@@ -7,12 +7,17 @@ namespace RizeUp.Models
         [Key] public int ResumeId { get; set; }
         public DateOnly CreatedDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public DateOnly? ModifiedDate { get; set; }
+        public string? ResumeFileName { get; set; }
+        public string? ResumeFileType { get; set; }
+        public byte[]? ResumeFile { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
-        public List<Education> Educations { get; set; } = new();
-        public List<Experience> Experiences { get; set; } = new();
-        public List<Skill> Skills { get; set; } = new();
-        public List<Language> Languages { get; set; } = new();
-        public List<Certificate> Certificates { get; set; } = new();
+        public List<Education> Educations { get; set; } 
+        public List<Experience> Experiences { get; set; } 
+        public List<Project> Projects { get; set; } 
+        public List<Skill> Skills { get; set; } 
+        public List<Language> Languages { get; set; }
+        public List<Certificate> Certificates { get; set; } 
 
         public string EndUserId { get; set; }
         public EndUser EndUser { get; set; }

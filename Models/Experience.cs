@@ -15,6 +15,8 @@ namespace RizeUp.Models
         public int ResumeId { get; set; }
         public Resume Resume { get; set; }
 
-       
+        
+
+
     }
 }

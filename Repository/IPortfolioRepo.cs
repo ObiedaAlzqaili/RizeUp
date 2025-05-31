@@ -1,0 +1,15 @@
+﻿using RizeUp.Models;
+
+namespace RizeUp.Repository
+{
+    public interface IPortfolioRepo
+    {
+        Task<Portfolio> GetPortfolioByIdAsync(int id);
+        
+        Task AddPortfolioAsync(Portfolio portfolio);
+        Task UpdatePortfolioAsync(Portfolio portfolio);
+        Task DeletePortfolioAsync(int id);
+        Task<IEnumerable<Portfolio>> GetPortfoliosByUserIdAsync(string userId);
+        
+    }
+}

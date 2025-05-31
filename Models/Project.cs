@@ -15,6 +15,13 @@ namespace RizeUp.Models
         public int ServiceId { get; set; }
         public Service Service { get; set; }
 
-        
+        public int ResumeId { get; set; }
+        public Resume Resume { get; set; }
+
+        public int PortfolioId { get; set; }
+        public Portfolio Portfolio { get; set; }
+
+
+
     }
 }

@@ -42,9 +42,22 @@ namespace RizeUp.Data
                 .HasOne(p => p.Service)
                 .WithMany(s => s.Projects)
                 .HasForeignKey(p => p.ServiceId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Project>()
+                .HasOne(p => p.Resume)
+                .WithMany(r => r.Projects)
+                .HasForeignKey(p => p.ResumeId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Project>()
+                .HasOne(p => p.Portfolio)
+                .WithMany(p => p.Projects)
+                .HasForeignKey(p => p.PortfolioId)
+                .OnDelete(DeleteBehavior.Cascade);
+           
             
+
+
         }
     }
 }
