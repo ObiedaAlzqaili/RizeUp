@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.SemanticKernel;
 using RizeUp.Data;
+using RizeUp.Interfaces;
 using RizeUp.Models;
 using RizeUp.Repository;
+using RizeUp.Services;
+
 
 namespace RizeUp
 {
@@ -21,10 +26,28 @@ namespace RizeUp
             
             builder.Services.AddScoped<IResumeRepo, ResumeRepo>();
 
+           
+
+            
+            
+            var key = builder.Configuration["OpenAI:Key"];
+            builder.Services.AddSingleton<Kernel>(sp =>
+            {
+                var kernelBuilder = Kernel.CreateBuilder();
+                kernelBuilder.AddOpenAIChatCompletion("gpt-4", key);
+                return kernelBuilder.Build();
+            });
+
+
+            builder.Services.AddSingleton<IResumeOpenAiService, ResumeOpenAiService>();
+
+
 
             builder.Services.AddDefaultIdentity<Person>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+           
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();

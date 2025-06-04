@@ -1,0 +1,248 @@
+﻿@model RizeUp.DTOs.ResumeJsonDto
+
+@{
+    ViewData["Title"] = "Generated Resume";
+    Layout = "~/Views/Shared/_ResumeLayout.cshtml";
+   
+}
+
+<div class="container my-5">
+    <!-- ===========================
+         Header: Name / Title / Contact
+         =========================== -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="fw-bold">@Model.FirstName @Model.LastName</h1>
+            @if (!string.IsNullOrWhiteSpace(Model.Title))
+            {
+                <h4 class="text-muted">@Model.Title</h4>
+            }
+            <p class="mt-2">
+                @if (!string.IsNullOrWhiteSpace(Model.Email))
+                {
+                    <a href="mailto:@Model.Email">@Model.Email</a>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.PhoneNumber))
+                {
+                    <span> | @Model.PhoneNumber</span>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.LinkedinLink))
+                {
+                    <span> | <a href="@Model.LinkedinLink" target="_blank">LinkedIn</a></span>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.GitHubLink))
+                {
+                    <span> | <a href="@Model.GitHubLink" target="_blank">GitHub</a></span>
+                }
+            </p>
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- ===========================
+         Summary / Bio
+         =========================== -->
+    @if (!string.IsNullOrWhiteSpace(Model.Bio))
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="h5 text-uppercase text-secondary mb-2">Professional Summary</h2>
+                <p>@Model.Bio</p>
+            </div>
+        </div>
+        <hr />
+    }
+
+    <!-- ===========================
+         Education Section
+         =========================== -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="h5 text-uppercase text-secondary mb-3">Education</h2>
+            @if (Model.Educations.Any())
+            {
+                <ul class="list-unstyled">
+                    @foreach (var edu in Model.Educations)
+                    {
+                        <li class="mb-3">
+                            <h5 class="mb-1">@edu.CollegeName</h5>
+                            <p class="mb-1">
+                                @edu.DegreeField
+                                @if (!string.IsNullOrWhiteSpace(edu.Major))
+                                {
+                                    <span>in @edu.Major</span>
+                                }
+                                <span class="text-muted">
+                                    (@edu.StartDate – @edu.EndDate)
+                                </span>
+                            </p>
+                            @if (edu.GPA.HasValue)
+                            {
+                                <p class="mb-0">GPA: @edu.GPA.Value.ToString("0.00")</p>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No education information provided.</p>
+            }
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- ===========================
+         Experience Section
+         =========================== -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="h5 text-uppercase text-secondary mb-3">Experience</h2>
+            @if (Model.Experiences.Any())
+            {
+                <ul class="list-unstyled">
+                    @foreach (var exp in Model.Experiences)
+                    {
+                        <li class="mb-4">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="mb-1">@exp.Title, @exp.Company</h5>
+                                <span class="text-muted">
+                                    (@exp.StartDate – @(exp.IsCurrent == true ? "Present" : exp.EndDate))
+                                </span>
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(exp.Duties))
+                            {
+                                <p class="mb-0">@exp.Duties</p>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No work experience provided.</p>
+            }
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- ===========================
+         Skills Section
+         =========================== -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="h5 text-uppercase text-secondary mb-3">Skills</h2>
+            @if (Model.Skills.Any())
+            {
+                <div class="row">
+                    @foreach (var skill in Model.Skills)
+                    {
+                        <div class="col-6 col-md-4 mb-2">
+                            <span class="badge bg-primary text-white">@skill.SkillName</span>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No skills listed.</p>
+            }
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- ===========================
+         Languages Section
+         =========================== -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="h5 text-uppercase text-secondary mb-3">Languages</h2>
+            @if (Model.Languages.Any())
+            {
+                <ul class="list-inline">
+                    @foreach (var lang in Model.Languages)
+                    {
+                        <li class="list-inline-item me-4">
+                            <strong>@lang.LanguageName</strong> – @lang.Level
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No languages specified.</p>
+            }
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- ===========================
+         Certificates Section
+         =========================== -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="h5 text-uppercase text-secondary mb-3">Certificates</h2>
+            @if (Model.Certificates.Any())
+            {
+                <ul class="list-unstyled">
+                    @foreach (var cert in Model.Certificates)
+                    {
+                        <li class="mb-3">
+                            <h6 class="mb-1">@cert.ProviderName – @cert.Field</h6>
+                            <p class="mb-1 text-muted">
+                                (@cert.StartDate – @cert.EndDate)
+                            </p>
+                            @if (cert.GPA.HasValue)
+                            {
+                                <p class="mb-0">GPA: @cert.GPA.Value.ToString("0.00")</p>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No certificates listed.</p>
+            }
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- ===========================
+         Projects Section
+         =========================== -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="h5 text-uppercase text-secondary mb-3">Projects</h2>
+            @if (Model.Projects.Any())
+            {
+                <ul class="list-unstyled">
+                    @foreach (var project in Model.Projects)
+                    {
+                        <li class="mb-4">
+                            <h5 class="mb-1">@project.ProjectName</h5>
+                            <p class="mb-1">@project.ProjectDescription</p>
+                            <p class="mb-1 text-muted">
+                                (@project.StartDate – @project.EndDate)
+                                @if (!string.IsNullOrWhiteSpace(project.ProjectLink))
+                                {
+                                    <span> | <a href="@project.ProjectLink" target="_blank">Project Link</a></span>
+                                }
+                            </p>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No projects listed.</p>
+            }
+        </div>
+    </div>
+</div>

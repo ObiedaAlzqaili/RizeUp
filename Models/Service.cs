@@ -10,8 +10,6 @@ namespace RizeUp.Models
         public string ServiceDescription { get; set; }
         public string ServiceImage { get; set; }
 
-        public List<Project> Projects { get; set; }
-
         public int PortfolioId { get; set; }
 
         public Portfolio Portfolio { get; set; }

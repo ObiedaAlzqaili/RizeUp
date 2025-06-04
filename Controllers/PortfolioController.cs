@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RizeUp.DTOs;
 
 namespace RizeUp.Controllers
 {
@@ -8,5 +9,14 @@ namespace RizeUp.Controllers
         {
             return View();
         }
+        public IActionResult NewPortfolio()
+        {
+            return View(new PortfolioDTO());
+        }
+        public IActionResult CreatePortfolio()
+        {
+            return View(new PortfolioDTO());
+        }
+
     }
 }

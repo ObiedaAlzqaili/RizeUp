@@ -68,7 +68,7 @@ namespace RizeUp.Repository
                 {
                     throw new KeyNotFoundException($"Resume with ID {resume.EndUserId} not found.");
                 }
-                existingResume.ModifiedDate = DateOnly.FromDateTime(DateTime.Now);
+                existingResume.ModifiedDate = DateOnly.FromDateTime(DateTime.Now).ToString();
                 _DbContext.Entry(existingResume).CurrentValues.SetValues(resume);
                 await _DbContext.SaveChangesAsync();
             }

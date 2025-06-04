@@ -36,13 +36,7 @@ namespace RizeUp.Data
                 .HasForeignKey(p => p.EndUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            
-
-            builder.Entity<Project>()
-                .HasOne(p => p.Service)
-                .WithMany(s => s.Projects)
-                .HasForeignKey(p => p.ServiceId)
-                .OnDelete(DeleteBehavior.Cascade);
+           
 
             builder.Entity<Project>()
                 .HasOne(p => p.Resume)

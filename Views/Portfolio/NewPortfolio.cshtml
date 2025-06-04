@@ -1,0 +1,110 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<link rel="stylesheet" href="~/css/NewPortfolio.css" asp-append-version="true" />
+<div class="wizard-container">
+    <div class="wizard-header">
+        <h3>AI Portfolio Builder</h3>
+        <p>Fill in your portfolio details and preview before sending to AI</p>
+    </div>
+
+    <div class="step-indicator">
+        <div class="step active" data-step="1">1</div>
+        <div class="step-line"></div>
+        <div class="step" data-step="2">2</div>
+        <div class="step-line"></div>
+        <div class="step" data-step="3">3</div> 
+    </div>
+
+    <form id="portfolioForm" enctype="multipart/form-data">
+        <!-- Page 1 -->
+        <div class="form-section active" data-step="1">
+            <h4>Personal & Contact Information</h4>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="firstName" class="form-label">First Name*</label>
+                    <input type="text" class="form-control" id="firstName" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="lastName" class="form-label">Last Name*</label>
+                    <input type="text" class="form-control" id="lastName" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label">Phone Number*</label>
+                    <input type="tel" class="form-control" id="phone" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">Email*</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="linkedin" class="form-label">LinkedIn Profile</label>
+                    <input type="url" class="form-control" id="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="github" class="form-label">GitHub Profile</label>
+                    <input type="url" class="form-control" id="github" placeholder="https://github.com/yourusername">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="profileImage" class="form-label">Profile Image</label>
+                <input type="file" class="form-control" id="profileImage" accept="image/*">
+                <img id="profilePreview" class="img-preview" style="display:none;" alt="Profile Preview">
+            </div>
+            <div class="mb-3">
+                <label for="summary" class="form-label">Summary/About Me*</label>
+                <textarea class="form-control" id="summary" rows="4" required
+                          placeholder="E.g., Creative web developer specializing in full-stack projects."></textarea>
+            </div>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="form-section" data-step="2">
+            <h4>Services, Projects & Skills</h4>
+            <div class="mb-3">
+                <label for="services" class="form-label">Services You Provide*</label>
+                <textarea class="form-control" id="services" rows="4" required
+                          placeholder="E.g., Front-end development, Back-end APIs, UI/UX design, etc."></textarea>
+            </div>
+
+            <!-- Projects Container -->
+            <div id="projectsContainer"></div>
+            <button type="button" id="addProjectBtn" class="btn btn-accent">
+                <i class="bi bi-plus-lg me-1"></i>Add Another Project
+            </button>
+
+            <div class="mb-3 mt-4">
+                <label for="skills" class="form-label">Skills*</label>
+                <textarea class="form-control" id="skills" rows="4" required
+                          placeholder="E.g., JavaScript, React, Node.js, MongoDB, etc."></textarea>
+            </div>
+        </div>
+
+        <!-- Page 3 -->
+        <div class="form-section" data-step="3">
+            <h4>Review Your Portfolio</h4>
+            <div class="preview-section" id="preview"></div>
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-magic me-1"></i> Enhance with AI
+            </button>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="form-navigation">
+            <button type="button" class="btn btn-outline-secondary prev-step" style="display: none;">
+                <i class="bi bi-arrow-left me-1"></i> Back
+            </button>
+            <button type="button" class="btn btn-primary next-step">
+                Next <i class="bi bi-arrow-right ms-1"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<script src="~/js/NewPortfolio.js" asp-append-version="true"></script>

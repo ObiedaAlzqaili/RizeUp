@@ -1,67 +1,105 @@
-﻿
-window.addEventListener('scroll', function () {
-    var backToTopButton = document.getElementById('back-to-top');
-    if (window.pageYOffset > 300) {
-        backToTopButton.style.display = 'block';
-    } else {
-        backToTopButton.style.display = 'none';
+﻿const sections = document.querySelectorAll('.form-section');
+const steps = document.querySelectorAll('.step');
+let currentStep = 0;
+
+// Show/hide sections and update step circles
+function updateStep() {
+    sections.forEach((sec, idx) => sec.classList.toggle('active', idx === currentStep));
+    steps.forEach((circle, idx) => {
+        circle.classList.remove('active', 'completed');
+        if (idx === currentStep) circle.classList.add('active');
+        else if (idx < currentStep) circle.classList.add('completed');
+    });
+    document.querySelector('.prev-step').style.display = currentStep === 0 ? 'none' : 'inline-block';
+    document.querySelector('.next-step').style.display = currentStep === 2 ? 'none' : 'inline-block';
+}
+
+// Advance to next step if validation passes
+document.querySelector('.next-step').addEventListener('click', () => {
+    if (validateSection(sections[currentStep])) {
+        currentStep++;
+        if (currentStep === 2) updatePreview();
+        updateStep();
     }
 });
 
-// Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
-    });
+// Go back to previous step
+document.querySelector('.prev-step').addEventListener('click', () => {
+    currentStep--;
+    updateStep();
 });
 
-// Initialize tooltips
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl);
-});
-
-// Animate elements when they come into view
-function animateOnScroll() {
-    const elements = document.querySelectorAll('.service-card, .testimonial-card, .pricing-card');
-
-    elements.forEach(element => {
-        const elementPosition = element.getBoundingClientRect().top;
-        const screenPosition = window.innerHeight / 1.3;
-
-        if (elementPosition < screenPosition) {
-            element.style.opacity = '1';
-            element.style.transform = 'translateY(0)';
+// Ensure required fields in current section are non-empty
+function validateSection(section) {
+    const requiredFields = section.querySelectorAll('[required]');
+    let valid = true;
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.classList.add('is-invalid');
+            valid = false;
+        } else {
+            field.classList.remove('is-invalid');
         }
     });
+    return valid;
 }
 
-// Set initial state for animation
-document.addEventListener('DOMContentLoaded', function () {
-    const animatedElements = document.querySelectorAll('.service-card, .testimonial-card, .pricing-card');
-    animatedElements.forEach(element => {
-        element.style.opacity = '0';
-        element.style.transform = 'translateY(20px)';
-        element.style.transition = 'all 0.6s ease';
-    });
+// Fill in the Review step with collected values
+function updatePreview() {
+    const data = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        linkedin: document.getElementById('linkedin').value,
+        github: document.getElementById('github').value,
+        summary: document.getElementById('summary').value,
+        education: document.getElementById('education').value,
+        experience: document.getElementById('experience').value,
+        skills: document.getElementById('skills').value
+    };
 
-    window.addEventListener('scroll', animateOnScroll);
-    animateOnScroll(); // Run once on load in case elements are already in view
+    document.getElementById('preview').innerHTML = `
+        <p><strong>Name:</strong> ${data.firstName} ${data.lastName}</p>
+        <p><strong>Email:</strong> ${data.email}</p>
+        <p><strong>Phone:</strong> ${data.phone}</p>
+        <p><strong>LinkedIn:</strong> ${data.linkedin}</p>
+        <p><strong>GitHub:</strong> ${data.github}</p>
+        <p><strong>Summary:</strong> ${data.summary}</p>
+        <p><strong>Education:</strong><br><pre>${data.education}</pre></p>
+        <p><strong>Experience:</strong><br><pre>${data.experience}</pre></p>
+        <p><strong>Skills:</strong><br><pre>${data.skills}</pre></p>
+      `;
+}
 
-    // FAQ accordion icons
-    document.querySelectorAll('.faq-header').forEach(header => {
-        header.addEventListener('click', function () {
-            const icon = this.querySelector('i');
-            if (this.classList.contains('collapsed')) {
-                icon.classList.remove('bi-chevron-down');
-                icon.classList.add('bi-chevron-up');
-            } else {
-                icon.classList.remove('bi-chevron-up');
-                icon.classList.add('bi-chevron-down');
-            }
-        });
-    });
+// On form submit, gather JSON and (optionally) send to your API
+document.getElementById('resumeForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    if (!document.getElementById('consentCheckbox').checked) {
+        alert('You must agree before submitting.');
+        return;
+    }
+    const formData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        linkedin: document.getElementById('linkedin').value,
+        github: document.getElementById('github').value,
+        summary: document.getElementById('summary').value,
+        education: document.getElementById('education').value,
+        experience: document.getElementById('experience').value,
+        skills: document.getElementById('skills').value
+    };
+    console.log('Sending to API:', formData);
+    // Example fetch (uncomment and replace URL):
+    // await fetch('/api/ai-enhance', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(formData)
+    // });
+    alert('Data sent to AI for processing.');
 });
+
+// Initialize step visibility on page load
+updateStep();
