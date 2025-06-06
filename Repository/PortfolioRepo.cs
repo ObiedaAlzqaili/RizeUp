@@ -37,7 +37,7 @@ namespace RizeUp.Repository
                     //_context.Portfolios.Remove(portfolio);
                     
                     portfolio.IsDeleted = true; // Soft delete
-                    portfolio.ModifiedDate = DateOnly.FromDateTime(DateTime.Now);
+                    portfolio.ModifiedDate = DateOnly.FromDateTime(DateTime.Now).ToString();
                     _context.Portfolios.Update(portfolio);
                     _context.Projects.RemoveRange(_context.Projects.Where(p => p.PortfolioId == id));
                     await _context.SaveChangesAsync();
@@ -102,12 +102,12 @@ namespace RizeUp.Repository
                 {
                     throw new KeyNotFoundException($"Portfolio with ID {portfolio.Id} not found.");
                 }
-                existingPortfolio.PersonalImage = portfolio.PersonalImage;
+                //existingPortfolio.PersonalImage = portfolio.PersonalImage;
                 existingPortfolio.Services = portfolio.Services;
                 existingPortfolio.Projects = portfolio.Projects;
                 existingPortfolio.IsDeleted = portfolio.IsDeleted;
                 existingPortfolio.EndUserId = portfolio.EndUserId;
-                existingPortfolio.ModifiedDate = DateOnly.FromDateTime(DateTime.Now);
+                existingPortfolio.ModifiedDate = DateOnly.FromDateTime(DateTime.Now).ToString();
                 _context.Portfolios.Update(existingPortfolio);
                 await _context.SaveChangesAsync();
             }

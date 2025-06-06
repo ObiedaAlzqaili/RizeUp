@@ -6,7 +6,6 @@ namespace RizeUp.Models
     public class Portfolio : PersonalInfo
     {
         [Key] public int Id { get; set; }
-        public string PersonalImage { get; set; }
 
         public List<Service> Services { get; set; } 
         public List<Project> Projects { get; set; }
@@ -15,8 +14,8 @@ namespace RizeUp.Models
         public string EndUserId { get; set; }
         public EndUser EndUser { get; set; }
 
-        public DateOnly CreatedDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
-        public DateOnly? ModifiedDate { get; set; }
+        public string CreatedDate { get; set; } = DateOnly.FromDateTime(DateTime.Now).ToString();
+        public string? ModifiedDate { get; set; }
     }
 }
 

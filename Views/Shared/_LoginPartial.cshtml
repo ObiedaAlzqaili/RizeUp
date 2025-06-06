@@ -2,28 +2,96 @@
 @inject SignInManager<Person> SignInManager
 @inject UserManager<Person> UserManager
 
-<ul class="navbar-nav">
+<ul class="navbar-nav align-items-center">
 @if (SignInManager.IsSignedIn(User))
 {
    
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name</a>
+        var user = await UserManager.GetUserAsync(User);
+        var displayName = user?.FirstName ?? "Profile";
+    
+    
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="me-2 d-none d-sm-inline">
+                <i class="bi bi-person-circle fs-5 text-success"></i>
+            </div>
+            <span class="d-none d-md-inline">@displayName</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li>
+                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+                    <i class="bi bi-person me-2"></i>My Profile
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="/resumes">
+                    <i class="bi bi-file-earmark-text me-2"></i>My Resumes
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="/portfolio">
+                    <i class="bi bi-collection me-2"></i>My Portfolio
+                </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="dropdown-item">
+                        <i class="bi bi-box-arrow-right me-2"></i>Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
     </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-        
 }
 else
 {
     <li class="nav-item">
-         <a class="btn btn-outline-primary me-2" asp-area="Identity" asp-page="/Account/Login">Login</a>
-        
+        <a class="btn btn-outline-primary me-2" asp-area="Identity" asp-page="/Account/Login">
+            <i class="bi bi-box-arrow-in-right me-1"></i>Login
+        </a>
     </li>
     <li class="nav-item">
-       <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">SignUp</a>
+        <a class="btn btn-success" asp-area="Identity" asp-page="/Account/Register">
+            <i class="bi bi-person-plus me-1"></i>Sign Up
+        </a>
     </li>
 }
 </ul>
+
+<style>
+    .nav-link.dropdown-toggle {
+        color: var(--dark-color) !important;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-link.dropdown-toggle:hover {
+        color: var(--primary-color) !important;
+    }
+    
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+    }
+    
+    .dropdown-item {
+        padding: 0.5rem 1.5rem;
+        transition: all 0.2s ease;
+    }
+    
+    .dropdown-item:hover {
+        background-color: rgba(76, 175, 80, 0.1);
+        color: var(--primary-color);
+    }
+    
+    .btn-success {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .btn-success:hover {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+    }
+</style>

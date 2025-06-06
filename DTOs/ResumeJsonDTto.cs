@@ -26,7 +26,7 @@
     public class EducationItem
     {
         public string? CollegeName { get; set; }
-        public string? DegreeField { get; set; }
+        public string? DegreeType { get; set; }
         public string? StartDate { get; set; }
         public string? EndDate { get; set; }
         public string? Major { get; set; }
@@ -57,10 +57,12 @@
 
     public class CertificateItem
     {
+        public string Title { get; set; }
         public string? ProviderName { get; set; }
         public string? StartDate { get; set; }
         public string? EndDate { get; set; }
         public string? Field { get; set; }
+        
         public double? GPA { get; set; }
     }
 

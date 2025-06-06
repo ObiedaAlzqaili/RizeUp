@@ -112,7 +112,7 @@ namespace RizeUp.Services
 
 Convert the following unstructured CV text into JSON with the structure:
 {
-                ""Title"": ""string"",
+            ""Title"": ""string"",
             ""FirstName"": ""string"",
             ""LastName"": ""string"",
             ""Email"": ""string"",
@@ -122,8 +122,9 @@ Convert the following unstructured CV text into JSON with the structure:
             ""Summary"": ""string"",
             ""Educations"": [
             {
-                    ""CollegeName"": ""string"",
-            ""DegreeField"": ""string"",
+            ""CollegeName"": ""string"",
+            ""IsCurrent"": ""boolean(or null)"",
+            ""DegreeType"": ""string"",
             ""Major"": ""string"",
             ""StartDate"": ""string"",
             ""EndDate"": ""string"",
@@ -132,7 +133,7 @@ Convert the following unstructured CV text into JSON with the structure:
             ],
             ""Experiences"": [
             {
-                    ""Title"": ""string"",
+            ""Title"": ""string"",
             ""Company"": ""string"",
             ""StartDate"": ""string"",
             ""EndDate"": ""string"",
@@ -151,7 +152,8 @@ Convert the following unstructured CV text into JSON with the structure:
             ],
             ""Certificates"": [
             {
-                    ""ProviderName"": ""string"",
+            ""Title"": ""string"",
+            ""ProviderName"": ""string"",
             ""Field"": ""string"",
             ""StartDate"": ""string"",
             ""EndDate"": ""string"",
@@ -160,7 +162,8 @@ Convert the following unstructured CV text into JSON with the structure:
             ],
             ""Projects"": [
             {
-                    ""ProjectName"": ""string"",
+            ""ProjectName"": ""string"",
+            ""IsOngoing"": ""boolean(or null)"",
             ""ProjectDescription"": ""string"",
             ""StartDate"": ""string"",
             ""EndDate"": ""string"",
@@ -225,6 +228,7 @@ JSON:
 
             
             resumeDto.FirstName = resumeDto.FirstName ?? "";
+            resumeDto.Title = resumeDto.Title ?? "";
             resumeDto.LastName = resumeDto.LastName ?? "";
             resumeDto.Email = resumeDto.Email ?? "";
             resumeDto.PhoneNumber = resumeDto.PhoneNumber ?? "";
@@ -233,8 +237,6 @@ JSON:
             resumeDto.Title = resumeDto.Title ?? "";
             resumeDto.GitHubLink = resumeDto.GitHubLink ?? "";
             resumeDto.LinkedinLink = resumeDto.LinkedinLink ?? "";
-
-           
             resumeDto.Educations ??= new List<EducationItem>();
             resumeDto.Experiences ??= new List<ExperienceItem>();
             resumeDto.Skills ??= new List<SkillItem>();

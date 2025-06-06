@@ -7,6 +7,8 @@ namespace RizeUp.Data
     public class ApplicationDbContext : IdentityDbContext<Person>
     {
         public DbSet<Resume> Resumes { get; set; }
+        public DbSet<Admin> Admins { get; set; }
+        public DbSet<EndUser> EndUsers { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
         public DbSet<Education> Educations { get; set; }
         public DbSet<Experience> Experiences { get; set; }

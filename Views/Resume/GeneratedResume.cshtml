@@ -1,9 +1,7 @@
 ﻿@model RizeUp.DTOs.ResumeJsonDto
 
 @{
-    ViewData["Title"] = "Generated Resume";
-    Layout = "~/Views/Shared/_ResumeLayout.cshtml";
-   
+    ViewData["Title"] = "Generated Resume"; 
 }
 
 <div class="container my-5">
@@ -68,7 +66,7 @@
                         <li class="mb-3">
                             <h5 class="mb-1">@edu.CollegeName</h5>
                             <p class="mb-1">
-                                @edu.DegreeField
+                                @edu.DegreeType
                                 @if (!string.IsNullOrWhiteSpace(edu.Major))
                                 {
                                     <span>in @edu.Major</span>

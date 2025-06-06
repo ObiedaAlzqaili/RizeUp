@@ -9,7 +9,9 @@ namespace RizeUp.Models
         public string? ProjectDescription { get; set; }
         public string? StartDate { get; set; }
         public string? EndDate { get; set; }
-        
+
+        public bool? IsOngoing { get; set; }
+
         public string? ProjectLink { get; set; }
 
         public int ResumeId { get; set; }

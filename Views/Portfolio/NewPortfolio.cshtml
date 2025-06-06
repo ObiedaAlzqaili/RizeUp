@@ -1,110 +1,240 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model RizeUp.DTOs.CreatePortfolioDto
+
 @{
+    ViewData["Title"] = "Create New Portfolio";
 }
+
 <link rel="stylesheet" href="~/css/NewPortfolio.css" asp-append-version="true" />
+
 <div class="wizard-container">
+    <!-- Header -->
     <div class="wizard-header">
         <h3>AI Portfolio Builder</h3>
         <p>Fill in your portfolio details and preview before sending to AI</p>
     </div>
 
-    <div class="step-indicator">
-        <div class="step active" data-step="1">1</div>
+    <!-- Step Indicators -->
+    <div class="step-indicator mb-4">
+        <div class="step @(Model.CurrentStep >= 1 ? "active" : "")" data-step="1">1</div>
         <div class="step-line"></div>
-        <div class="step" data-step="2">2</div>
+        <div class="step @(Model.CurrentStep >= 2 ? "active" : "")" data-step="2">2</div>
         <div class="step-line"></div>
-        <div class="step" data-step="3">3</div> 
+        <div class="step @(Model.CurrentStep >= 3 ? "active" : "")" data-step="3">3</div>
     </div>
 
-    <form id="portfolioForm" enctype="multipart/form-data">
-        <!-- Page 1 -->
-        <div class="form-section active" data-step="1">
-            <h4>Personal & Contact Information</h4>
+    <form asp-action="ProcessStep" asp-controller="Portfolio" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="CurrentStep" id="currentStep" value="@Model.CurrentStep" />
+
+        <!-- ===========================
+             PAGE 1: Personal & Contact
+             =========================== -->
+        <div class="form-section @(Model.CurrentStep == 1 ? "active" : "")" data-step="1">
+            <h4>Personal &amp; Contact Information</h4>
+
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="firstName" class="form-label">First Name*</label>
-                    <input type="text" class="form-control" id="firstName" required>
+                    <label asp-for="FirstName" class="form-label">First Name*</label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="lastName" class="form-label">Last Name*</label>
-                    <input type="text" class="form-control" id="lastName" required>
+                    <label asp-for="LastName" class="form-label">Last Name*</label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="phone" class="form-label">Phone Number*</label>
-                    <input type="tel" class="form-control" id="phone" required>
+                    <label asp-for="Phone" class="form-label">Phone Number*</label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="email" class="form-label">Email*</label>
-                    <input type="email" class="form-control" id="email" required>
+                    <label asp-for="Email" class="form-label">Email*</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="linkedin" class="form-label">LinkedIn Profile</label>
-                    <input type="url" class="form-control" id="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                    <label asp-for="LinkedIn" class="form-label">LinkedIn Profile</label>
+                    <input asp-for="LinkedIn" class="form-control" placeholder="https://linkedin.com/in/yourprofile" />
+                    <span asp-validation-for="LinkedIn" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="github" class="form-label">GitHub Profile</label>
-                    <input type="url" class="form-control" id="github" placeholder="https://github.com/yourusername">
+                    <label asp-for="GitHub" class="form-label">GitHub Profile</label>
+                    <input asp-for="GitHub" class="form-control" placeholder="https://github.com/yourusername" />
+                    <span asp-validation-for="GitHub" class="text-danger"></span>
                 </div>
             </div>
+
             <div class="mb-3">
-                <label for="profileImage" class="form-label">Profile Image</label>
-                <input type="file" class="form-control" id="profileImage" accept="image/*">
-                <img id="profilePreview" class="img-preview" style="display:none;" alt="Profile Preview">
+                <label asp-for="ProfileImage" class="form-label">Profile Image</label>
+                <input asp-for="ProfileImage" type="file" class="form-control" accept="image/*" />
+                <img id="profilePreview" class="img-preview mt-2" style="display:none;" alt="Profile Preview" />
+                <span asp-validation-for="ProfileImage" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
-                <label for="summary" class="form-label">Summary/About Me*</label>
-                <textarea class="form-control" id="summary" rows="4" required
-                          placeholder="E.g., Creative web developer specializing in full-stack projects."></textarea>
+                <label asp-for="Summary" class="form-label">Summary/About Me*</label>
+                <textarea asp-for="Summary" class="form-control" rows="4" placeholder="E.g., Creative web developer specializing in full-stack projects."></textarea>
+                <span asp-validation-for="Summary" class="text-danger"></span>
             </div>
         </div>
 
-        <!-- Page 2 -->
-        <div class="form-section" data-step="2">
-            <h4>Services, Projects & Skills</h4>
+        <!-- =========================
+             PAGE 2: Services, Projects, Skills
+             ========================= -->
+        <div class="form-section @(Model.CurrentStep == 2 ? "active" : "")" data-step="2">
+            <h4>Services, Projects &amp; Skills</h4>
+
             <div class="mb-3">
-                <label for="services" class="form-label">Services You Provide*</label>
-                <textarea class="form-control" id="services" rows="4" required
-                          placeholder="E.g., Front-end development, Back-end APIs, UI/UX design, etc."></textarea>
+                <label asp-for="Services" class="form-label">Services You Provide*</label>
+                <textarea asp-for="Services" class="form-control" rows="4" placeholder="E.g., Front-end, Back-end, UI/UX design, etc."></textarea>
+                <span asp-validation-for="Services" class="text-danger"></span>
             </div>
 
-            <!-- Projects Container -->
-            <div id="projectsContainer"></div>
-            <button type="button" id="addProjectBtn" class="btn btn-accent">
+            <!-- Render existing projects (if any) -->
+            <div id="projectsContainer">
+                @if (Model.Projects != null && Model.Projects.Count > 0)
+                {
+                    for (int i = 0; i < Model.Projects.Count; i++)
+                    {
+                        <div class="project-item mb-4 p-3 border rounded">
+                            <div class="mb-3">
+                                <label class="form-label">Project Name*</label>
+                                <input name="Projects[@i].Name"
+                                       value="@Model.Projects[i].Name"
+                                       class="form-control project-name"
+                                       required />
+                                <span asp-validation-for="Projects[@i].Name" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description*</label>
+                                <textarea name="Projects[@i].Description"
+                                  class="form-control project-description"
+                                  rows="3"
+                                  required>@Model.Projects[i].Description</textarea>
+                                <span asp-validation-for="Projects[@i].Description" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Project Link</label>
+                                <input name="Projects[@i].Link"
+                                       value="@Model.Projects[i].Link"
+                                       class="form-control project-link"
+                                       type="url" />
+                                <span asp-validation-for="Projects[@i].Link" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Project Image</label>
+                                <input name="Projects[@i].Image"
+                                       type="file"
+                                       class="form-control project-image"
+                                       accept="image/*" />
+                                <img class="project-preview img-preview mt-2"
+                                     style="display:none;"
+                                     alt="Project Preview" />
+                                <span asp-validation-for="Projects[@i].Image" class="text-danger"></span>
+                            </div>
+                            <button type="button" class="btn btn-danger btn-sm remove-project">Remove Project</button>
+                        </div>
+                    }
+                }
+            </div>
+
+            <button type="button" id="addProjectBtn" class="btn btn-accent mb-4">
                 <i class="bi bi-plus-lg me-1"></i>Add Another Project
             </button>
 
-            <div class="mb-3 mt-4">
-                <label for="skills" class="form-label">Skills*</label>
-                <textarea class="form-control" id="skills" rows="4" required
-                          placeholder="E.g., JavaScript, React, Node.js, MongoDB, etc."></textarea>
+            <div class="mb-3">
+                <label asp-for="Skills" class="form-label">Skills*</label>
+                <textarea asp-for="Skills" class="form-control" rows="4" placeholder="E.g., JavaScript, React, Node.js, MongoDB, etc."></textarea>
+                <span asp-validation-for="Skills" class="text-danger"></span>
             </div>
         </div>
 
-        <!-- Page 3 -->
-        <div class="form-section" data-step="3">
+        <!-- ============================
+             PAGE 3: Review & Final Submit
+             ============================ -->
+        <div class="form-section @(Model.CurrentStep == 3 ? "active" : "")" data-step="3">
             <h4>Review Your Portfolio</h4>
-            <div class="preview-section" id="preview"></div>
-            <button type="submit" class="btn btn-primary w-100">
+
+            <div class="preview-section mb-4" id="preview">
+                <h5>Personal &amp; Contact Information</h5>
+                <p><strong>Name:</strong> @Model.FirstName @Model.LastName</p>
+                <p><strong>Phone:</strong> @Model.Phone</p>
+                <p><strong>Email:</strong> @Model.Email</p>
+                <p><strong>LinkedIn:</strong> @(string.IsNullOrWhiteSpace(Model.LinkedIn) ? "—" : Model.LinkedIn)</p>
+                <p><strong>GitHub:</strong> @(string.IsNullOrWhiteSpace(Model.GitHub) ? "—" : Model.GitHub)</p>
+                <p><strong>Summary:</strong><br />@Model.Summary</p>
+                <hr />
+
+                <h5>Services</h5>
+                <p>@Model.Services</p>
+                <hr />
+
+                <h5>Projects</h5>
+                @if (Model.Projects != null && Model.Projects.Count > 0)
+                {
+                    <ul>
+                        @for (int i = 0; i < Model.Projects.Count; i++)
+                        {
+                            <li>
+                                <strong>@Model.Projects[i].Name:</strong> @Model.Projects[i].Description<br />
+                                <em>Link:</em>
+                                @(string.IsNullOrWhiteSpace(Model.Projects[i].Link) ? "—" : Model.Projects[i].Link)
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p>—</p>
+                }
+                <hr />
+
+                <h5>Skills</h5>
+                <p>@Model.Skills</p>
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="consentCheckbox" required />
+                <label class="form-check-label" for="consentCheckbox">
+                    I agree to send my information to the AI system for enhancement.
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" name="command" value="submit">
                 <i class="bi bi-magic me-1"></i> Enhance with AI
             </button>
         </div>
 
-        <!-- Navigation Buttons -->
-        <div class="form-navigation">
-            <button type="button" class="btn btn-outline-secondary prev-step" style="display: none;">
+        <!-- =========================
+             Navigation Buttons (Back / Next)
+             ========================= -->
+        <div class="form-navigation mt-4 d-flex justify-content-between">
+            <button type="submit"
+                    class="btn btn-outline-secondary"
+                    name="command"
+                    value="prev"
+                    @(Model.CurrentStep == 1 ? "disabled" : "")>
                 <i class="bi bi-arrow-left me-1"></i> Back
             </button>
-            <button type="button" class="btn btn-primary next-step">
+
+            <button type="submit"
+                    class="btn btn-primary"
+                    name="command"
+                    value="next"
+                    @(Model.CurrentStep == 3 ? "disabled" : "")>
                 Next <i class="bi bi-arrow-right ms-1"></i>
             </button>
         </div>
     </form>
 </div>
 
-<script src="~/js/NewPortfolio.js" asp-append-version="true"></script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/NewPortfolio.js" asp-append-version="true"></script>
+}

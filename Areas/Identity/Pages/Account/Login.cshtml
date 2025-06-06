@@ -1,0 +1,152 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-rocket-fill fs-1 text-success"></i>
+                        <h1 class="h3 mb-3 fw-normal">Welcome to <span class="text-success">RizeUp</span></h1>
+                        <p class="text-muted">Sign in to access your resumes and portfolios</p>
+                    </div>
+
+                    <div class="row">
+                        <!-- Local Login -->
+                        <div class="col-md-6">
+                            <form id="account" method="post">
+                                <h2 class="h5 mb-3">Sign in with email</h2>
+                                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Input.Email" class="form-control" autocomplete="username"
+                                           aria-required="true" placeholder="name@example.com" />
+                                    <label asp-for="Input.Email">Email</label>
+                                    <span asp-validation-for="Input.Email" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Input.Password" class="form-control"
+                                           autocomplete="current-password" aria-required="true" placeholder="password" />
+                                    <label asp-for="Input.Password">Password</label>
+                                    <span asp-validation-for="Input.Password" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                                    <label class="form-check-label" asp-for="Input.RememberMe">
+                                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                    </label>
+                                </div>
+
+                                <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-success mb-3">
+                                    Sign In
+                                </button>
+
+                                <div class="text-center small">
+                                    <p>
+                                        <a id="forgot-password" asp-page="./ForgotPassword" class="text-decoration-none text-success">
+                                            Forgot password?
+                                        </a>
+                                    </p>
+                                    <p>
+                                        Don't have an account?
+                                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-decoration-none text-success">
+                                            Sign up
+                                        </a>
+                                    </p>
+                                    <p>
+                                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" class="text-decoration-none text-success">
+                                            Resend confirmation email
+                                        </a>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- External Logins -->
+                        <div class="col-md-6 border-start ps-md-5 mt-5 mt-md-0">
+                            <div class="d-flex flex-column h-100">
+                                <h2 class="h5 mb-3">Or sign in with</h2>
+
+                                @{
+                                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                                    {
+                                        <div class="alert alert-info">
+                                            <p class="mb-0">
+                                                No external authentication services configured. See
+                                                <a href="https://go.microsoft.com/fwlink/?LinkID=532715" class="text-success">
+                                                    this article
+                                                </a> for setup instructions.
+                                            </p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                                            <div class="d-grid gap-2">
+                                                @foreach (var provider in Model.ExternalLogins!)
+                                                {
+                                                    <button type="submit" class="btn btn-outline-success" name="provider"
+                                                            value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                                        <i class="bi bi-@(provider.DisplayName.ToLower()) me-2"></i>
+                                                        Continue with @provider.DisplayName
+                                                    </button>
+                                                }
+                                            </div>
+                                        </form>
+                                    }
+                                }
+
+                                <div class="mt-auto pt-4 text-center">
+                                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80"
+                                         class="img-fluid rounded" alt="Career growth">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <style>
+        .form-control:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+        }
+
+        .btn-success {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+            .btn-success:hover {
+                background-color: #388E3C;
+                border-color: #388E3C;
+            }
+
+        .btn-outline-success {
+            color: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+            .btn-outline-success:hover {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+        .text-success {
+            color: #4CAF50 !important;
+        }
+    </style>
+}
