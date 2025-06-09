@@ -30,11 +30,11 @@ namespace RizeUp
 
 
 
-            var key = builder.Configuration["OpenAI:Key"];
+            var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
             builder.Services.AddSingleton<Kernel>(sp =>
             {
                 var kernelBuilder = Kernel.CreateBuilder();
-                kernelBuilder.AddOpenAIChatCompletion("gpt-4", key);
+                kernelBuilder.AddOpenAIChatCompletion("gpt-4", openAiKey);
                 return kernelBuilder.Build();
             });
 
