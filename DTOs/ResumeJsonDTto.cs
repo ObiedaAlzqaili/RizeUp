@@ -17,7 +17,7 @@
         // Parsed arrays (each array can be null or empty if OpenAI couldn’t extract any)
         public List<EducationItem>? Educations { get; set; }
         public List<ExperienceItem>? Experiences { get; set; }
-        public List<SkillItem>? Skills { get; set; }
+        public List<SkillItem1>? Skills { get; set; }
         public List<LanguageItem>? Languages { get; set; }
         public List<CertificateItem>? Certificates { get; set; }
         public List<ProjectItem>? Projects { get; set; }
@@ -43,7 +43,7 @@
         public string? Duties { get; set; }
     }
 
-    public class SkillItem
+    public class SkillItem1
     {
         public string? SkillName { get; set; }
         public string? SkillType { get; set; }

@@ -211,7 +211,7 @@ JSON:
             //";
 
             KernelFunction extractFunction = _kernel.CreateFunctionFromPrompt(prompt);
-           
+
             FunctionResult result = await _kernel.InvokeAsync(extractFunction, new()
             {
                 ["input"] = rawText
@@ -239,7 +239,7 @@ JSON:
             resumeDto.LinkedinLink = resumeDto.LinkedinLink ?? "";
             resumeDto.Educations ??= new List<EducationItem>();
             resumeDto.Experiences ??= new List<ExperienceItem>();
-            resumeDto.Skills ??= new List<SkillItem>();
+            resumeDto.Skills ??= new List<SkillItem1>();
             resumeDto.Languages ??= new List<LanguageItem>();
             resumeDto.Certificates ??= new List<CertificateItem>();
 

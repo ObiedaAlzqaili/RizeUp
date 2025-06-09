@@ -103,7 +103,7 @@ namespace RizeUp.Controllersء
                 Email = dto.Email,
                 PhoneNumber = dto.PhoneNumber,
                 Title = dto.Title,
-                Bio = dto.Bio ?? dto.Bio, // use whichever is populated
+                Summery = dto.Bio ?? dto.Bio, // use whichever is populated
                 GitHubLink = dto.GitHubLink,
                 LinkedinLink = dto.LinkedinLink,
                 EndUserId = userId, // assuming you use ASP.NET Identity

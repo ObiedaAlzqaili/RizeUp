@@ -25,11 +25,11 @@ namespace RizeUp
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             
             builder.Services.AddScoped<IResumeRepo, ResumeRepo>();
+            builder.Services.AddScoped<IPortfolioRepo, PortfolioRepo>();
 
-           
 
-            
-            
+
+
             var key = builder.Configuration["OpenAI:Key"];
             builder.Services.AddSingleton<Kernel>(sp =>
             {
@@ -40,7 +40,7 @@ namespace RizeUp
 
 
             builder.Services.AddSingleton<IResumeOpenAiService, ResumeOpenAiService>();
-
+            builder.Services.AddSingleton<IPortfolioOpenAiService, PortfolioOpenAiService>();
 
 
             builder.Services.AddDefaultIdentity<Person>(options => options.SignIn.RequireConfirmedAccount = true)

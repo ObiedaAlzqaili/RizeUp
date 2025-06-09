@@ -28,9 +28,12 @@
         <!-- ===========================
              PAGE 1: Personal & Contact
              =========================== -->
+        <input type="hidden" asp-for="ProfileImageBase64" value="@Model.ProfileImageBase64" />
+        <input type="hidden" asp-for="ProfileImageContentType" value="@Model.ProfileImageContentType" />
+        <input type="hidden" asp-for="ProfileImageFileName" value="@Model.ProfileImageFileName" />
         <div class="form-section @(Model.CurrentStep == 1 ? "active" : "")" data-step="1">
             <h4>Personal &amp; Contact Information</h4>
-
+            <input type="hidden" asp-for="ProfileImageBase64" />
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label asp-for="FirstName" class="form-label">First Name*</label>
@@ -69,11 +72,18 @@
                     <span asp-validation-for="GitHub" class="text-danger"></span>
                 </div>
             </div>
-
             <div class="mb-3">
                 <label asp-for="ProfileImage" class="form-label">Profile Image</label>
                 <input asp-for="ProfileImage" type="file" class="form-control" accept="image/*" />
-                <img id="profilePreview" class="img-preview mt-2" style="display:none;" alt="Profile Preview" />
+                @if (!string.IsNullOrEmpty(Model.ProfileImageBase64))
+                {
+                    <img src="data:@Model.ProfileImageContentType;base64,@Model.ProfileImageBase64"
+                         class="img-preview mt-2" alt="Profile Preview" />
+                }
+                else
+                {
+                    <img id="profilePreview" class="img-preview mt-2" style="display:none;" alt="Profile Preview" />
+                }
                 <span asp-validation-for="ProfileImage" class="text-danger"></span>
             </div>
 
@@ -83,12 +93,16 @@
                 <span asp-validation-for="Summary" class="text-danger"></span>
             </div>
         </div>
-
+      
         <!-- =========================
              PAGE 2: Services, Projects, Skills
              ========================= -->
         <div class="form-section @(Model.CurrentStep == 2 ? "active" : "")" data-step="2">
             <h4>Services, Projects &amp; Skills</h4>
+
+            <input type="hidden" asp-for="ProfileImageBase64" value="@Model.ProfileImageBase64" />
+            <input type="hidden" asp-for="ProfileImageContentType" value="@Model.ProfileImageContentType" />
+            <input type="hidden" asp-for="ProfileImageFileName" value="@Model.ProfileImageFileName" />
 
             <div class="mb-3">
                 <label asp-for="Services" class="form-label">Services You Provide*</label>
@@ -100,6 +114,7 @@
             <div id="projectsContainer">
                 @if (Model.Projects != null && Model.Projects.Count > 0)
                 {
+
                     for (int i = 0; i < Model.Projects.Count; i++)
                     {
                         <div class="project-item mb-4 p-3 border rounded">
@@ -158,8 +173,22 @@
         <!-- ============================
              PAGE 3: Review & Final Submit
              ============================ -->
+        <input type="hidden" asp-for="ProfileImageBase64" value="@Model.ProfileImageBase64" />
+        <input type="hidden" asp-for="ProfileImageContentType" value="@Model.ProfileImageContentType" />
+        <input type="hidden" asp-for="ProfileImageFileName" value="@Model.ProfileImageFileName" />
         <div class="form-section @(Model.CurrentStep == 3 ? "active" : "")" data-step="3">
             <h4>Review Your Portfolio</h4>
+            @if (Model.Projects != null && Model.Projects.Count > 0)
+            {
+                @for(int i = 0 ; i < Model.Projects.Count; i++)
+                {
+                    <input type="hidden" asp-for="Projects[i].ImageFileName" value="@Model.Projects[i].ImageFileName" />
+                    <input type="hidden" asp-for="Projects[i].ImageContentType" value="@Model.Projects[i].ImageContentType" />
+                    <input type="hidden" asp-for="Projects[i].ImageBase64" value="@Model.Projects[i].ImageBase64" />
+                }
+
+            }
+            
 
             <div class="preview-section mb-4" id="preview">
                 <h5>Personal &amp; Contact Information</h5>
