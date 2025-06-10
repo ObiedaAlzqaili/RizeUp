@@ -23,13 +23,23 @@ namespace RizeUp
                 options.UseSqlServer(connectionString));
             
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            // Pseudocode:
+            // 1. Add code to read the key from "sercrite.json".
+            // 2. Register the key in the DI container as "userManagerSercirte".
+            // 3. Use Configuration to load the file and access the key.
+
             
+
             var key = builder.Configuration["OpenAi:key"];
+
+            var userSecret = builder.Configuration["key"];
+             
+
 
             builder.Services.AddSingleton<Kernel>(sp =>
             {
                 var kernelBuilder = Kernel.CreateBuilder();
-                kernelBuilder.AddOpenAIChatCompletion("gpt-4", key);
+                kernelBuilder.AddOpenAIChatCompletion("gpt-4", userSecret);
                 return kernelBuilder.Build();
             });
 
@@ -48,7 +58,7 @@ namespace RizeUp
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
-
+            
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
