@@ -137,10 +137,48 @@ namespace RizeUp.Controllers
         }
 
         [HttpGet]
-        public IActionResult PortfolioTemplate1(PortfolioJsonDto json)
+        public IActionResult PortfolioTemplate1()
         {
-            
-            return View(json);
+            var dummy = new PortfolioJsonDto
+            {
+                Title = "Software Engineer Portfolio",
+                FirstName = "Jane",
+                LastName = "Doe",
+                Email = "jane.doe@example.com",
+                PhoneNumber = "123-456-7890",
+                Address = "123 Main St, Cityville",
+                Summery = "Experienced software engineer with a passion for building scalable web applications.",
+                GitHubLink = "https://github.com/janedoe",
+                LinkedinLink = "https://linkedin.com/in/janedoe",
+                ImageBase64 = null,
+                ImageFileName = null,
+                ImageContentType = null,
+                Services = new List<ServiceItem>
+                {
+                    new ServiceItem { ServiceName = "Web Development", ServiceDescription = "Building responsive and robust web applications." },
+                    new ServiceItem { ServiceName = "API Design", ServiceDescription = "Designing RESTful APIs for scalable systems." }
+                },
+                Projects = new List<ProjectItem1>
+                {
+                    new ProjectItem1
+                    {
+                        ProjectName = "Project Alpha",
+                        ProjectDescription = "A web-based project management tool.",
+                        StartDate = "2022-01-01",
+                        EndDate = "2022-06-01",
+                        ProjectLink = "https://github.com/janedoe/project-alpha"
+                    },
+                    new ProjectItem1
+                    {
+                        ProjectName = "Beta App",
+                        ProjectDescription = "A mobile app for task tracking.",
+                        StartDate = "2021-03-01",
+                        EndDate = "2021-12-01",
+                        ProjectLink = "https://github.com/janedoe/beta-app"
+                    }
+                }
+            };
+            return View(dummy);
         }
 
         private Portfolio MapToPortfolioEntity(PortfolioJsonDto dto, string userId)

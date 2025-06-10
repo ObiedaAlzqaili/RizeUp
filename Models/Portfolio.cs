@@ -9,6 +9,7 @@ namespace RizeUp.Models
 
         public List<Service> Services { get; set; } 
         public List<Project> Projects { get; set; }
+        public List<Skill> Skills { get; set; }
         public bool IsDeleted { get; set; } = false;
 
         public string? ImageBase64 { get; set; }

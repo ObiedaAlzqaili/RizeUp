@@ -24,23 +24,20 @@ namespace RizeUp
             
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             
-            builder.Services.AddScoped<IResumeRepo, ResumeRepo>();
-            builder.Services.AddScoped<IPortfolioRepo, PortfolioRepo>();
+            var key = builder.Configuration["OpenAi:key"];
 
-
-
-
-            var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
             builder.Services.AddSingleton<Kernel>(sp =>
             {
                 var kernelBuilder = Kernel.CreateBuilder();
-                kernelBuilder.AddOpenAIChatCompletion("gpt-4", openAiKey);
+                kernelBuilder.AddOpenAIChatCompletion("gpt-4", key);
                 return kernelBuilder.Build();
             });
 
-
+            builder.Services.AddScoped<IResumeRepo, ResumeRepo>();
+            builder.Services.AddScoped<IPortfolioRepo, PortfolioRepo>();
             builder.Services.AddSingleton<IResumeOpenAiService, ResumeOpenAiService>();
             builder.Services.AddSingleton<IPortfolioOpenAiService, PortfolioOpenAiService>();
+
 
 
             builder.Services.AddDefaultIdentity<Person>(options => options.SignIn.RequireConfirmedAccount = true)

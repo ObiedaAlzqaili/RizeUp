@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using RizeUp.Models;
 
 namespace RizeUp.DTOs
 {
@@ -21,6 +23,7 @@ namespace RizeUp.DTOs
         // Child lists
         public List<ServiceItem>? Services { get; set; }
         public List<ProjectItem1>? Projects { get; set; }
+        public List<SkillItem>? Skills { get; set; }
     }
 
     public class ServiceItem
@@ -40,5 +43,12 @@ namespace RizeUp.DTOs
         public string? ImageContentType { get; set; }
         public bool? IsOngoing { get; set; }
         public string? ProjectLink { get; set; }
+    }
+    public class SkillItem
+    {
+        public string? SkillName { get; set; }
+        public string? SkillType { get; set; }
+
+        
     }
 }
