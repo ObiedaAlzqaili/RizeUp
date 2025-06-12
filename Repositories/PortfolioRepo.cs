@@ -52,6 +52,9 @@ namespace RizeUp.Repository
             {
                 var por = await _context.Portfolios
                     .AsNoTracking()
+                    .Include(p => p.Skills)
+                    .Include(p => p.Projects)
+                    .Include(p => p.Services)
                     .FirstOrDefaultAsync(p => p.Id == id);
 
                 if (por == null)
@@ -87,17 +90,28 @@ namespace RizeUp.Repository
         {
             try
             {
-                var existingPortfolio = await _context.Portfolios.FindAsync(portfolio.Id);
+                var existingPortfolio = await _context.Portfolios
+                    .Include(p => p.Services)
+                    .Include(p => p.Projects)
+                    .Include(p => p.Skills)
+                    .FirstOrDefaultAsync(p => p.Id == portfolio.Id);
+
                 if (existingPortfolio == null)
                 {
                     throw new KeyNotFoundException($"Portfolio with ID {portfolio.Id} not found.");
                 }
-                existingPortfolio.Services = portfolio.Services;
-                existingPortfolio.Projects = portfolio.Projects;
-                existingPortfolio.IsDeleted = portfolio.IsDeleted;
-                existingPortfolio.EndUserId = portfolio.EndUserId;
-                existingPortfolio.ModifiedDate = DateOnly.FromDateTime(DateTime.Now).ToString();
-                _context.Portfolios.Update(existingPortfolio);
+
+                // Remove related entities
+                _context.Services.RemoveRange(existingPortfolio.Services);
+                _context.Projects.RemoveRange(existingPortfolio.Projects);
+                _context.Skills.RemoveRange(existingPortfolio.Skills);
+
+                // Remove the portfolio itself
+                _context.Portfolios.Remove(existingPortfolio);
+
+                // Add the new portfolio
+                _context.Portfolios.Add(portfolio);
+
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)

@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿ using System.Text.Json;
 using Microsoft.SemanticKernel;
 using RizeUp.DTOs;
 using RizeUp.Interfaces;
@@ -14,7 +14,7 @@ namespace RizeUp.Services
             _kernel = kernel;
         }
 
-        public async Task<PortfolioJsonDto> ParsePortfolioDataAsync(CreatePortfolioDto dto)
+        public async Task<PortfolioDto> ParsePortfolioDataAsync(CreatePortfolioDto dto)
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
 
@@ -30,7 +30,7 @@ namespace RizeUp.Services
         Given the following raw key:value lines, output a single JSON object matching this schema exactly (omit any other keys):
 
         {
-        ""title"": string or null,
+        ""title"": string ,
         ""firstName"": string,
         ""lastName"": string,
         ""email"": string,
@@ -40,22 +40,24 @@ namespace RizeUp.Services
         ""gitHubLink"": string or null,
         ""linkedinLink"": string or null,
         ""skills"": [
-        {""skillName"": string or null, ""skillType"": string or null }
+          {""skillName"": string or null, ""skillType"": string or null}
         ] or [],
         ""services"": [
-        { ""serviceName"": string or null, ""serviceDescription"": string or null }
+          { ""serviceName"": string or null, ""serviceDescription"": string or null }
         ] or [],
         ""projects"": [
-        {
-          ""projectName"": string or null,
-          ""projectDescription"": string or null,
-          ""startDate"": string or null,
-          ""endDate"": string or null,
-          ""isOngoing"": boolean or null,
-          ""projectLink"": string or null
-        }
+          {
+            ""projectName"": string or null,
+            ""projectDescription"": string or null,
+            ""startDate"": string or null,
+            ""endDate"": string or null,
+            ""isOngoing"": boolean or null,
+            ""projectLink"": string or null
+          }
         ] or []
         }
+
+        For each Service, if you know what it is, add a short, clear description in the 'serviceDescription' field. If you do not know, leave 'serviceDescription' as null.
 
         If any section is empty or cannot be parsed, emit `[]`.  
         Return _only_ the JSON—no commentary.
@@ -73,7 +75,6 @@ namespace RizeUp.Services
         LastName: {dto.LastName}
         Email: {dto.Email}
         PhoneNumber: {dto.Phone}
-        Address: 
         Summery: {dto.Summary?.Replace("\r\n", " ").Replace("\n", " ")}
         GitHubLink: {dto.GitHub ?? ""}
         LinkedinLink: {dto.LinkedIn ?? ""}
@@ -92,17 +93,17 @@ namespace RizeUp.Services
 
             string json = result.ToString();
 
-            PortfolioJsonDto portfolioDto;
+            PortfolioDto portfolioDto;
             try
             {
-                portfolioDto = JsonSerializer.Deserialize<PortfolioJsonDto>(json, new JsonSerializerOptions
+                portfolioDto = JsonSerializer.Deserialize<PortfolioDto>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
-                }) ?? new PortfolioJsonDto();
+                }) ?? new PortfolioDto();
             }
             catch
             {
-                portfolioDto = new PortfolioJsonDto();
+                portfolioDto = new PortfolioDto();
             }
 
             // Fill in any missing fields from the original dto if needed
@@ -113,9 +114,18 @@ namespace RizeUp.Services
             portfolioDto.LinkedinLink ??= dto.LinkedIn;
             portfolioDto.GitHubLink ??= dto.GitHub;
             portfolioDto.Summery ??= dto.Summary;
-            portfolioDto.ImageBase64 ??= dto.ProfileImageBase64;
-            portfolioDto.ImageFileName ??= dto.ProfileImageFileName;
-            portfolioDto.ImageContentType ??= dto.ProfileImageContentType;
+            portfolioDto.ImageBase64 = dto.ProfileImageBase64;
+            portfolioDto.ImageFileName = dto.ProfileImageFileName;
+            portfolioDto.ImageContentType = dto.ProfileImageContentType;
+            for (int i = 0; i < portfolioDto.Projects.Count; i++)
+            {
+                portfolioDto.Projects[i].ProjectName ??= dto.Projects.ElementAtOrDefault(i)?.Name;
+                portfolioDto.Projects[i].ProjectDescription ??= dto.Projects.ElementAtOrDefault(i)?.Description;
+                portfolioDto.Projects[i].ProjectLink ??= dto.Projects.ElementAtOrDefault(i)?.Link;
+                portfolioDto.Projects[i].ImageBase64 = dto.Projects.ElementAtOrDefault(i)?.ImageBase64;
+                portfolioDto.Projects[i].ImageFileName = dto.Projects.ElementAtOrDefault(i)?.ImageFileName;
+                portfolioDto.Projects[i].ImageContentType = dto.Projects.ElementAtOrDefault(i)?.ImageContentType;
+            }
 
             return portfolioDto;
         }

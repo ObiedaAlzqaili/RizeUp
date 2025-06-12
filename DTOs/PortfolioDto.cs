@@ -4,21 +4,24 @@ using RizeUp.Models;
 
 namespace RizeUp.DTOs
 {
-    public class PortfolioJsonDto
+    public class PortfolioDto
     {
-        // from PersonalInfo
+        public int Id { get; set; }
         public string? Title { get; set; }
-        public string FirstName { get; set; } = "";
-        public string LastName { get; set; } = "";
-        public string Email { get; set; } = "";
-        public string PhoneNumber { get; set; } = "";
+        public string FirstName { get; set; }
+        public string LastName { get; set; } 
+        public string Email { get; set; } 
+        public string PhoneNumber { get; set; } 
         public string? Address { get; set; }
-        public string Summery { get; set; } = "";
+        public string? Summery { get; set; }
+        public IFormFile? PersonalImage { get; set; }
         public string? ImageBase64 { get; set; }
         public string? ImageFileName { get; set; }
         public string? ImageContentType { get; set; }
         public string? GitHubLink { get; set; }
         public string? LinkedinLink { get; set; }
+        public string? CreatedDate { get; set; }
+        public string? ModifiedDate { get; set; }
 
         // Child lists
         public List<ServiceItem>? Services { get; set; }
@@ -38,6 +41,7 @@ namespace RizeUp.DTOs
         public string? ProjectDescription { get; set; }
         public string? StartDate { get; set; }
         public string? EndDate { get; set; }
+        public IFormFile? ProjectImage { get; set; }
         public string? ImageBase64 { get; set; }
         public string? ImageFileName { get; set; }
         public string? ImageContentType { get; set; }
@@ -48,7 +52,6 @@ namespace RizeUp.DTOs
     {
         public string? SkillName { get; set; }
         public string? SkillType { get; set; }
-
         
     }
 }

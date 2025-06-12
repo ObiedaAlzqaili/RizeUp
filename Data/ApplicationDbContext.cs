@@ -38,22 +38,32 @@ namespace RizeUp.Data
                 .HasForeignKey(p => p.EndUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-           
-
             builder.Entity<Project>()
                 .HasOne(p => p.Resume)
                 .WithMany(r => r.Projects)
                 .HasForeignKey(p => p.ResumeId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
             builder.Entity<Project>()
                 .HasOne(p => p.Portfolio)
                 .WithMany(p => p.Projects)
                 .HasForeignKey(p => p.PortfolioId)
                 .OnDelete(DeleteBehavior.Cascade);
-           
-            
 
 
+            builder.Entity<Skill>()
+                .HasOne(p => p.Portfolio)
+                .WithMany(p => p.Skills)
+                .HasForeignKey(p => p.PortfolioId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            builder.Entity<Skill>()
+                .HasOne(p => p.Resume)
+                .WithMany(p => p.Skills)
+                .HasForeignKey(p => p.PortfolioId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

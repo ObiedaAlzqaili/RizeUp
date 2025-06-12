@@ -5,6 +5,6 @@ namespace RizeUp.Interfaces
 {
     public interface IResumeOpenAiService
     {
-        Task<ResumeJsonDto> ParseResumeAsync(CreateResumeDto resemeRowData);
+        Task<ResumeDto> ParseResumeAsync(CreateResumeDto resemeRowData);
     }
 }

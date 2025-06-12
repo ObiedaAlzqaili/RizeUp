@@ -23,7 +23,15 @@ namespace RizeUp.Repository
             Resume resume = null;
             try
             {
-                resume = await _DbContext.Resumes.FindAsync(id);
+                resume = await _DbContext.Resumes
+    .Include(r => r.Educations)
+    .Include(r => r.Experiences)
+    .Include(r => r.Projects)
+    .Include(r => r.Skills)
+    .Include(r => r.Languages)
+    .Include(r => r.Certificates)
+    .Include(r => r.EndUser)
+    .FirstOrDefaultAsync(r => r.ResumeId == id);
                 if (resume == null)
                 {
                     throw new KeyNotFoundException($"Resume with ID {id} not found.");
@@ -42,10 +50,7 @@ namespace RizeUp.Repository
             try
             {
                 var resumes = await _DbContext.Resumes.Where(r => r.EndUserId == userId).ToListAsync();
-                if (resumes == null || !resumes.Any())
-                {
-                    throw new KeyNotFoundException($"No resumes found for user ID {userId}.");
-                }
+               
                 return resumes;
             }
             catch (Exception ex)

@@ -104,3 +104,55 @@
 
 //// Initialize step visibility on page load
 //updateStep();
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('resumeForm');
+    const submitBtn = form.querySelector('button[value="submit"]');
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const command = e.submitter.value;
+        formData.append('command', command);
+
+        // Show loading state
+        if (command === 'submit') {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+        }
+
+        try {
+            const response = await fetch('/Resume/ProcessStep', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.redirected) {
+                window.location.href = response.url;
+                return;
+            }
+
+            const result = await response.text();
+            document.documentElement.innerHTML = result;
+
+            // Reinitialize any scripts after content update
+            const scripts = document.querySelectorAll('script');
+            scripts.forEach(script => {
+                if (script.src) {
+                    const newScript = document.createElement('script');
+                    newScript.src = script.src;
+                    document.body.appendChild(newScript);
+                }
+            });
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while submitting the form. Please try again.');
+        } finally {
+            if (command === 'submit') {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Submit to AI';
+            }
+        }
+    });
+});

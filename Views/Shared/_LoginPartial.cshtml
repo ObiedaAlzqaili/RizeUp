@@ -5,9 +5,9 @@
 <ul class="navbar-nav align-items-center">
 @if (SignInManager.IsSignedIn(User))
 {
-   
+
         var user = await UserManager.GetUserAsync(User);
-        var displayName = user?.FirstName ?? "Profile";
+        var displayName = user?.FirstName ?? User.Identity?.Name;
     
     
     <li class="nav-item dropdown">

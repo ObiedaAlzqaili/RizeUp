@@ -1,9 +1,9 @@
 ﻿namespace RizeUp.DTOs
 {
    
-    public class ResumeJsonDto
+    public class ResumeDto
     {
-        // PersonalInfo
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -11,8 +11,11 @@
         public string? Address { get; set; }
         public string? Bio { get; set; }
         public string? Title { get; set; }
+        public string EndUserId { get; set; }
         public string? GitHubLink { get; set; }
         public string? LinkedinLink { get; set; }
+        public string CreatedDate { get; set; } = DateOnly.FromDateTime(DateTime.Now).ToString();
+        public string? ModifiedDate { get; set; }
 
         // Parsed arrays (each array can be null or empty if OpenAI couldn’t extract any)
         public List<EducationItem>? Educations { get; set; }

@@ -24,6 +24,8 @@ namespace RizeUp.Controllers
             _portfolioOpenAiService = portfolioOpenAiService;
         }
 
+  
+
         [Authorize]
         public async Task<IActionResult> Index()
         {
@@ -40,6 +42,41 @@ namespace RizeUp.Controllers
                 CurrentStep = 1
             };
             return View(dto);
+        }
+        [HttpGet]
+        public async Task<IActionResult> EditPortfolio(int PortfolioId)
+        {
+            var portfolio = await _portfolioRepo.GetPortfolioByIdAsync(PortfolioId);
+            var portfolioDto = MapToPortfolioDto(portfolio);
+            return View(portfolioDto);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePortfolio(PortfolioDto portfolio)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Re-render the view with validation errors and keep current step
+                return View("EditPortfolio", portfolio);
+            }
+            var portfolio1 = MapToPortfolioEntity(portfolio, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            portfolio1.Id = portfolio.Id;
+  
+          await _portfolioRepo.UpdatePortfolioAsync(portfolio1);
+            // After a successful edit, redirect to Index
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeletePortfolio(int portfolioId)
+        {
+            var portfolio = await _portfolioRepo.GetPortfolioByIdAsync(portfolioId);
+            if (portfolio == null)
+            {
+                return NotFound();
+            }
+         
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -128,7 +165,7 @@ namespace RizeUp.Controllers
                 // You may need to map the DTO to your Portfolio entity/model
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var data = MapToPortfolioEntity(result, userId);
-                await _portfolioRepo.AddPortfolioAsync(data); ;
+                await _portfolioRepo.AddPortfolioAsync(data);
                 return RedirectToAction("Index");
             }
 
@@ -137,55 +174,24 @@ namespace RizeUp.Controllers
         }
 
         [HttpGet]
-        public IActionResult PortfolioTemplate1()
+        public async Task<IActionResult> PortfolioTemplate1(int portfolioId)
         {
-            var dummy = new PortfolioJsonDto
+            var portfolio = await _portfolioRepo.GetPortfolioByIdAsync(portfolioId);
+            if (portfolio == null)
             {
-                Title = "Software Engineer Portfolio",
-                FirstName = "Jane",
-                LastName = "Doe",
-                Email = "jane.doe@example.com",
-                PhoneNumber = "123-456-7890",
-                Address = "123 Main St, Cityville",
-                Summery = "Experienced software engineer with a passion for building scalable web applications.",
-                GitHubLink = "https://github.com/janedoe",
-                LinkedinLink = "https://linkedin.com/in/janedoe",
-                ImageBase64 = null,
-                ImageFileName = null,
-                ImageContentType = null,
-                Services = new List<ServiceItem>
-                {
-                    new ServiceItem { ServiceName = "Web Development", ServiceDescription = "Building responsive and robust web applications." },
-                    new ServiceItem { ServiceName = "API Design", ServiceDescription = "Designing RESTful APIs for scalable systems." }
-                },
-                Projects = new List<ProjectItem1>
-                {
-                    new ProjectItem1
-                    {
-                        ProjectName = "Project Alpha",
-                        ProjectDescription = "A web-based project management tool.",
-                        StartDate = "2022-01-01",
-                        EndDate = "2022-06-01",
-                        ProjectLink = "https://github.com/janedoe/project-alpha"
-                    },
-                    new ProjectItem1
-                    {
-                        ProjectName = "Beta App",
-                        ProjectDescription = "A mobile app for task tracking.",
-                        StartDate = "2021-03-01",
-                        EndDate = "2021-12-01",
-                        ProjectLink = "https://github.com/janedoe/beta-app"
-                    }
-                }
-            };
-            return View(dummy);
+                return NotFound();
+            }
+            var portfolioDto = MapToPortfolioDto(portfolio);
+            return View(portfolioDto);
         }
 
-        private Portfolio MapToPortfolioEntity(PortfolioJsonDto dto, string userId)
+
+        private Portfolio MapToPortfolioEntity(PortfolioDto dto, string userId)
         {
             return new Portfolio
             {
                 // Top-level properties:
+                Id = dto.Id,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 Email = dto.Email,
@@ -193,6 +199,9 @@ namespace RizeUp.Controllers
                 Title = dto.Title,
                 Address = dto.Address,
                 Summery = dto.Summery,
+                ImageBase64 = dto.ImageBase64,
+                ImageContentType = dto.ImageContentType,
+                ImageFileName = dto.ImageFileName,
                 GitHubLink = dto.GitHubLink,
                 LinkedinLink = dto.LinkedinLink,
                 EndUserId = userId,
@@ -215,20 +224,29 @@ namespace RizeUp.Controllers
                     ProjectName = p.ProjectName,
                     ProjectDescription = p.ProjectDescription,
                     StartDate = string.IsNullOrWhiteSpace(p.StartDate) ? null : p.StartDate,
-                    EndDate = string.IsNullOrWhiteSpace(p.EndDate) ? null :p.EndDate,
+                    EndDate = string.IsNullOrWhiteSpace(p.EndDate) ? null : p.EndDate,
                     IsOngoing = p.IsOngoing,
+                    ImageBase64 = p.ImageBase64,
+                    ImageContentType = p.ImageContentType,
+                    ImageFileName = p.ImageFileName,
                     ProjectLink = p.ProjectLink
-                }).ToList() ?? new List<Project>()
+                }).ToList() ?? new List<Project>(),
+                Skills = dto.Skills?.Select(s => new Skill
+                {
+                    SkillName = s.SkillName,
+                    SkillType = s.SkillType
+                }).ToList() ?? new List<Skill>(),
             };
         }
 
-        public List<PortfolioJsonDto> MapToPortfolioJsonDtoList(List<Portfolio> portfolios)
+        public List<PortfolioDto> MapToPortfolioJsonDtoList(List<Portfolio> portfolios)
         {
             if (portfolios == null || portfolios.Count == 0)
-                return new List<PortfolioJsonDto>();
+                return new List<PortfolioDto>();
 
-            return portfolios.Select(p => new PortfolioJsonDto
+            return portfolios.Select(p => new PortfolioDto
             {
+                Id = p.Id,
                 Title = p.Title,
                 FirstName = p.FirstName,
                 LastName = p.LastName,
@@ -251,13 +269,57 @@ namespace RizeUp.Controllers
                     ProjectDescription = proj.ProjectDescription,
                     StartDate = proj.StartDate,
                     EndDate = proj.EndDate,
-              
+
                     ProjectLink = proj.ProjectLink
                 }).ToList() ?? new List<ProjectItem1>()
             }).ToList();
         }
+        private PortfolioDto MapToPortfolioDto(Portfolio portfolio)
+        {
+            if (portfolio == null)
+                return null;
 
-
+            return new PortfolioDto
+            {         
+                Id = portfolio.Id,
+                Title = portfolio.Title,
+                FirstName = portfolio.FirstName,
+                LastName = portfolio.LastName,
+                Email = portfolio.Email,
+                PhoneNumber = portfolio.PhoneNumber,
+                Address = portfolio.Address,
+                Summery = portfolio.Summery,
+                GitHubLink = portfolio.GitHubLink,
+                LinkedinLink = portfolio.LinkedinLink,
+                ImageBase64 = portfolio.ImageBase64,
+                ImageFileName = portfolio.ImageFileName,
+                ImageContentType = portfolio.ImageContentType,
+                CreatedDate = portfolio.CreatedDate,
+                ModifiedDate = portfolio.ModifiedDate,
+                Services = portfolio.Services?.Select(s => new ServiceItem
+                {
+                    ServiceName = s.ServiceName,
+                    ServiceDescription = s.ServiceDescription
+                }).ToList() ?? new List<ServiceItem>(),
+                Projects = portfolio.Projects?.Select(p => new ProjectItem1
+                {
+                    ProjectName = p.ProjectName,
+                    ProjectDescription = p.ProjectDescription,
+                    StartDate = p.StartDate,
+                    EndDate = p.EndDate,
+                    IsOngoing = p.IsOngoing,
+                    ProjectLink = p.ProjectLink,
+                    ImageBase64 = p.ImageBase64,
+                    ImageFileName = p.ImageFileName,
+                    ImageContentType = p.ImageContentType
+                }).ToList() ?? new List<ProjectItem1>(),
+                Skills = portfolio.Skills?.Select(s => new SkillItem
+                {
+                    SkillName = s.SkillName,
+                    SkillType = s.SkillType,
+                }).ToList() ?? new List<SkillItem>(),
+            };
+        }
     }
 
 }

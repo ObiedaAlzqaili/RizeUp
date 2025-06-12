@@ -1,5 +1,4 @@
-﻿@model List<RizeUp.DTOs.PortfolioJsonDto>
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿@model List<RizeUp.DTOs.PortfolioDto>
 @{
     ViewData["Title"] = "Portfolio";
 }
@@ -10,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
     <!-- Welcome Header -->
     <div class="welcome-header">
         <div class="container">
-            <h3 class="mb-1">Welcome back, <strong>Obaida Alzogilli</strong></h3>
+            <h3 class="mb-1">Welcome back, <strong>@User?.Identity?.Name</strong></h3>
             <p class="text-muted mb-0">You have @Model.Count portfolio</p>
         </div>
     </div>
@@ -43,60 +42,70 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
     <div class="tip-box">
         <strong>TIP:</strong> Did you know that tailoring your resume to the job description can double your interview chances?
     </div>
-
-    <!-- Resumes List -->
-     <div class="portfolio-list">
-        <!-- Portfolio Card 1 -->
-        @for(int i = 0; i < Model.Count; i++)
-        {
-            <div class="portfolio-card">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <h4 class="portfolio-title">@Model[i].FirstName</h4>
-                        <div class="portfolio-meta">
-                            <span><i class="bi bi-calendar"></i> June 10, 2025</span>
-                            <span><i class="bi bi-clock"></i> Edited 1 day ago</span>
-                            <span><i class="bi bi-link-45deg"></i> <a href="https://github.com/you/react-store" target="_blank" class="text-decoration-none">github.com/you/react-store</a></span>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-three-dots-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-pencil"></i>Edit</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-eye"></i>Preview</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-up-right"></i>Publish</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash"></i>Delete</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <p class="mt-3 text-muted">A fully responsive e-commerce store built with React, Redux, and Stripe integration for payments. Features product listings, user authentication, and a shopping cart.</p>
-                <div class="mt-3 action-buttons">
-                    <a href="#" class="btn btn-sm btn-outline-primary action-btn"><i class="bi bi-pencil"></i> Edit</a>
-                    <a href="#" class="btn btn-sm btn-outline-secondary action-btn"><i class="bi bi-eye"></i> Preview</a>
-                    <a href="#" class="btn btn-sm btn-primary action-btn"><i class="bi bi-box-arrow-up-right"></i> Publish</a>
-                    <a href="#" class="btn btn-sm btn-outline-danger action-btn"><i class="bi bi-trash"></i> Delete</a>
-                </div>
-            </div>
-		})
-        
-
-        <!-- Portfolio Card 2 -->
-        
-    </div>
-        <!-- Resume Card 3 -->
-        <!-- Empty State (Hidden) -->
-        <div class="empty-state" style="display: none;">
+    @if (Model.Count == 0)
+    {
+       
+        <div class="empty-state"  >
             <div class="empty-state-icon">
                 <i class="bi bi-file-earmark-text"></i>
             </div>
             <h4>No resumes yet</h4>
             <p class="text-muted mb-4">Create your first resume to get started</p>
-            <a href="/resumes/new" class="btn btn-primary">
+            <a asp-action="NewPortfolio" asp-controller="Portfolio" class="btn btn-primary">
                 <i class="bi bi-plus-lg me-2"></i>Create New Portfolio
             </a>
         </div>
+    }
+    else
+    {
+        <!-- Resumes List -->
+        <div class="portfolio-list">
+
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="portfolio-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h4 class="portfolio-title">@Model[i].FirstName</h4>
+                            <div class="portfolio-meta">
+                                <span><i class="bi bi-calendar"></i> June 10, 2025</span>
+                                <span><i class="bi bi-clock"></i> Edited 1 day ago</span>
+                                <span><i class="bi bi-link-45deg"></i> <a href="https://github.com/you/react-store" target="_blank" class="text-decoration-none">github.com/you/react-store</a></span>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" name="PortfolioId" asp-action="EditPortfolio" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id"><i class="bi bi-pencil"></i>Edit</a></li>
+                                <li><a class="dropdown-item" asp-action="PortfolioTemplate1" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id"><i class="bi bi-eye"></i>Preview</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-up-right"></i>Publish</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" name="PortfolioId" asp-action="DeletePortfolio" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id"><i class="bi bi-trash"></i>Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-muted">A fully responsive e-commerce store built with React, Redux, and Stripe integration for payments. Features product listings, user authentication, and a shopping cart.</p>
+                    <div class="mt-3 action-buttons">
+                        <a name="PortfolioId" asp-action="EditPortfolio" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id" class="btn btn-sm btn-outline-primary action-btn"><i class="bi bi-pencil"></i> Edit</a>
+                        <a asp-action="PortfolioTemplate1" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id" class="btn btn-sm btn-outline-secondary action-btn"><i class="bi bi-eye"></i> Preview</a>
+                        <a href="#" class="btn btn-sm btn-primary action-btn"><i class="bi bi-box-arrow-up-right"></i> Publish</a>
+                        <a name="PortfolioId" asp-action="DeletePortfolio" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id" class="btn btn-sm btn-outline-danger action-btn"><i class="bi bi-trash"></i> Delete</a>
+                    </div>
+                </div>
+            }
+
+
+
+            <!-- Portfolio Card 2 -->
+
+        </div>
+        
+    }
+    
+        <!-- Resume Card 3 -->
+        <!-- Empty State (Hidden) -->
+        
     </div>
     <script src="~/js/ResumePage.js" asp-append-version="true"></script>

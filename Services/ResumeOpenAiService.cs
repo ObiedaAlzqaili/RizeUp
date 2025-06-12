@@ -19,7 +19,7 @@ namespace RizeUp.Services
             _kernel = kernel ;
         }
 
-        public async Task<ResumeJsonDto> ParseResumeAsync(CreateResumeDto dto)
+        public async Task<ResumeDto> ParseResumeAsync(CreateResumeDto dto)
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
 
@@ -221,10 +221,10 @@ JSON:
             string json = result.ToString();
 
          
-            ResumeJsonDto resumeDto = JsonSerializer.Deserialize<ResumeJsonDto>(json, new JsonSerializerOptions
+            ResumeDto resumeDto = JsonSerializer.Deserialize<ResumeDto>(json, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
-            }) ?? new ResumeJsonDto();
+            }) ?? new ResumeDto();
 
             
             resumeDto.FirstName = resumeDto.FirstName ?? "";

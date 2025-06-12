@@ -1,0 +1,502 @@
+﻿@model RizeUp.DTOs.ResumeDto
+
+    @{
+        ViewData["Title"] = "Edit Resume";
+    }
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/EditPortfolio.css" asp-append-version="true" />
+
+    <div class="container py-5">
+        <div class="row">
+            <!-- Side Navigation -->
+            <div class="col-lg-3 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body p-0">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#" data-section="personal-info">
+                                    <i class="fas fa-user-circle me-2"></i> Personal Info
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-section="educations">
+                                    <i class="fas fa-graduation-cap me-2"></i> Education
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-section="experiences">
+                                    <i class="fas fa-briefcase me-2"></i> Experience
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-section="skills">
+                                    <i class="fas fa-lightbulb me-2"></i> Skills
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-section="languages">
+                                    <i class="fas fa-language me-2"></i> Languages
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-section="certificates">
+                                    <i class="fas fa-certificate me-2"></i> Certificates
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-section="projects">
+                                    <i class="fas fa-project-diagram me-2"></i> Projects
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                
+                @using (Html.BeginForm("UpdateResume", "Resume", FormMethod.Post, new { enctype = "multipart/form-data", id = "resumeForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="EndUserId" />
+                    <input type="hidden" asp-for="CreatedDate" />
+                    <input type="hidden" asp-for="ModifiedDate" />
+
+                    <!-- Personal Info Section -->
+                    <div class="form-section active" id="personal-info-section">
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-user-circle me-2"></i> Personal Information
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label asp-for="FirstName" class="form-label"></label>
+                                        <input asp-for="FirstName" class="form-control" required />
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="LastName" class="form-label"></label>
+                                        <input asp-for="LastName" class="form-control" required />
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="Email" class="form-label"></label>
+                                        <input asp-for="Email" class="form-control" required />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="PhoneNumber" class="form-label"></label>
+                                        <input asp-for="PhoneNumber" class="form-control" required />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-12">
+                                        <label asp-for="Bio" class="form-label"></label>
+                                        <textarea asp-for="Bio" class="form-control" rows="4"></textarea>
+                                        <span asp-validation-for="Bio" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="Title" class="form-label"></label>
+                                        <input asp-for="Title" class="form-control" />
+                                        <span asp-validation-for="Title" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="Address" class="form-label"></label>
+                                        <input asp-for="Address" class="form-control" />
+                                        <span asp-validation-for="Address" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <h6 class="section-title mt-4">Social Links</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label asp-for="GitHubLink" class="form-label"></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fab fa-github"></i></span>
+                                            <input asp-for="GitHubLink" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="GitHubLink" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="LinkedinLink" class="form-label"></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fab fa-linkedin"></i></span>
+                                            <input asp-for="LinkedinLink" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="LinkedinLink" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Education Section -->
+                    <div class="form-section" id="educations-section">
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-graduation-cap me-2"></i> Education
+                                </h5>
+                                <button type="button" class="btn btn-sm btn-primary" id="addEducation">
+                                    <i class="fas fa-plus me-1"></i> Add Education
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="educationsContainer">
+                                    @if (Model.Educations != null && Model.Educations.Count > 0)
+                                    {
+                                        for (int i = 0; i < Model.Educations.Count; i++)
+                                        {
+                                            <div class="dynamic-list-item">
+                                                <i class="fas fa-times remove-item" onclick="removeItem(this)"></i>
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Educations[i].CollegeName" class="form-label">College Name*</label>
+                                                        <input asp-for="@Model.Educations[i].CollegeName" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Educations[i].CollegeName" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Educations[i].DegreeType" class="form-label">Degree Type*</label>
+                                                        <input asp-for="@Model.Educations[i].DegreeType" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Educations[i].DegreeType" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Educations[i].StartDate" class="form-label">Start Date*</label>
+                                                        <input asp-for="@Model.Educations[i].StartDate" type="date" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Educations[i].StartDate" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Educations[i].EndDate" class="form-label">End Date</label>
+                                                        <input asp-for="@Model.Educations[i].EndDate" type="date" class="form-control" />
+                                                        <span asp-validation-for="@Model.Educations[i].EndDate" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Educations[i].Major" class="form-label">Major</label>
+                                                        <input asp-for="@Model.Educations[i].Major" class="form-control" />
+                                                        <span asp-validation-for="@Model.Educations[i].Major" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Educations[i].GPA" class="form-label">GPA</label>
+                                                        <input asp-for="@Model.Educations[i].GPA" class="form-control" />
+                                                        <span asp-validation-for="@Model.Educations[i].GPA" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>No education entries found. Click "Add Education" to create one.</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Experience Section -->
+                    <div class="form-section" id="experiences-section">
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-briefcase me-2"></i> Experience
+                                </h5>
+                                <button type="button" class="btn btn-sm btn-primary" id="addExperience">
+                                    <i class="fas fa-plus me-1"></i> Add Experience
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="experiencesContainer">
+                                    @if (Model.Experiences != null && Model.Experiences.Count > 0)
+                                    {
+                                        for (int i = 0; i < Model.Experiences.Count; i++)
+                                        {
+                                            <div class="dynamic-list-item">
+                                                <i class="fas fa-times remove-item" onclick="removeItem(this)"></i>
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Experiences[i].Title" class="form-label">Job Title*</label>
+                                                        <input asp-for="@Model.Experiences[i].Title" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Experiences[i].Title" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Experiences[i].Company" class="form-label">Company Name*</label>
+                                                        <input asp-for="@Model.Experiences[i].Company" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Experiences[i].Company" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Experiences[i].StartDate" class="form-label">Start Date*</label>
+                                                        <input asp-for="@Model.Experiences[i].StartDate" type="date" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Experiences[i].StartDate" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Experiences[i].EndDate" class="form-label">End Date</label>
+                                                        <input asp-for="@Model.Experiences[i].EndDate" type="date" class="form-control" />
+                                                        <span asp-validation-for="@Model.Experiences[i].EndDate" class="text-danger"></span>
+                                                    </div>
+                                                    @* <div class="col-md-4">
+                                                        <label asp-for="@Model.Experiences[i].IsCurrent" class="form-label">Currently Working Here</label>
+                                                        <div class="form-check">
+                                                            <input asp-for="@Model.Experiences[i].IsCurrent" class="form-check-input" type="checkbox" />
+                                                            <label class="form-check-label">Yes</label>
+                                                        </div>
+                                                    </div> *@
+                                                    <div class="col-12">
+                                                        <label asp-for="@Model.Experiences[i].Duties" class="form-label">Job Duties*</label>
+                                                        <textarea asp-for="@Model.Experiences[i].Duties" class="form-control" rows="3" required></textarea>
+                                                        <span asp-validation-for="@Model.Experiences[i].Duties" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>No experience entries found. Click "Add Experience" to create one.</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skills Section -->
+                    <div class="form-section" id="skills-section">
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-lightbulb me-2"></i> Skills
+                                </h5>
+                                <button type="button" class="btn btn-sm btn-primary" id="addSkill">
+                                    <i class="fas fa-plus me-1"></i> Add Skill
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="skillsContainer">
+                                    @if (Model.Skills != null && Model.Skills.Count > 0)
+                                    {
+                                        for (int i = 0; i < Model.Skills.Count; i++)
+                                        {
+                                            <div class="dynamic-list-item">
+                                                <i class="fas fa-times remove-item" onclick="removeItem(this)"></i>
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Skills[i].SkillName" class="form-label">Skill Name*</label>
+                                                        <input asp-for="@Model.Skills[i].SkillName" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Skills[i].SkillName" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Skills[i].SkillType" class="form-label">Skill Type</label>
+                                                        <select asp-for="@Model.Skills[i].SkillType" class="form-select">
+                                                            <option value="">Select type</option>
+                                                            <option>Programming Language</option>
+                                                            <option>Framework</option>
+                                                            <option>Tool</option>
+                                                            <option>Design</option>
+                                                        </select>
+                                                        <span asp-validation-for="@Model.Skills[i].SkillType" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>No skill entries found. Click "Add Skill" to create one.</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Languages Section -->
+                    <div class="form-section" id="languages-section">
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-language me-2"></i> Languages
+                                </h5>
+                                <button type="button" class="btn btn-sm btn-primary" id="addLanguage">
+                                    <i class="fas fa-plus me-1"></i> Add Language
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="languagesContainer">
+                                    @if (Model.Languages != null && Model.Languages.Count > 0)
+                                    {
+                                        for (int i = 0; i < Model.Languages.Count; i++)
+                                        {
+                                            <div class="dynamic-list-item">
+                                                <i class="fas fa-times remove-item" onclick="removeItem(this)"></i>
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Languages[i].LanguageName" class="form-label">Language Name*</label>
+                                                        <input asp-for="@Model.Languages[i].LanguageName" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Languages[i].LanguageName" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Languages[i].Level" class="form-label">Proficiency Level*</label>
+                                                        <select asp-for="@Model.Languages[i].Level" class="form-select" required>
+                                                            <option value="">Select level</option>
+                                                            <option>Native</option>
+                                                            <option>Fluent</option>
+                                                            <option>Conversational</option>
+                                                            <option>Intermediate</option>
+                                                            <option>Beginner</option>
+                                                        </select>
+                                                        <span asp-validation-for="@Model.Languages[i].Level" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>No language entries found. Click "Add Language" to create one.</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certificates Section -->
+                    <div class="form-section" id="certificates-section">
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-certificate me-2"></i> Certificates
+                                </h5>
+                                <button type="button" class="btn btn-sm btn-primary" id="addCertificate">
+                                    <i class="fas fa-plus me-1"></i> Add Certificate
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="certificatesContainer">
+                                    @if (Model.Certificates != null && Model.Certificates.Count > 0)
+                                    {
+                                        for (int i = 0; i < Model.Certificates.Count; i++)
+                                        {
+                                            <div class="dynamic-list-item">
+                                                <i class="fas fa-times remove-item" onclick="removeItem(this)"></i>
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Certificates[i].Title" class="form-label">Certificate Title*</label>
+                                                        <input asp-for="@Model.Certificates[i].Title" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Certificates[i].Title" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Certificates[i].ProviderName" class="form-label">Issuing Organization*</label>
+                                                        <input asp-for="@Model.Certificates[i].ProviderName" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Certificates[i].ProviderName" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Certificates[i].StartDate" class="form-label">Issue Date*</label>
+                                                        <input asp-for="@Model.Certificates[i].StartDate" type="date" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Certificates[i].StartDate" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Certificates[i].EndDate" class="form-label">Expiration Date</label>
+                                                        <input asp-for="@Model.Certificates[i].EndDate" type="date" class="form-control" />
+                                                        <span asp-validation-for="@Model.Certificates[i].EndDate" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Certificates[i].Field" class="form-label">Field of Study</label>
+                                                        <input asp-for="@Model.Certificates[i].Field" class="form-control" />
+                                                        <span asp-validation-for="@Model.Certificates[i].Field" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Certificates[i].GPA" class="form-label">GPA</label>
+                                                        <input asp-for="@Model.Certificates[i].GPA" class="form-control" />
+                                                        <span asp-validation-for="@Model.Certificates[i].GPA" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>No certificate entries found. Click "Add Certificate" to create one.</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Projects Section -->
+                    <div class="form-section" id="projects-section">
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-project-diagram me-2"></i> Projects
+                                </h5>
+                                <button type="button" class="btn btn-sm btn-primary" id="addProject">
+                                    <i class="fas fa-plus me-1"></i> Add Project
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="projectsContainer">
+                                    @if (Model.Projects != null && Model.Projects.Count > 0)
+                                    {
+                                        for (int i = 0; i < Model.Projects.Count; i++)
+                                        {
+                                            <div class="dynamic-list-item">
+                                                <i class="fas fa-times remove-item" onclick="removeItem(this)"></i>
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Projects[i].ProjectName" class="form-label">Project Name*</label>
+                                                        <input asp-for="@Model.Projects[i].ProjectName" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Projects[i].ProjectName" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label asp-for="@Model.Projects[i].ProjectDescription" class="form-label">Project Description*</label>
+                                                        <textarea asp-for="@Model.Projects[i].ProjectDescription" class="form-control" rows="3" required></textarea>
+                                                        <span asp-validation-for="@Model.Projects[i].ProjectDescription" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Projects[i].StartDate" class="form-label">Start Date*</label>
+                                                        <input asp-for="@Model.Projects[i].StartDate" type="date" class="form-control" required />
+                                                        <span asp-validation-for="@Model.Projects[i].StartDate" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Projects[i].EndDate" class="form-label">End Date</label>
+                                                        <input asp-for="@Model.Projects[i].EndDate" type="date" class="form-control" />
+                                                        <span asp-validation-for="@Model.Projects[i].EndDate" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label asp-for="@Model.Projects[i].ProjectLink" class="form-label">Project Link</label>
+                                                        <input asp-for="@Model.Projects[i].ProjectLink" class="form-control" />
+                                                        <span asp-validation-for="@Model.Projects[i].ProjectLink" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>No project entries found. Click "Add Project" to create one.</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-save me-2"></i> Save Changes
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/EditResume.js" asp-append-version="true"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    }
+}

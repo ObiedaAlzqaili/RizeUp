@@ -8,9 +8,7 @@ namespace RizeUp.Models
         [Key] public int Id { get; set; }
         public string? ServiceName { get; set; }
         public string? ServiceDescription { get; set; }
-
         public int PortfolioId { get; set; }
-
         public Portfolio Portfolio { get; set; }
     }
 }
