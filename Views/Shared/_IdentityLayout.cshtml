@@ -1,0 +1,54 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - YourAppName</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div id="rizeup-loader">
+        <div class="loader-content">
+            <div class="rocket">
+                <div class="rocket-body"></div>
+                <div class="rocket-flame"></div>
+            </div>
+            <div class="loader-text">RizeUp is launching...</div>
+        </div>
+    </div>
+
+    <div class="container min-vh-100 d-flex align-items-center justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="text-center mb-0">@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    @RenderBody()
+                </div>
+                <div class="card-footer text-center text-muted">
+                    &copy; @DateTime.Now.Year - YourAppName
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+          window.setTimeout(function () {
+            document.getElementById('rizeup-loader').classList.add('hide');
+          }, 400); // minimum display time for smoothness
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RizeUp.DTOs;
 using RizeUp.Interfaces;
@@ -17,17 +18,7 @@ namespace RizeUp.Controllers
             _resumeOpenAiService = resumeOpenAiService;
            _resumeRepo = resumeRepo;
         }
-  //      "firstName": "John",
-  //"lastName": "Doe",
-  //"phone": "+1-555-123-4567",
-  //"email": "john.doe@example.com",
-  //"linkedinLink": "https://www.linkedin.com/in/johndoe",
-  //"gitHubLink": "https://github.com/johndoe",
-  //"summary": "Experienced software developer with 5+ years of experience in full-stack development. Specialized in .NET Core, React, and cloud technologies. Strong problem-solving abilities and a track record of delivering high-quality solutions.",
-  //"education": "Bachelor of Science in Computer Science\nMIT University\n2015-2019\nGPA: 3.8\n\nMaster of Science in Software Engineering\nStanford University\n2019-2021\nGPA: 3.9",
-  //"experience": "Senior Software Engineer\nTech Corp International\nJan 2021 - Present\n- Led development of microservices architecture\n- Mentored junior developers\n- Implemented CI/CD pipelines\n\nSoftware Developer\nStartup Solutions Inc.\nJun 2019 - Dec 2020\n- Developed full-stack web applications\n- Optimized database performance\n- Implemented security best practices",
-  //"skills": "Programming Languages: C#, JavaScript, Python\nFrameworks: .NET Core, React, Angular\nCloud: AWS, Azure\nDatabases: SQL Server, MongoDB\nTools: Git, Docker, Kubernetes",
-  //"currentStep": 1
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var resumes = await _resumeRepo.GetResumesByUserIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -35,41 +26,11 @@ namespace RizeUp.Controllers
             return View(ToResumeJsonDtoList(resumes.ToList()));
 
         }
-
+        //edit
         public IActionResult NewResume()
         {
             return View(new CreateResumeDto { CurrentStep = 1 });
         }
-        
-        public IActionResult GeneratedResume(ResumeDto dto)
-        {
-            return View(dto);
-        }
-        
-        [HttpGet]
-        public async Task<IActionResult> EditResume(int resumeId)
-        {
-            var r = await _resumeRepo.GetResumeByIdAsync(resumeId);
-            var resume = MapToResumeJsonDto(r);
-            
-
-            return View(resume);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken] 
-        public async Task<IActionResult> UpdateResume(ResumeDto resumeDto) // Rename parameter
-        {
-            if (!ModelState.IsValid)
-            {
-                return View("EditResume", resumeDto);
-            }
-
-            Resume resumeEntity = MapToResumeEntity(resumeDto, User.FindFirstValue(ClaimTypes.NameIdentifier));
-            await _resumeRepo.UpdateResumeAsync(resumeEntity); // Add await
-
-            return RedirectToAction("Index"); // Redirect to reload data
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProcessStep(CreateResumeDto model, string command)
@@ -87,16 +48,16 @@ namespace RizeUp.Controllers
             }
             else if (command == "submit")
             {
-                // 1. Call the AI service, get back a sanitized ResumeJsonDto
+              
                 ResumeDto resumeDto = await _resumeOpenAiService.ParseResumeAsync(model);
                 if (resumeDto != null)
                 {
-                    // 1. Get current user id (if using ASP.NET Identity)
+                    
                     string? userId = User?.Identity?.IsAuthenticated == true
                         ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
                         : null;
 
-                    // 2. Map to entity
+                   
                     Resume resumeEntity = MapToResumeEntity(resumeDto, userId);
                     try
                     {
@@ -105,12 +66,13 @@ namespace RizeUp.Controllers
                     }
                     catch (Exception ex)
                     {
-                        // Handle exceptions, e.g., log them
+                        
                         ModelState.AddModelError("", "An error occurred while saving the resume. Please try again.");
                         return View("NewResume", model);
                     }
-                 
-                }else
+
+                }
+                else
                 {
                     ModelState.AddModelError("", "Failed to parse resume data. Please check your input and try again.");
                     return View("NewResume", model);
@@ -120,18 +82,76 @@ namespace RizeUp.Controllers
             // If something else happened, redisplay the form
             return View("NewResume", model);
         }
+
+
+        
+        // edit
+        [HttpGet]
+        public async Task<IActionResult> EditResume(int resumeId)
+        {
+            var r = await _resumeRepo.GetResumeByIdAsync(resumeId);
+            var resume = MapToResumeJsonDto(r);           
+            return View(resume);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken] 
+        public async Task<IActionResult> UpdateResume(ResumeDto resumeDto) // Rename parameter
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("EditResume", resumeDto);
+            }
+
+            Resume resumeEntity = MapToResumeEntity(resumeDto, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            await _resumeRepo.UpdateResumeAsync(resumeEntity); // Add await
+
+            return RedirectToAction("Index"); // Redirect to reload data
+        }
+
+
+        //Delete
+        public async Task<IActionResult> DeleteResume(int resumeId )
+        {
+            await _resumeRepo.DeleteResumeAsync(resumeId);
+            return RedirectToAction("Index");
+        }
+
+
+
+        //template for resume
+        public async Task<IActionResult> Templates(int resumeId)
+        {
+            var r = await _resumeRepo.GetResumeByIdAsync(resumeId);
+            var dto = MapToResumeJsonDto(r);
+            return View(dto);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         private Resume MapToResumeEntity(ResumeDto dto, string userId)
         {
             return new Resume
             {
                 ResumeId = dto.Id,
+                ResumeTemplateId = dto.ResumedTemplateId, 
                 Address = dto.Address, 
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 Email = dto.Email,
                 PhoneNumber = dto.PhoneNumber,
                 Title = dto.Title,
-                Summery = dto.Bio ?? dto.Bio, // use whichever is populated
+                Summery = dto.Summary ?? dto.Summary, // use whichever is populated
                 GitHubLink = dto.GitHubLink,
                 LinkedinLink = dto.LinkedinLink,
                 EndUserId = userId, // assuming you use ASP.NET Identity
@@ -198,6 +218,7 @@ namespace RizeUp.Controllers
             return new ResumeDto
             {
                 Id = entity.ResumeId,
+                ResumedTemplateId = entity.ResumeTemplateId, 
                 GitHubLink = entity.GitHubLink,
                 CreatedDate = entity.CreatedDate,
                 ModifiedDate = entity.ModifiedDate,
@@ -207,7 +228,7 @@ namespace RizeUp.Controllers
                 Email = entity.Email,
                 PhoneNumber = entity.PhoneNumber,
                 Address = entity.Address,
-                Bio = entity.Summery,
+                Summary = entity.Summery,
                 Title = entity.Title,
                 LinkedinLink = entity.LinkedinLink,
 
@@ -272,13 +293,14 @@ namespace RizeUp.Controllers
             return entities.Select(entity => new ResumeDto
             {
                 Id = entity.ResumeId,
+                ResumedTemplateId = entity.ResumeTemplateId,
                 GitHubLink = entity.GitHubLink,
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
                 Email = entity.Email,
                 PhoneNumber = entity.PhoneNumber,
                 Address = entity.Address,
-                Bio = entity.Summery,
+                Summary = entity.Summery,
                 Title = entity.Title,
                 LinkedinLink = entity.LinkedinLink,
 

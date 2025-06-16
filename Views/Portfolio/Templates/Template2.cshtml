@@ -1,0 +1,1131 @@
+﻿@model RizeUp.DTOs.PortfolioDto 
+<style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary: #4cc9f0;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.18);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+
+        section {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+            position: relative;
+            padding-bottom: var(--spacing-sm);
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Glassmorphism elements */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1.25rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            padding: 0.8rem 0;
+        }
+
+        .navbar-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+
+        .navbar-nav .nav-link {
+            font-weight: 600;
+            color: var(--dark);
+            padding: 0.5rem 1.25rem;
+            margin: 0 0.25rem;
+            position: relative;
+            transition: var(--transition);
+            text-decoration: none;
+            border-radius: 50px;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--primary);
+        }
+
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+            width: 100%;
+        }
+
+        .navbar-toggler {
+            border: none;
+            outline: none;
+            box-shadow: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.1) 0%, rgba(76, 201, 240, 0.05) 70%, transparent 100%);
+            z-index: -1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(247, 37, 133, 0.1) 0%, rgba(247, 37, 133, 0.05) 70%, transparent 100%);
+            z-index: -1;
+        }
+
+        .profile-img {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: var(--box-shadow);
+            margin-bottom: var(--spacing-lg);
+            transition: var(--transition);
+        }
+
+        .hero h1 {
+            font-size: 3.8rem;
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p.lead {
+            font-size: 1.5rem;
+            color: var(--gray);
+            margin-bottom: var(--spacing-lg);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 300;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: var(--primary);
+            font-size: 1.25rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2.5rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            z-index: -1;
+            transition: var(--transition);
+            opacity: 1;
+        }
+
+        .btn:hover::before {
+            transform: scale(1.1);
+        }
+
+        .btn-primary {
+            background: transparent;
+            color: white;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* About Section */
+        .about .glass-card {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .about .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .about .card-body {
+            padding: var(--spacing-lg);
+        }
+
+        .about .card-title {
+            font-size: 1.6rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--primary);
+        }
+
+        /* Services */
+        .services {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e6eaf1 100%);
+        }
+
+        .service-card {
+            height: 100%;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--box-shadow);
+            padding: var(--spacing-lg);
+            text-align: center;
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 2rem;
+            margin-bottom: var(--spacing-md);
+            transition: var(--transition);
+        }
+
+        .service-card:hover .service-icon {
+            transform: rotateY(360deg);
+        }
+
+        .service-card h4 {
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        /* Skills Section */
+        .skills {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skills::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%234361ee' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .skill-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-box:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .skill-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.6s ease;
+        }
+
+        .skill-box:hover::before {
+            transform: scaleX(1);
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
+            transition: var(--transition);
+        }
+
+        .skill-box:hover .skill-icon {
+            color: var(--secondary);
+        }
+
+        .skill-level {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+            font-weight: 500;
+        }
+
+        .skill-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Projects */
+        .projects {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e6eaf1 100%);
+        }
+
+        .project-card {
+            margin-bottom: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--box-shadow);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .project-card img {
+            height: 280px;
+            object-fit: cover;
+            width: 100%;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .project-card .card-body {
+            padding: var(--spacing-lg);
+        }
+
+        .badge {
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .badge.bg-success {
+            background: linear-gradient(to right, #28a745, #20c997);
+            color: white;
+        }
+
+        .badge.bg-secondary {
+            background: linear-gradient(to right, #6c757d, #adb5bd);
+            color: white;
+        }
+
+        /* Contact */
+        .contact .glass-card {
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+
+        .form-control {
+            padding: 0.9rem 1.2rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            width: 100%;
+            margin-bottom: var(--spacing-md);
+            background: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            background: white;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: var(--spacing-xl) 0 var(--spacing-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        footer h5 {
+            color: white;
+            margin-bottom: var(--spacing-md);
+            position: relative;
+            z-index: 1;
+        }
+
+        footer p, footer li {
+            color: rgba(255, 255, 255, 0.85);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-link:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: var(--transition);
+        }
+
+        .footer-link:hover::after {
+            width: 100%;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .footer-social a {
+            color: white;
+            font-size: 1.3rem;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-social a:hover {
+            color: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            padding-top: var(--spacing-lg);
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            margin-top: var(--spacing-lg);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animation */
+        keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .animate {
+            animation: fadeIn 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Responsive Design */
+        media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            .section-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        media (max-width: 768px) {
+            .hero {
+                min-height: auto;
+                padding: 120px 0 80px;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .profile-img {
+                width: 180px;
+                height: 180px;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .navbar {
+                padding: 1rem 0;
+            }
+            .skills-container {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .btn {
+                padding: 0.75rem 1.8rem;
+                font-size: 1rem;
+            }
+            .skills-container {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+        }
+    </style>
+
+
+    <!-- Navigation -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="#">@Model.FirstName @Model.LastName[0].</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon">☰</span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#services">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#projects">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            @if (!string.IsNullOrEmpty(Model.ImageBase64))
+            {
+                <img src="data:@Model.ImageContentType;base64,@Model.ImageBase64"
+                     alt="@Model.FirstName @Model.LastName"
+                     class="profile-img float">
+            }
+            else
+            {
+                <div class="profile-img-placeholder float">
+                    <i class="fas fa-user-circle" style="font-size: 180px; color: var(--primary);"></i>
+                </div>
+            }
+            <h1>@Model.FirstName @Model.LastName</h1>
+            <p class="lead">@Model.Title</p>
+            <div class="social-icons">
+                @if (!string.IsNullOrEmpty(Model.GitHubLink))
+                {
+                    <a href="@Model.GitHubLink" class="social-icon" target="_blank"><i class="fab fa-github"></i></a>
+                }
+                @if (!string.IsNullOrEmpty(Model.LinkedinLink))
+                {
+                    <a href="@Model.LinkedinLink" class="social-icon" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                }
+                @if (!string.IsNullOrEmpty(Model.Email))
+                {
+                    <a href="mailto:@Model.Email" class="social-icon"><i class="fas fa-envelope"></i></a>
+                }
+            </div>
+            <a href="#projects" class="btn btn-primary mt-3">View My Work</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about section" id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="glass-card p-4 h-100">
+                        <p class="lead mb-4">@Model.Summery</p>
+                        @if (!string.IsNullOrEmpty(Model.Summery))
+                        {
+                            <p>@Model.Summery</p>
+                        }
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="glass-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Personal Info</h5>
+                            <ul class="list-unstyled">
+                                @if (!string.IsNullOrEmpty(Model.Email))
+                                {
+                                    <li class="mb-3 d-flex align-items-center">
+                                        <i class="fas fa-envelope me-3 text-primary"></i>
+                                        <span>@Model.Email</span>
+                                    </li>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                                {
+                                    <li class="mb-3 d-flex align-items-center">
+                                        <i class="fas fa-phone me-3 text-primary"></i>
+                                        <span>@Model.PhoneNumber</span>
+                                    </li>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Address))
+                                {
+                                    <li class="mb-3 d-flex align-items-center">
+                                        <i class="fas fa-map-marker-alt me-3 text-primary"></i>
+                                        <span>@Model.Address</span>
+                                    </li>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.LinkedinLink))
+                                {
+                                    <li class="mb-3 d-flex align-items-center">
+                                        <i class="fab fa-linkedin me-3 text-primary"></i>
+                                        <span>@Model.LinkedinLink</span>
+                                    </li>
+                                }
+                            </ul>
+                            <div class="mt-4">
+                                <a href="#contact" class="btn btn-outline w-100">Contact Me</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    @if (Model.Services != null )
+    {
+        <section class="services section" id="services">
+            <div class="container">
+                <h2 class="section-title">My Services</h2>
+                <div class="row">
+                    @foreach (var service in Model.Services)
+                    {
+                        <div class="col-md-4 mb-4">
+                            <div class="service-card">
+                                @* <div class="service-icon">
+                                    <i class="@service.IconClass"></i>
+                                </div> *@
+                                <h4>@service.ServiceName</h4>
+                                <p>@service.ServiceDescription</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    }
+
+    <!-- Projects Section -->
+    @if (Model.Projects != null )
+    {
+        <section class="projects section" id="projects">
+            <div class="container">
+                <h2 class="section-title">Featured Projects</h2>
+                <div class="row">
+                    @foreach (var project in Model.Projects)
+                    {
+                        <div class="col-lg-6 mb-4">
+                            <div class="project-card">
+                                @if (!string.IsNullOrEmpty(project.ImageBase64))
+                                {
+                                    <img src="data:@project.ImageContentType;base64,@project.ImageBase64"
+                                         alt="@project.ProjectName">
+                                }
+                                else
+                                {
+                                    <div class="project-img-placeholder" style="height: 280px; background: linear-gradient(45deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-project-diagram fa-4x" style="color: white;"></i>
+                                    </div>
+                                }
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <h4 class="card-title">@project.ProjectName</h4>
+                                        @if (project.IsOngoing == true)
+                                        {
+                                            <span class="badge bg-success">Ongoing</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Completed</span>
+                                        }
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(project.StartDate))
+                                    {
+                                        <p class="text-muted small mb-3">
+                                            <i class="far fa-calendar-alt me-1"></i>
+                                            @project.StartDate
+                                            @if (!string.IsNullOrEmpty(project.EndDate) && project.IsOngoing != true)
+                                            {
+                                                @:- @project.EndDate
+                                            }
+                                            else if (project.IsOngoing == true)
+                                            {
+                                                @:- Present
+                                            }
+                                        </p>
+                                    }
+                                    <p class="card-text mb-4">@project.ProjectDescription</p>
+                                    <div class="d-flex">
+                                        @if (!string.IsNullOrEmpty(project.ProjectLink))
+                                        {
+                                            <a href="@project.ProjectLink" target="_blank" class="btn btn-outline me-3">
+                                                View Project
+                                            </a>
+                                        }
+                                        <button class="btn btn-primary">Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    }
+
+    <!-- Skills section -->
+    @if (Model.Skills != null )
+    {
+        <section class="skills section" id="skills">
+            <div class="container">
+                <h2 class="section-title">My Skills</h2>
+                <div class="skills-container">
+                   @foreach (var skill in Model.Skills)
+                    {
+                        <div class="skill-box animate delay-@((Model.Skills.IndexOf(skill) % 3))">
+                            @* <div class="skill-icon">
+                                <i class="@skill.IconClass"></i>
+                            </div> *@
+                            <h4 style="color: var(--primary-dark)">@skill.SkillName</h4>
+                            @if (!string.IsNullOrEmpty(skill.SkillType))
+                            {
+                                <span class="skill-level">@skill.SkillType</span>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    }
+
+    <!-- Contact Section -->
+    <section class="contact section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="glass-card">
+                        <div class="card-body p-4 p-md-5">
+                            <form method="post" asp-controller="Portfolio" asp-action="Contact">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">Your Name</label>
+                                        <input type="text" class="form-control" id="name" name="name" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Your Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">Subject</label>
+                                    <input type="text" class="form-control" id="subject" name="subject" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="message" class="form-label">Message</label>
+                                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>@Model.FirstName @Model.LastName</h5>
+                    <p>@Model.Title</p>
+                    <div class="footer-social">
+                        @if (!string.IsNullOrEmpty(Model.GitHubLink))
+                        {
+                            <a href="@Model.GitHubLink" target="_blank"><i class="fab fa-github"></i></a>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.LinkedinLink))
+                        {
+                            <a href="@Model.LinkedinLink" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Email))
+                        {
+                            <a href="mailto:@Model.Email"><i class="fas fa-envelope"></i></a>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#home" class="footer-link">Home</a></li>
+                        <li class="mb-2"><a href="#about" class="footer-link">About</a></li>
+                        <li class="mb-2"><a href="#services" class="footer-link">Services</a></li>
+                        <li class="mb-2"><a href="#projects" class="footer-link">Projects</a></li>
+                        <li><a href="#contact" class="footer-link">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Info</h5>
+                    <ul class="list-unstyled">
+                        @if (!string.IsNullOrEmpty(Model.Email))
+                        {
+                            <li class="mb-2">
+                                <a href="mailto:@Model.Email" class="footer-link d-flex align-items-center">
+                                    <i class="fas fa-envelope me-2"></i> @Model.Email
+                                </a>
+                            </li>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                        {
+                            <li class="mb-2 d-flex align-items-center">
+                                <i class="fas fa-phone me-2"></i> @Model.PhoneNumber
+                            </li>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Address))
+                        {
+                            <li class="d-flex align-items-center">
+                                <i class="fas fa-map-marker-alt me-2"></i> @Model.Address
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p class="mb-0">&copy; @DateTime.Now.Year @Model.FirstName @Model.LastName. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.navbar-toggler').addEventListener('click', function() {
+            const navbarCollapse = document.getElementById('navbarNav');
+            navbarCollapse.classList.toggle('show');
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const navbarCollapse = document.getElementById('navbarNav');
+                    navbarCollapse.classList.remove('show');
+                }
+            });
+        });
+
+        // Animation on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.animate');
+            
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                if (position.top < windowHeight - 100) {
+                    element.style.opacity = 1;
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // Initialize animations
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+        animateOnScroll(); // Run on initial load
+
+        // Add class to navbar on initial scroll
+        if (window.scrollY > 50) {
+            document.querySelector('.navbar').classList.add('scrolled');
+        }
+    </script>

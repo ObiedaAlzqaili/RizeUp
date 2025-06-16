@@ -5,7 +5,7 @@
 }
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />  
     <link rel="stylesheet" href="~/css/EditPortfolio.css" asp-append-version="true" />
 
 
@@ -15,7 +15,7 @@
         <div class="col-lg-3 mb-4">
             <div class="card shadow-sm">
                 <div class="card-body p-0">
-                    <ul class="nav nav-pills flex-column">
+                    <ul class="nav nav-pills flex-column" id="portfolioTabs">
                         <li class="nav-item">
                             <a class="nav-link active" href="#" data-section="personal-info">
                                 <i class="fas fa-user-circle me-2"></i> Personal Info
@@ -36,10 +36,16 @@
                                 <i class="fas fa-lightbulb me-2"></i> Skills
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="design">
+                                <i class="fas fa-paint-brush me-2"></i> Design
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
+
 
         <!-- Main Content -->
         <div class="col-lg-9">
@@ -302,6 +308,43 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-section" id="design-section">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-paint-brush me-2"></i> Select Design
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-4">
+                                <!-- Template 1 -->
+                                <div class="col-md-4 text-center">
+                                    <label class="design-option p-2 border rounded w-100">
+                                        <input asp-for="PortfolioTemplateId" type="radio" value="1" hidden />
+                                        <img src="~/images/PortfolioDesgin/template1.png" class="img-fluid mb-2" alt="Classic Layout" />
+                                        <div>Classic Layout</div>
+                                    </label>
+                                </div>
+                                <!-- Template 2 -->
+                                <div class="col-md-4 text-center">
+                                    <label class="design-option p-2 border rounded w-100">
+                                        <input asp-for="PortfolioTemplateId" type="radio" value="2" hidden />
+                                        <img src="~/images/PortfolioDesgin/template2.png" class="img-fluid mb-2" alt="Modern Layout" />
+                                        <div>Modern Layout</div>
+                                    </label>
+                                </div>
+                                <!-- Template 3 -->
+                                <div class="col-md-4 text-center">
+                                    <label class="design-option p-2 border rounded w-100">
+                                        <input asp-for="PortfolioTemplateId" type="radio" value="3" hidden />
+                                        <img src="~/images/PortfolioDesgin/template3.png" class="img-fluid mb-2" alt="Minimalist" />
+                                        <div>Minimalist</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary btn-lg w-100">
@@ -315,4 +358,29 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/EditPortfolio.js" asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+       
+        $('#portfolioTabs .nav-link').click(function(e) {
+      e.preventDefault();
+      var section = $(this).data('section') + '-section';
+      $('.form-section').removeClass('active');
+      $('#' + section).addClass('active');
+      $('#portfolioTabs .nav-link').removeClass('active');
+      $(this).addClass('active');
+    });
+
+    $('input[name="PortfolioTemplateId"]').change(function() {
+      $('.design-option').removeClass('border-primary');
+      $(this).closest('.design-option').addClass('border-primary');
+    });
+
+    // On initial load, highlight the chosen template:
+    var selected = $('input[name="PortfolioTemplateId"]:checked');
+    if (selected.length) {
+      selected.closest('.design-option').addClass('border-primary');
+    }
+            </script>
 }

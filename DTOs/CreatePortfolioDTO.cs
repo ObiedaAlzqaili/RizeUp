@@ -43,6 +43,7 @@ namespace RizeUp.DTOs
 
         [Required(ErrorMessage = "Skills are required.")]
         public string Skills { get; set; }
+        public int PortfolioTemplateId { get; set; } = 1;
 
         // Tracks which step (1–3) is currently active
         public int CurrentStep { get; set; }

@@ -1,0 +1,1237 @@
+﻿@model RizeUp.DTOs.PortfolioDto
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<style>
+    :root {
+        --primary: #6C63FF;
+        --primary-light: #817CFF;
+        --secondary: #B0B0B0;
+        --dark: #121212;
+        --dark-light: #1F1F1F;
+        --text: #EDEDED;
+        --text-light: #B0B0B0;
+        --accent: #4e9fd1;
+        --success: #6cbf84;
+        --warning: #e2b04f;
+        --spacing-xs: 0.5rem;
+        --spacing-sm: 1rem;
+        --spacing-md: 2rem;
+        --spacing-lg: 3rem;
+        --spacing-xl: 4rem;
+        --border-radius: 16px;
+        --border-radius-sm: 8px;
+        --transition: all 0.3s ease;
+        --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        --glass-bg: rgba(18, 18, 18, 0.4);
+        --glass-border: rgba(255, 255, 255, 0.05);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #0F172A, #1E293B);
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-sm);
+    }
+
+    section {
+        padding: var(--spacing-xl) 0;
+        position: relative;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        margin-bottom: var(--spacing-lg);
+        text-align: center;
+        position: relative;
+        padding-bottom: var(--spacing-sm);
+        color: var(--text);
+        font-weight: 700;
+    }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+    /* Glass Card */
+    .glass-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--box-shadow);
+        transition: var(--transition);
+        overflow: hidden;
+        position: relative;
+    }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
+        }
+
+    /* Navigation */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 1.25rem 0;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--glass-border);
+        transition: var(--transition);
+    }
+
+        .navbar.scrolled {
+            padding: 0.8rem 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+    .navbar-brand {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 1.8rem;
+        color: var(--text);
+        text-decoration: none;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .navbar-nav .nav-link {
+        font-weight: 500;
+        color: var(--text-light);
+        padding: 0.5rem 1.25rem;
+        margin: 0 0.25rem;
+        position: relative;
+        transition: var(--transition);
+        text-decoration: none;
+        border-radius: 50px;
+    }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--text);
+            background: rgba(108, 99, 255, 0.1);
+        }
+
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+            width: 60%;
+        }
+
+    .navbar-toggler {
+        border: none;
+        outline: none;
+        box-shadow: none;
+        color: var(--text);
+    }
+
+    /* Hero Section */
+    .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 100px 0 80px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(108, 99, 255, 0.1) 0%, rgba(15, 23, 42, 0) 70%);
+            z-index: -1;
+            animation: rotate 20s linear infinite;
+        }
+
+    .hero-content {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xl);
+        z-index: 2;
+    }
+
+    .hero-text {
+        flex: 1;
+    }
+
+    .hero-image {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .profile-img-container {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 6px solid rgba(255, 255, 255, 0.1);
+        box-shadow: var(--box-shadow);
+        background: linear-gradient(45deg, var(--primary), var(--accent));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .profile-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profile-img-placeholder {
+        font-size: 120px;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: var(--spacing-sm);
+        color: var(--text);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        background: none;
+        -webkit-text-fill-color: unset;
+    }
+
+    .hero .title {
+        font-size: 1.8rem;
+        color: var(--text-light);
+        margin-bottom: var(--spacing-md);
+        font-weight: 400;
+    }
+
+    .hero .lead {
+        color: var(--text-light);
+        font-size: 1.1rem;
+        line-height: 1.8;
+        max-width: 600px;
+    }
+
+    .social-icons {
+        display: flex;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .social-icon {
+        display: fle background: #2c2c2c;
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+       
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 1.3rem;
+        transition: var(--transition);
+        text-decoration: none;
+    }
+
+        .social-icon:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(108, 99, 255, 0.3);
+        }
+
+    .btn {
+        display: inline-block;
+        padding: 1rem 2.5rem;
+        font-weight: 600;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: var(--transition);
+        border: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        color: #ffffff;
+        border: none;
+        box-shadow: 0 6px 15px rgba(108, 99, 255, 0.2);
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
+        }
+
+    .btn-outline {
+        background: transparent;
+        color: var(--text);
+        border: 2px solid var(--primary);
+        margin-left: var(--spacing-sm);
+    }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+    /* About Section */
+    .about-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .about-text p {
+        margin-bottom: var(--spacing-sm);
+        color: var(--text-light);
+    }
+
+    .personal-info {
+        background: var(--dark-light);
+        border-radius: var(--border-radius-sm);
+        padding: var(--spacing-md);
+    }
+
+    .info-item {
+        display: flex;
+        margin-bottom: var(--spacing-sm);
+        padding-bottom: var(--spacing-sm);
+        border-bottom: 1px solid var(--glass-border);
+    }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .info-item i {
+            width: 40px;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .info-item span {
+            flex: 1;
+            color: var(--text);
+        }
+
+    /* Services Section */
+    .services {
+        background: linear-gradient(to bottom, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+        background-size: cover;
+        background-attachment: fixed;
+        position: relative;
+    }
+
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: var(--spacing-md);
+    }
+
+    .service-card {
+        padding: var(--spacing-md);
+        border-radius: var(--border-radius);
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: var(--transition);
+    }
+
+        .service-card:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            transform: translateY(-8px);
+        }
+
+    .service-icon {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto var(--spacing-md);
+        font-size: 2rem;
+        color: var(--primary);
+        background: rgba(108, 99, 255, 0.1);
+        border-radius: 50%;
+    }
+
+    .service-card h3 {
+        margin-bottom: var(--spacing-sm);
+        color: var(--text);
+    }
+
+    .service-card p {
+        color: var(--text-light);
+    }
+
+    /* Projects Section */
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: var(--spacing-md);
+    }
+
+    .project-card {
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+    .project-img {
+        height: 220px;
+        width: 100%;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+
+    .project-card:hover .project-img {
+        transform: scale(1.05);
+    }
+
+    .project-content {
+        padding: var(--spacing-md);
+    }
+
+    .project-meta {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .project-badge {
+        padding: 0.4rem 1rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .badge-ongoing {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
+    }
+
+    .badge-completed {
+        background: rgba(245, 158, 11, 0.1);
+        color: var(--warning);
+    }
+
+    .project-date {
+        color: var(--text-light);
+        font-size: 0.9rem;
+    }
+
+    .project-title {
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-sm);
+        color: var(--text);
+    }
+
+    .project-description {
+        color: var(--text-light);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .project-actions {
+        display: flex;
+        gap: var(--spacing-sm);
+    }
+
+    /* Skills Section */
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: var(--spacing-md);
+    }
+
+    .skill-card {
+        padding: var(--spacing-md);
+        text-align: center;
+        transition: var(--transition);
+    }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            background: rgba(108, 99, 255, 0.1);
+        }
+
+    .skill-icon {
+        font-size: 2.5rem;
+        color: var(--primary);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .skill-name {
+        font-size: 1.2rem;
+        color: var(--text);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .skill-type {
+        color: var(--text-light);
+        font-size: 0.9rem;
+    }
+
+    /* Contact Section */
+    .contact-form {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 1rem;
+        background: var(--dark-light);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-sm);
+        color: var(--text);
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+        }
+
+    textarea.form-control {
+        min-height: 150px;
+        resize: vertical;
+    }
+
+    /* Footer */
+    footer {
+        background: var(--dark);
+        padding: var(--spacing-xl) 0 var(--spacing-md);
+        position: relative;
+    }
+
+    .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .footer-brand {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: var(--spacing-sm);
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .footer-about p {
+        color: var(--text-light);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .footer-social {
+        display: flex;
+        gap: var(--spacing-sm);
+    }
+
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--dark-light);
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+            .footer-social a:hover {
+                background: var(--primary);
+                transform: translateY(-3px);
+            }
+
+    .footer-links h5,
+    .footer-contact h5 {
+        font-size: 1.3rem;
+        margin-bottom: var(--spacing-md);
+        color: var(--text);
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+        .footer-links h5::after,
+        .footer-contact h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+    .footer-links ul {
+        list-style: none;
+    }
+
+    .footer-links li {
+        margin-bottom: 0.8rem;
+    }
+
+    .footer-links a {
+        color: var(--text-light);
+        text-decoration: none;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+    }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+    .footer-links i {
+        margin-right: 0.8rem;
+        width: 20px;
+        color: var(--primary);
+    }
+
+    .footer-contact p {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        color: var(--text-light);
+    }
+
+    .footer-contact i {
+        margin-right: 1rem;
+        color: var(--primary);
+        width: 20px;
+    }
+
+    .copyright {
+        text-align: center;
+        padding-top: var(--spacing-md);
+        border-top: 1px solid var(--glass-border);
+        color: var(--text-light);
+        font-size: 0.9rem;
+    }
+
+    /* Animations */
+    keyframes float {
+        0%
+
+    {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+
+    }
+
+    keyframes rotate {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    .animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+        .animate.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    /* Responsive Design */
+    media (max-width: 992px) {
+        .hero-content
+
+    {
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+
+    .hero-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+
+    }
+
+    media (max-width: 768px) {
+        .section-title
+
+    {
+        font-size: 2rem;
+    }
+
+    .hero h1 {
+        font-size: 2.8rem;
+    }
+
+    .hero .title {
+        font-size: 1.5rem;
+    }
+
+    .profile-img-container {
+        width: 250px;
+        height: 250px;
+    }
+
+    .projects-grid,
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+
+    }
+
+    media (max-width: 576px) {
+        .hero h1
+
+    {
+        font-size: 2.3rem;
+    }
+
+    .hero .title {
+        font-size: 1.3rem;
+    }
+
+    .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .btn-outline {
+        margin-left: 0;
+    }
+
+    }
+</style>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="#">@Model.FirstName @Model.LastName[0].</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon">☰</span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#services">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#projects">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="animate" style="animation-delay: 0.2s">@Model.FirstName @Model.LastName</h1>
+                    <p class="title animate" style="animation-delay: 0.4s">@Model.Title</p>
+                    <p class="lead animate" style="animation-delay: 0.6s">@Model.Summery</p>
+
+                    <div class="social-icons animate" style="animation-delay: 0.8s">
+                        @if (!string.IsNullOrEmpty(Model.GitHubLink))
+                        {
+                            <a href="@Model.GitHubLink" target="_blank" class="social-icon">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.LinkedinLink))
+                        {
+                            <a href="@Model.LinkedinLink" target="_blank" class="social-icon">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Email))
+                        {
+                            <a href="mailto:@Model.Email" class="social-icon">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        }
+                    </div>
+
+                    <div class="animate" style="animation-delay: 1s">
+                        <a href="#projects" class="btn btn-primary">View My Work</a>
+                        <a href="#contact" class="btn btn-outline">Contact Me</a>
+                    </div>
+                </div>
+
+                <div class="hero-image animate" style="animation-delay: 0.2s">
+                    <div class="profile-img-container">
+                        @if (!string.IsNullOrEmpty(Model.ImageBase64))
+                        {
+                            <img src="data:@Model.ImageContentType;base64,@Model.ImageBase64"
+                                 alt="@Model.FirstName @Model.LastName"
+                                 class="profile-img">
+                        }
+                        else
+                        {
+                            <div class="profile-img-placeholder">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about section" id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="glass-card">
+                <div class="about-content p-5">
+                    <div class="about-text">
+                        <h3>Who I Am</h3>
+                        <p>@Model.Summery</p>
+                        <p>I'm a passionate developer with over 8 years of experience creating innovative solutions. My expertise spans across multiple technologies and platforms.</p>
+                        <div class="mt-4">
+                            <a href="#contact" class="btn btn-primary">Hire Me</a>
+                        </div>
+                    </div>
+
+                    <div class="personal-info">
+                        <h3 class="mb-4">Personal Info</h3>
+                        @if (!string.IsNullOrEmpty(Model.Email))
+                        {
+                            <div class="info-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>@Model.Email</span>
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                        {
+                            <div class="info-item">
+                                <i class="fas fa-phone"></i>
+                                <span>@Model.PhoneNumber</span>
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Address))
+                        {
+                            <div class="info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>@Model.Address</span>
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.LinkedinLink))
+                        {
+                            <div class="info-item">
+                                <i class="fab fa-linkedin"></i>
+                                <span>@Model.LinkedinLink</span>
+                            </div>
+                        }
+                        <div class="info-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Available for freelance work</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+@if (Model.Services != null && Model.Services.Any())
+{
+        <section class="services section" id="services">
+            <div class="container">
+                <h2 class="section-title">My Services</h2>
+                <div class="services-grid">
+                    @foreach (var service in Model.Services)
+                    {
+                        <div class="glass-card service-card animate">
+                            <div class="service-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <h3>@service.ServiceName</h3>
+                            <p>@service.ServiceDescription</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+}
+
+    <!-- Projects Section -->
+@if (Model.Projects != null && Model.Projects.Any())
+{
+        <section class="projects section" id="projects">
+            <div class="container">
+                <h2 class="section-title">Featured Projects</h2>
+                <div class="projects-grid">
+                    @foreach (var project in Model.Projects)
+                    {
+                        <div class="glass-card project-card animate">
+                            @if (!string.IsNullOrEmpty(project.ImageBase64))
+                            {
+                                <img src="data:@project.ImageContentType;base64,@project.ImageBase64"
+                                     alt="@project.ProjectName"
+                                     class="project-img">
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center justify-content-center" style="height: 220px; background: var(--dark-light);">
+                                    <i class="fas fa-project-diagram fa-3x" style="color: var(--primary);"></i>
+                                </div>
+                            }
+                            <div class="project-content">
+                                <div class="project-meta">
+                                    @if (project.IsOngoing == true)
+                                    {
+                                        <span class="project-badge badge-ongoing">Ongoing</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="project-badge badge-completed">Completed</span>
+                                    }
+                                    @if (!string.IsNullOrEmpty(project.StartDate))
+                                    {
+                                        <span class="project-date">
+                                            <i class="far fa-calendar-alt me-1"></i>
+                                            @project.StartDate
+                                            @if (!string.IsNullOrEmpty(project.EndDate) && project.IsOngoing != true)
+                                            {
+                                                @:- @project.EndDate
+                                            }
+                                            else if (project.IsOngoing == true)
+                                            {
+                                                @:- Present
+                                            }
+                                        </span>
+                                    }
+                                </div>
+                                <h3 class="project-title">@project.ProjectName</h3>
+                                <p class="project-description">@project.ProjectDescription</p>
+                                <div class="project-actions">
+                                    @if (!string.IsNullOrEmpty(project.ProjectLink))
+                                    {
+                                        <a href="@project.ProjectLink" target="_blank" class="btn btn-outline">
+                                            View Project
+                                        </a>
+                                    }
+                                    <button class="btn btn-primary">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+}
+
+    <!-- Skills Section -->
+@if (Model.Skills != null && Model.Skills.Any())
+{
+        <section class="skills section" id="skills">
+            <div class="container">
+                <h2 class="section-title">My Skills</h2>
+                <div class="skills-grid">
+                    @foreach (var skill in Model.Skills)
+                    {
+                        <div class="glass-card skill-card animate">
+                            <div class="skill-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h3 class="skill-name">@skill.SkillName</h3>
+                            @if (!string.IsNullOrEmpty(skill.SkillType))
+                            {
+                                <p class="skill-type">@skill.SkillType</p>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+}
+
+    <!-- Contact Section -->
+    <section class="contact section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="glass-card">
+                <div class="contact-form p-5">
+                    <form method="post" asp-controller="Portfolio" asp-action="Contact">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Your Name" name="name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="Your Email" name="email" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" placeholder="Message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-brand">@Model.FirstName @Model.LastName</div>
+                    <p>@Model.Title</p>
+                    <p>Creating innovative solutions with passion and expertise.</p>
+                    <div class="footer-social mt-3">
+                        @if (!string.IsNullOrEmpty(Model.GitHubLink))
+                        {
+                            <a href="@Model.GitHubLink" target="_blank">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.LinkedinLink))
+                        {
+                            <a href="@Model.LinkedinLink" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Email))
+                        {
+                            <a href="mailto:@Model.Email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h5>Quick Links</h5>
+                    <ul>
+                        <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#about"><i class="fas fa-chevron-right"></i> About</a></li>
+                        <li><a href="#services"><i class="fas fa-chevron-right"></i> Services</a></li>
+                        <li><a href="#projects"><i class="fas fa-chevron-right"></i> Projects</a></li>
+                        <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h5>Contact Info</h5>
+                    @if (!string.IsNullOrEmpty(Model.Email))
+                    {
+                        <p><i class="fas fa-envelope"></i> @Model.Email</p>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                    {
+                        <p><i class="fas fa-phone"></i> @Model.PhoneNumber</p>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Address))
+                    {
+                        <p><i class="fas fa-map-marker-alt"></i> @Model.Address</p>
+                    }
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; @DateTime.Now.Year @Model.FirstName @Model.LastName. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animation on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        });
+
+        document.querySelectorAll('.animate').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.navbar-toggler').addEventListener('click', function() {
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            navbarCollapse.classList.toggle('show');
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu if open
+                    const navbarCollapse = document.querySelector('.navbar-collapse');
+                    navbarCollapse.classList.remove('show');
+                }
+            });
+        });
+
+        // Set active nav link on scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+
+                if (pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>

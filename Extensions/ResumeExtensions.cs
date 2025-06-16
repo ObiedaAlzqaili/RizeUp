@@ -17,7 +17,7 @@ namespace RizeUp.Extensions
                 Email = entity.Email,
                 PhoneNumber = entity.PhoneNumber,
                 Address = entity.Address,
-                Bio = entity.Summery,
+                Summary = entity.Summery,
                 Title = entity.Title,
                 LinkedinLink = entity.LinkedinLink,
 

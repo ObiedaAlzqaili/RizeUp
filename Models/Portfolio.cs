@@ -12,6 +12,7 @@ namespace RizeUp.Models
         public List<Skill>? Skills { get; set; }
         public bool IsDeleted { get; set; } = false;
 
+        public int PortfolioTemplateId { get; set; }
         public string? ImageBase64 { get; set; }
         public string? ImageFileName { get; set; }
         public string? ImageContentType { get; set; }

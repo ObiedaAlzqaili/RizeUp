@@ -1,10 +1,101 @@
 ﻿@model RizeUp.DTOs.ResumeDto
-
+ 
 @{
-    ViewData["Title"] = "Generated Resume"; 
+    Layout = "/Views/Shared/_ResumeLayout.cshtml";
+    ViewData["Title"] = "Generated Resume";
+    var t = Model.ResumedTemplateId;
+    if (t < 1 || t > 4)
+    {
+        t = 1;
+    }
+   
 }
 
-<div class="container my-5">
+@await Html.PartialAsync($"Templates/Template{t}", @Model)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* <div class="container my-5">
     <!-- ===========================
          Header: Name / Title / Contact
          =========================== -->
@@ -243,4 +334,4 @@
             }
         </div>
     </div>
-</div>
+</div> *@

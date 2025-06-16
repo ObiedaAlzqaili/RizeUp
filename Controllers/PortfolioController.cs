@@ -34,6 +34,10 @@ namespace RizeUp.Controllers
             return View(MapToPortfolioJsonDtoList(portfolios.ToList()));
         }
 
+
+
+
+        //Create New Portfolio
         [HttpGet]
         public IActionResult NewPortfolio()
         {
@@ -43,42 +47,6 @@ namespace RizeUp.Controllers
             };
             return View(dto);
         }
-        [HttpGet]
-        public async Task<IActionResult> EditPortfolio(int PortfolioId)
-        {
-            var portfolio = await _portfolioRepo.GetPortfolioByIdAsync(PortfolioId);
-            var portfolioDto = MapToPortfolioDto(portfolio);
-            return View(portfolioDto);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdatePortfolio(PortfolioDto portfolio)
-        {
-            if (!ModelState.IsValid)
-            {
-                // Re-render the view with validation errors and keep current step
-                return View("EditPortfolio", portfolio);
-            }
-            var portfolio1 = MapToPortfolioEntity(portfolio, User.FindFirstValue(ClaimTypes.NameIdentifier));
-            portfolio1.Id = portfolio.Id;
-  
-          await _portfolioRepo.UpdatePortfolioAsync(portfolio1);
-            // After a successful edit, redirect to Index
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> DeletePortfolio(int portfolioId)
-        {
-            var portfolio = await _portfolioRepo.GetPortfolioByIdAsync(portfolioId);
-            if (portfolio == null)
-            {
-                return NotFound();
-            }
-         
-            return RedirectToAction("Index");
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProcessStep(CreatePortfolioDto model, string command)
@@ -173,8 +141,51 @@ namespace RizeUp.Controllers
             return View("NewPortfolio", model);
         }
 
+
+        //Edit on Resume
         [HttpGet]
-        public async Task<IActionResult> PortfolioTemplate1(int portfolioId)
+        public async Task<IActionResult> EditPortfolio(int PortfolioId)
+        {
+            var portfolio = await _portfolioRepo.GetPortfolioByIdAsync(PortfolioId);
+            var portfolioDto = MapToPortfolioDto(portfolio);
+            return View(portfolioDto);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePortfolio(PortfolioDto portfolio)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Re-render the view with validation errors and keep current step
+                return View("EditPortfolio", portfolio);
+            }
+            var portfolio1 = MapToPortfolioEntity(portfolio, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            portfolio1.Id = portfolio.Id;
+  
+          await _portfolioRepo.UpdatePortfolioAsync(portfolio1);
+            // After a successful edit, redirect to Index
+            return RedirectToAction("Index");
+        }
+
+
+
+        //delete 
+        [HttpGet]
+        public async Task<IActionResult> DeletePortfolio(int portfolioId)
+        {
+            var portfolio = await _portfolioRepo.GetPortfolioByIdAsync(portfolioId);
+            if (portfolio == null)
+            {
+                return NotFound();
+            }
+         
+            return RedirectToAction("Index");
+        }
+
+        
+        //Temolate for Portdolio
+        [HttpGet]
+        public async Task<IActionResult> Templates(int portfolioId)
         {
             var portfolio = await _portfolioRepo.GetPortfolioByIdAsync(portfolioId);
             if (portfolio == null)
@@ -192,6 +203,7 @@ namespace RizeUp.Controllers
             {
                 // Top-level properties:
                 Id = dto.Id,
+                PortfolioTemplateId = dto.PortfolioTemplateId, // Assuming this is set in the DTO
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 Email = dto.Email,
@@ -248,6 +260,7 @@ namespace RizeUp.Controllers
             {
                 Id = p.Id,
                 Title = p.Title,
+                PortfolioTemplateId = p.PortfolioTemplateId,
                 FirstName = p.FirstName,
                 LastName = p.LastName,
                 Email = p.Email,
@@ -283,6 +296,7 @@ namespace RizeUp.Controllers
             {         
                 Id = portfolio.Id,
                 Title = portfolio.Title,
+                PortfolioTemplateId = portfolio.PortfolioTemplateId,
                 FirstName = portfolio.FirstName,
                 LastName = portfolio.LastName,
                 Email = portfolio.Email,

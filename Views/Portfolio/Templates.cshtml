@@ -1,8 +1,70 @@
 ﻿@model RizeUp.DTOs.PortfolioDto
 @{
-    ViewData["Title"] = Model.Title ?? $"{Model.FirstName} {Model.LastName}'s Portfolio";
     Layout = "/Views/Shared/_PortfolioLayout.cshtml";
+    string? major = null;
+    if (!string.IsNullOrWhiteSpace(Model.Summery))
+    {
+        var match = System.Text.RegularExpressions.Regex.Match(Model.Summery, @"(?i)major(?:ing)?(?: in)?[:\s]*([A-Za-z0-9 &]+)");
+        if (match.Success)
+        {
+            major = match.Groups[1].Value.Trim();
+        }
+    }
+    ViewData["Title"] = !string.IsNullOrWhiteSpace(major)
+        ? major
+        : (string.IsNullOrWhiteSpace(Model.Title) ? "Portfolio" : Model.Title);
+    var t = Model.PortfolioTemplateId;
+    if (t < 1 || t > 3) { t = 1; }
+
 }
+@await Html.PartialAsync($"Templates/Template{t}", Model)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* 
+
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
@@ -270,4 +332,4 @@
         </div>
     </div>
 </footer>
-
+ *@

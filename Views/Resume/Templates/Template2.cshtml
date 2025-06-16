@@ -1,0 +1,266 @@
+﻿@model RizeUp.DTOs.ResumeDto
+<style>
+    .timeline {
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e9ecef;
+        }
+
+    .timeline-item {
+        position: relative;
+        padding-bottom: 1.5rem;
+    }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.7rem;
+            top: 0.3rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #0d6efd;
+            border: 2px solid white;
+        }
+
+    .card {
+        border-radius: 10px;
+    }
+
+    .progress {
+        background-color: #f0f0f0;
+    }
+</style>
+<div class="container my-4">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-5 fw-bold text-primary">@Model.FirstName <span class="text-dark">@Model.LastName</span></h1>
+            @if (!string.IsNullOrWhiteSpace(Model.Title))
+            {
+                <h3 class="text-secondary mb-3">@Model.Title</h3>
+            }
+        </div>
+        <div class="col-md-4 text-md-end">
+            <ul class="list-unstyled">
+                @if (!string.IsNullOrWhiteSpace(Model.Email))
+                {
+                    <li><i class="bi bi-envelope-fill me-2"></i><a href="mailto:@Model.Email">@Model.Email</a></li>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.PhoneNumber))
+                {
+                    <li><i class="bi bi-phone-fill me-2"></i>@Model.PhoneNumber</li>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.LinkedinLink))
+                {
+                    <li><i class="bi bi-linkedin me-2"></i><a href="@Model.LinkedinLink" target="_blank">LinkedIn</a></li>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.GitHubLink))
+                {
+                    <li><i class="bi bi-github me-2"></i><a href="@Model.GitHubLink" target="_blank">GitHub</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <!-- Bio Section -->
+    @if (!string.IsNullOrWhiteSpace(Model.Summary))
+    {
+        <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5 mb-3 text-uppercase border-bottom pb-2">Profile</h2>
+                <p class="mb-0">@Model.Summary</p>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col-lg-8 pe-lg-4">
+            <!-- Experience Section -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5 mb-3 text-uppercase border-bottom pb-2">Work Experience</h2>
+                    @if (Model.Experiences.Any())
+                    {
+                        <div class="timeline">
+                            @foreach (var exp in Model.Experiences)
+                            {
+                                <div class="timeline-item mb-4">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <h5 class="fw-bold mb-0">@exp.Title</h5>
+                                        <span class="text-muted small">
+                                            @exp.StartDate – @(exp.IsCurrent == true ? "Present" : exp.EndDate)
+                                        </span>
+                                    </div>
+                                    <h6 class="text-secondary mb-2">@exp.Company</h6>
+                                    @if (!string.IsNullOrWhiteSpace(exp.Duties))
+                                    {
+                                        <p class="mb-0">@exp.Duties</p>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No work experience provided.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            @if (Model.Projects.Any())
+            {
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3 text-uppercase border-bottom pb-2">Projects</h2>
+                        <div class="row">
+                            @foreach (var project in Model.Projects)
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <div class="card h-100 border-light">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@project.ProjectName</h5>
+                                            <p class="card-text small">@project.ProjectDescription</p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="badge bg-light text-dark small">@project.StartDate – @project.EndDate</span>
+                                                @if (!string.IsNullOrWhiteSpace(project.ProjectLink))
+                                                {
+                                                    <a href="@project.ProjectLink" target="_blank" class="btn btn-sm btn-outline-primary">View Project</a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-lg-4">
+            <!-- Education Section -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5 mb-3 text-uppercase border-bottom pb-2">Education</h2>
+                    @if (Model.Educations.Any())
+                    {
+                        <ul class="list-unstyled">
+                            @foreach (var edu in Model.Educations)
+                            {
+                                <li class="mb-3">
+                                    <h5 class="fw-bold mb-1">@edu.CollegeName</h5>
+                                    <p class="mb-1 small">
+                                        @edu.DegreeType
+                                        @if (!string.IsNullOrWhiteSpace(edu.Major))
+                                        {
+                                            <span>in @edu.Major</span>
+                                        }
+                                    </p>
+                                    <p class="text-muted small mb-1">
+                                        @edu.StartDate – @edu.EndDate
+                                    </p>
+                                    @if (edu.GPA.HasValue)
+                                    {
+                                        <p class="small mb-0"><strong>GPA:</strong> @edu.GPA.Value.ToString("0.00")</p>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted small">No education information provided.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Skills Section -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5 mb-3 text-uppercase border-bottom pb-2">Skills</h2>
+                    @if (Model.Skills.Any())
+                    {
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var skill in Model.Skills)
+                            {
+                                <span class="badge bg-primary bg-opacity-10 text-primary">@skill.SkillName</span>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted small">No skills listed.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Languages Section -->
+            @if (Model.Languages.Any())
+            {
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3 text-uppercase border-bottom pb-2">Languages</h2>
+                        <ul class="list-unstyled">
+                            @foreach (var lang in Model.Languages)
+                            {
+                                <li class="mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span>@lang.LanguageName</span>
+                                        <span class="text-muted small">@lang.Level</span>
+                                    </div>
+                                    <div class="progress mt-1" style="height: 5px;">
+                                        @{
+                                            var progress = lang.Level switch
+                                            {
+                                                "Native" => 100,
+                                                "Fluent" => 80,
+                                                "Intermediate" => 60,
+                                                "Basic" => 40,
+                                                _ => 20
+                                            };
+                                        }
+                                        <div class="progress-bar bg-secondary" role="progressbar" style="width: @progress%"></div>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+
+            <!-- Certificates Section -->
+            @if (Model.Certificates.Any())
+            {
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3 text-uppercase border-bottom pb-2">Certifications</h2>
+                        <ul class="list-unstyled">
+                            @foreach (var cert in Model.Certificates)
+                            {
+                                <li class="mb-3">
+                                    <h6 class="fw-bold mb-1">@cert.Field</h6>
+                                    <p class="small mb-1">@cert.ProviderName</p>
+                                    <p class="text-muted small mb-0">@cert.StartDate – @cert.EndDate</p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

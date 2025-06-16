@@ -195,7 +195,7 @@ JSON:
                           Skills: {(dto.Skills ?? "").Replace("\r\n", ", ").Replace("\n", ", ")}
             ";
 
-            //            string rawText = @"
+      
             //John
             //Doe
             //john.doe@example.com
@@ -233,7 +233,7 @@ JSON:
             resumeDto.Email = resumeDto.Email ?? "";
             resumeDto.PhoneNumber = resumeDto.PhoneNumber ?? "";
             resumeDto.Address = resumeDto.Address ?? "";
-            resumeDto.Bio = resumeDto.Bio ?? "";
+            resumeDto.Summary = resumeDto.Summary ?? "";
             resumeDto.Title = resumeDto.Title ?? "";
             resumeDto.GitHubLink = resumeDto.GitHubLink ?? "";
             resumeDto.LinkedinLink = resumeDto.LinkedinLink ?? "";

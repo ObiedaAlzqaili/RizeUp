@@ -42,6 +42,8 @@ namespace RizeUp.DTOs
         [StringLength(1000, ErrorMessage = "Skills list cannot exceed 1000 characters.")]
         public string Skills { get; set; }
 
+        public int ResumedTemplateId { get; set; } = 1;
+
         public int CurrentStep { get; set; } = 1;
     }
 

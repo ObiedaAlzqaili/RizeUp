@@ -1,0 +1,35 @@
+﻿@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
+    {
+        Layout = parentLayout.ToString();
+    }
+    else
+    {
+        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    }
+}
+<!-- make sure your root stylesheet is included -->
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+<div class="container my-5 manage-container">
+    <div class="row">
+        <!-- left-side nav -->
+        <aside class="col-12 col-md-4 mb-4 mb-md-0">
+            <div class="manage-nav p-4 bg-white rounded shadow-sm position-sticky" style="top: 100px;">
+                <h5 class="text-uppercase text-muted mb-3">Account Settings</h5>
+                <partial name="_ManageNav" />
+            </div>
+        </aside>
+
+        <!-- main content -->
+        <main class="col-12 col-md-8">
+            <h1 class="mb-2">Manage your account</h1>
+            <h2 class="h5 text-secondary mb-4">Change your account settings</h2>
+            @RenderBody()
+        </main>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("scripts", required: false)
+}

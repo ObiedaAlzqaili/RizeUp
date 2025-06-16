@@ -26,4 +26,20 @@
     <Folder Include="Prompts\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Views\Portfolio\Templates\Template3.cshtml" />
+  </ItemGroup>
+
+  <!-- Remove duplicate compressed assets (like .gz/.br) before DiscoverPrecompressedAssets runs -->
+  <Target Name="RemoveDuplicateCompressedAssets" BeforeTargets="DiscoverPrecompressedAssets">
+    <ItemGroup>
+      <!--
+        Replace these with the actual duplicate paths reported in your error message!
+        The below lines are just common examples. If your error mentions other files, add lines for each.
+      -->
+      <StaticWebAsset Remove="@(StaticWebAsset)" Condition="'%(RelativePath)' == 'wwwroot/js/site.js.gz'" />
+      <StaticWebAsset Remove="@(StaticWebAsset)" Condition="'%(RelativePath)' == 'js/site.js.br'" />
+    </ItemGroup>
+  </Target>
+
 </Project>

@@ -13,111 +13,115 @@ namespace RizeUp.Repository
             _context = context;
         }
 
+        public async Task<int> GetCountAsync()
+        {
+            return await _context.Portfolios.CountAsync();
+        }
+
+        //public async Task<List<PortfolioReview>> GetRecentReviewsAsync(int count)
+        //{
+        //    return await _context.Portfolio
+        //        .Include(r => r.User)
+        //        .OrderByDescending(r => r.ReviewDate)
+        //        .Take(count)
+        //        .Select(r => new PortfolioReview
+        //        {
+        //            UserName = r.User.UserName,
+        //            Title = r.User.Title ?? "User",
+        //            Content = r.Content,
+        //            ReviewDate = r.ReviewDate
+        //        })
+        //        .ToListAsync();
+        //}
+
         public async Task AddPortfolioAsync(Portfolio portfolio)
         {
-            try
-            {
-                _context.Portfolios.Add(portfolio);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while adding the portfolio.", ex);
-            }
+            if (portfolio == null)
+                throw new ArgumentNullException(nameof(portfolio), "Portfolio cannot be null");
+
+            _context.Portfolios.Add(portfolio);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeletePortfolioAsync(int id)
         {
-            try
+            var portfolio = await _context.Portfolios
+                .Include(p => p.Projects)
+                .Include(p => p.Skills)
+                .Include(p => p.Services)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (portfolio != null)
             {
-                var portfolio = await _context.Portfolios.FindAsync(id);
-                if (portfolio != null)
-                {
-                    portfolio.IsDeleted = true; // Soft delete
-                    portfolio.ModifiedDate = DateOnly.FromDateTime(DateTime.Now).ToString();
-                    _context.Portfolios.Update(portfolio);
-                    _context.Projects.RemoveRange(_context.Projects.Where(p => p.PortfolioId == id));
-                    await _context.SaveChangesAsync();
-                }
+                portfolio.IsDeleted = true; // Soft delete
+                portfolio.ModifiedDate = DateOnly.FromDateTime(DateTime.Now).ToString();
+
+                // Optionally, soft delete children too, if you have IsDeleted on child entities
+                // portfolio.Projects.ForEach(p => p.IsDeleted = true);
+                // etc.
+
+                _context.Portfolios.Update(portfolio);
+                await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            else
             {
-                throw new Exception("An error occurred while deleting the portfolio.", ex);
+                throw new KeyNotFoundException($"Portfolio with ID {id} not found.");
             }
         }
 
         public async Task<Portfolio> GetPortfolioByIdAsync(int id)
         {
-            try
-            {
-                var por = await _context.Portfolios
-                    .AsNoTracking()
-                    .Include(p => p.Skills)
-                    .Include(p => p.Projects)
-                    .Include(p => p.Services)
-                    .FirstOrDefaultAsync(p => p.Id == id);
+            var por = await _context.Portfolios
+                .AsNoTracking()
+                .Include(p => p.Skills)
+                .Include(p => p.Projects)
+                .Include(p => p.Services)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
-                if (por == null)
-                    throw new KeyNotFoundException($"Portfolio with ID {id} not found.");
-                if (por.IsDeleted)
-                    throw new InvalidOperationException($"Portfolio with ID {id} is deleted.");
+            if (por == null)
+                throw new KeyNotFoundException($"Portfolio with ID {id} not found.");
+            if (por.IsDeleted)
+                throw new InvalidOperationException($"Portfolio with ID {id} is deleted.");
 
-                return por;
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new Exception("A database error occurred while retrieving the portfolio.", ex);
-            }
+            return por;
         }
 
         public async Task<IEnumerable<Portfolio>> GetPortfoliosByUserIdAsync(string userId)
         {
-            List<Portfolio> portfolios;
-            try
-            {
-                portfolios = await _context.Portfolios
-                    .Where(p => p.EndUserId == userId && !p.IsDeleted)
-                    .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while retrieving portfolios by user ID.", ex);
-            }
-            return portfolios;
+            return await _context.Portfolios
+                .Where(p => p.EndUserId == userId && !p.IsDeleted)
+                .ToListAsync();
         }
 
         public async Task UpdatePortfolioAsync(Portfolio portfolio)
         {
-            try
-            {
-                var existingPortfolio = await _context.Portfolios
-                    .Include(p => p.Services)
-                    .Include(p => p.Projects)
-                    .Include(p => p.Skills)
-                    .FirstOrDefaultAsync(p => p.Id == portfolio.Id);
+            if (portfolio == null)
+                throw new ArgumentNullException(nameof(portfolio), "Portfolio cannot be null");
 
-                if (existingPortfolio == null)
-                {
-                    throw new KeyNotFoundException($"Portfolio with ID {portfolio.Id} not found.");
-                }
+            var existingPortfolio = await _context.Portfolios
+                .Include(p => p.Services)
+                .Include(p => p.Projects)
+                .Include(p => p.Skills)
+                .FirstOrDefaultAsync(p => p.Id == portfolio.Id);
 
-                // Remove related entities
-                _context.Services.RemoveRange(existingPortfolio.Services);
-                _context.Projects.RemoveRange(existingPortfolio.Projects);
-                _context.Skills.RemoveRange(existingPortfolio.Skills);
+            if (existingPortfolio == null)
+                throw new KeyNotFoundException($"Portfolio with ID {portfolio.Id} not found.");
 
-                // Remove the portfolio itself
-                _context.Portfolios.Remove(existingPortfolio);
+            // Update main properties
+            _context.Entry(existingPortfolio).CurrentValues.SetValues(portfolio);
+            existingPortfolio.ModifiedDate = DateOnly.FromDateTime(DateTime.Now).ToString();
 
-                // Add the new portfolio
-                _context.Portfolios.Add(portfolio);
+            // Remove all existing children
+            _context.Services.RemoveRange(existingPortfolio.Services ?? new List<Service>());
+            _context.Projects.RemoveRange(existingPortfolio.Projects ?? new List<Project>());
+            _context.Skills.RemoveRange(existingPortfolio.Skills ?? new List<Skill>());
 
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while updating the portfolio.", ex);
-            }
+            // Add the new children (if any)
+            existingPortfolio.Services = portfolio.Services ?? new List<Service>();
+            existingPortfolio.Projects = portfolio.Projects ?? new List<Project>();
+            existingPortfolio.Skills = portfolio.Skills ?? new List<Skill>();
+
+            await _context.SaveChangesAsync();
         }
     }
 }

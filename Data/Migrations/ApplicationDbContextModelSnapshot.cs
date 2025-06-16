@@ -439,6 +439,9 @@ namespace RizeUp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PortfolioTemplateId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Summery")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -550,6 +553,9 @@ namespace RizeUp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ResumeTemplateId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Summery")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -611,6 +617,8 @@ namespace RizeUp.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PortfolioId");
+
+                    b.HasIndex("ResumeId");
 
                     b.ToTable("Skills");
                 });
@@ -779,11 +787,11 @@ namespace RizeUp.Data.Migrations
                     b.HasOne("RizeUp.Models.Portfolio", "Portfolio")
                         .WithMany("Skills")
                         .HasForeignKey("PortfolioId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("RizeUp.Models.Resume", "Resume")
                         .WithMany("Skills")
-                        .HasForeignKey("PortfolioId")
+                        .HasForeignKey("ResumeId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Portfolio");

@@ -325,3 +325,415 @@ footer {
         margin-bottom: 1rem;
     }
 }
+
+
+#resume-loader-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #fff;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+    user-select: none;
+    touch-action: none;
+}
+
+    #resume-loader-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    #resume-loader-overlay .rizeup-logo {
+        position: absolute;
+        top: 28px;
+        left: 28px;
+        opacity: 0.4;
+        z-index: 10;
+    }
+
+    #resume-loader-overlay .container {
+        width: 100%;
+        max-width: 800px;
+        padding: 20px;
+        text-align: center;
+    }
+
+    #resume-loader-overlay .loading-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 30px 0;
+        position: relative;
+    }
+
+    #resume-loader-overlay h1 {
+        font-size: 2.3rem;
+        margin-bottom: 18px;
+        line-height: 1.2;
+        color: #222;
+        font-weight: 700;
+    }
+
+    #resume-loader-overlay .highlight {
+        color: #27ae60;
+        position: relative;
+        display: inline-block;
+    }
+
+    #resume-loader-overlay .subtitle {
+        font-size: 1.15rem;
+        color: #555;
+        max-width: 600px;
+        margin: 0 auto 32px;
+        line-height: 1.6;
+        font-weight: 400;
+    }
+
+    /* Rocket Animation */
+    #resume-loader-overlay .rocket-container {
+        position: relative;
+        width: 180px;
+        height: 260px;
+        margin: 0 auto 32px;
+    }
+
+    #resume-loader-overlay .rocket {
+        position: absolute;
+        width: 60px;
+        height: 140px;
+        left: 50%;
+        top: 28px;
+        transform: translateX(-50%);
+        animation: float 3s infinite ease-in-out;
+    }
+
+    #resume-loader-overlay .rocket-body {
+        position: absolute;
+        width: 44px;
+        height: 125px;
+        background: linear-gradient(to bottom, #27ae60, #2ecc71);
+        border-radius: 50% 50% 40% 40% / 60% 60% 30% 30%;
+        left: 8px;
+        top: 0;
+        z-index: 2;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    #resume-loader-overlay .rocket-window {
+        position: absolute;
+        width: 19px;
+        height: 19px;
+        background: #ffffff;
+        border-radius: 50%;
+        top: 29px;
+        left: 13px;
+        border: 2px solid #d5f5e3;
+        box-shadow: 0 0 0 3px #27ae60;
+    }
+
+    #resume-loader-overlay .rocket-fin {
+        position: absolute;
+        width: 15px;
+        height: 41px;
+        background: #2ecc71;
+        border-radius: 4px;
+        bottom: 0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+    }
+
+    #resume-loader-overlay .fin-left {
+        left: -12px;
+        transform: rotate(15deg);
+    }
+
+    #resume-loader-overlay .fin-right {
+        right: -12px;
+        transform: rotate(-15deg);
+    }
+
+    #resume-loader-overlay .flame-container {
+        position: absolute;
+        bottom: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 28px;
+        height: 85px;
+    }
+
+    #resume-loader-overlay .flame {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to top, #82e0aa, #27ae60, transparent 90%);
+        border-radius: 50% 50% 20% 20%;
+        filter: blur(3px);
+        animation: flame 0.8s infinite alternate;
+    }
+
+        #resume-loader-overlay .flame::before,
+        #resume-loader-overlay .flame::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            background: linear-gradient(to top, #58d68d, #229954, transparent 90%);
+            border-radius: 50%;
+            filter: blur(6px);
+            animation: flame 0.6s infinite alternate;
+        }
+
+        #resume-loader-overlay .flame::before {
+            left: -9px;
+            bottom: 0;
+        }
+
+        #resume-loader-overlay .flame::after {
+            right: -9px;
+            bottom: 0;
+        }
+
+@keyframes float {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-13px);
+    }
+}
+
+@keyframes flame {
+    0% {
+        height: 85px;
+        opacity: 0.82;
+    }
+
+    100% {
+        height: 97px;
+        opacity: 1;
+    }
+}
+
+#resume-loader-overlay .progress-container {
+    width: 100%;
+    max-width: 350px;
+    margin: 20px auto 0;
+    background: #f0f0f0;
+    border-radius: 8px;
+    height: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#resume-loader-overlay .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #27ae60, #2ecc71);
+    border-radius: 8px;
+    transition: width 0.5s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+    #resume-loader-overlay .progress-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        animation: shine 2s infinite;
+    }
+
+@keyframes shine {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+#resume-loader-overlay .status-message {
+    font-size: 1.07rem;
+    color: #555;
+    margin: 24px 0 0 0;
+    min-height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#resume-loader-overlay .dots {
+    display: flex;
+    gap: 6px;
+}
+
+#resume-loader-overlay .dot {
+    width: 8px;
+    height: 8px;
+    background: #27ae60;
+    border-radius: 50%;
+    opacity: 0;
+    animation: dotPulse 1.5s infinite;
+}
+
+    #resume-loader-overlay .dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    #resume-loader-overlay .dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+@keyframes dotPulse {
+    0%, 100% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    #resume-loader-overlay h1 {
+        font-size: 1.5rem;
+    }
+
+    #resume-loader-overlay .rocket-container {
+        width: 130px;
+        height: 180px;
+    }
+
+    #resume-loader-overlay .container {
+        max-width: 95vw;
+    }
+}
+
+@media (max-width: 480px) {
+    #resume-loader-overlay h1 {
+        font-size: 1.05rem;
+    }
+
+    #resume-loader-overlay .rocket-container {
+        transform: scale(0.85);
+    }
+}
+
+.manage-container {
+    min-height: 70vh;
+}
+
+/* styling for the side nav panel */
+.manage-nav {
+    border: 1px solid #e6e6e6;
+}
+
+    .manage-nav .nav-link {
+        color: var(--dark-color);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+        .manage-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: #fff !important;
+        }
+
+    /* make sure headings line up visually */
+    .manage-nav h5 {
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+    }
+
+/* ------------ Profile Page ------------ */
+/*.profile-page h2 {
+    font-weight: 700;
+}*/
+
+/* Gradient header for cards */
+/*.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+}*/
+
+/* Stat cards */
+/*.stat-card {
+    border-radius: 12px;
+    transition: transform 0.2s ease;
+}
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }*/
+
+/* Icons and values */
+/*.stat-icon {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+}
+
+.stat-value {
+    font-weight: 600;
+    color: var(--dark-color);
+}*/
+
+/* Ensure cards stack nicely on small screens */
+/*@media (max-width: 575.98px) {
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+}*/
+/* make nav & card full-width and stacked */
+.manage-nav {
+    border: 1px solid #e6e6e6;
+}
+
+/* Profile card header */
+.profile-card .card-header {
+    background: var(--primary-color);
+}
+
+    .profile-card .card-header i {
+        color: #fff;
+    }
+
+/* Stat cards hover lift */
+.stat-card {
+    background: var(--light-color);
+    border-radius: 0.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+.stat-icon {
+    font-size: 1.75rem;
+    color: var(--accent-color);
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+/* ensure a bit of breathing room on narrow screens */
+@media (max-width: 575.98px) {
+    .profile-card .card-body .row > [class*="col-"] {
+        text-align: center;
+    }
+}

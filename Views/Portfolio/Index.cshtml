@@ -79,7 +79,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" name="PortfolioId" asp-action="EditPortfolio" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id"><i class="bi bi-pencil"></i>Edit</a></li>
-                                <li><a class="dropdown-item" asp-action="PortfolioTemplate1" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id"><i class="bi bi-eye"></i>Preview</a></li>
+                                <li><a class="dropdown-item" asp-action="Templates" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id" target="_blank"><i class="bi bi-eye"></i>Preview</a></li>
                                 <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-up-right"></i>Publish</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" name="PortfolioId" asp-action="DeletePortfolio" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id"><i class="bi bi-trash"></i>Delete</a></li>
@@ -89,7 +89,7 @@
                     <p class="mt-3 text-muted">A fully responsive e-commerce store built with React, Redux, and Stripe integration for payments. Features product listings, user authentication, and a shopping cart.</p>
                     <div class="mt-3 action-buttons">
                         <a name="PortfolioId" asp-action="EditPortfolio" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id" class="btn btn-sm btn-outline-primary action-btn"><i class="bi bi-pencil"></i> Edit</a>
-                        <a asp-action="PortfolioTemplate1" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id" class="btn btn-sm btn-outline-secondary action-btn"><i class="bi bi-eye"></i> Preview</a>
+                        <a asp-action="Templates" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id" target="_blank" class="btn btn-sm btn-outline-secondary action-btn"><i class="bi bi-eye"></i> Preview</a>
                         <a href="#" class="btn btn-sm btn-primary action-btn"><i class="bi bi-box-arrow-up-right"></i> Publish</a>
                         <a name="PortfolioId" asp-action="DeletePortfolio" asp-controller="Portfolio" asp-route-portfolioId="@Model[i].Id" class="btn btn-sm btn-outline-danger action-btn"><i class="bi bi-trash"></i> Delete</a>
                     </div>

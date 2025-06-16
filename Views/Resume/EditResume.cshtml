@@ -12,48 +12,54 @@
         <div class="row">
             <!-- Side Navigation -->
             <div class="col-lg-3 mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-body p-0">
-                        <ul class="nav nav-pills flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#" data-section="personal-info">
-                                    <i class="fas fa-user-circle me-2"></i> Personal Info
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-section="educations">
-                                    <i class="fas fa-graduation-cap me-2"></i> Education
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-section="experiences">
-                                    <i class="fas fa-briefcase me-2"></i> Experience
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-section="skills">
-                                    <i class="fas fa-lightbulb me-2"></i> Skills
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-section="languages">
-                                    <i class="fas fa-language me-2"></i> Languages
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-section="certificates">
-                                    <i class="fas fa-certificate me-2"></i> Certificates
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-section="projects">
-                                    <i class="fas fa-project-diagram me-2"></i> Projects
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <ul class="nav nav-pills flex-column" id="resumeTabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" data-section="personal-info">
+                                <i class="fas fa-user-circle me-2"></i> Personal Info
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="educations">
+                                <i class="fas fa-graduation-cap me-2"></i> Education
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="experiences">
+                                <i class="fas fa-briefcase me-2"></i> Experience
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="skills">
+                                <i class="fas fa-lightbulb me-2"></i> Skills
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="languages">
+                                <i class="fas fa-language me-2"></i> Languages
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="certificates">
+                                <i class="fas fa-certificate me-2"></i> Certificates
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="projects">
+                                <i class="fas fa-project-diagram me-2"></i> Projects
+                            </a>
+                        </li>
+                        <!-- Design Section Link -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="design">
+                                <i class="fas fa-paint-brush me-2"></i> Design
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
+        </div>
 
             <!-- Main Content -->
             <div class="col-lg-9">
@@ -97,9 +103,9 @@
                                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                                     </div>
                                     <div class="col-12">
-                                        <label asp-for="Bio" class="form-label"></label>
-                                        <textarea asp-for="Bio" class="form-control" rows="4"></textarea>
-                                        <span asp-validation-for="Bio" class="text-danger"></span>
+                                        <label asp-for="Summary" class="form-label"></label>
+                                        <textarea asp-for="Summary" class="form-control" rows="4"></textarea>
+                                        <span asp-validation-for="Summary" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <label asp-for="Title" class="form-label"></label>
@@ -483,6 +489,41 @@
                             </div>
                         </div>
                     </div>
+                     <div class="form-section" id="design-section">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-paint-brush me-2"></i> Select Resume Design</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-4">
+                                <!-- Template 1 -->
+                                <div class="col-md-4 text-center">
+                                    <label class="design-option p-2 border rounded w-100">
+                                        <input asp-for="ResumedTemplateId" type="radio" value="1" hidden />
+                                        <img src="~/images/resume-designs/template1.png" class="img-fluid mb-2" alt="Classic Resume" />
+                                        <div>Classic</div>
+                                    </label>
+                                </div>
+                                <!-- Template 2 -->
+                                <div class="col-md-4 text-center">
+                                    <label class="design-option p-2 border rounded w-100">
+                                        <input asp-for="ResumedTemplateId" type="radio" value="2" hidden />
+                                        <img src="~/images/resume-designs/template2.png" class="img-fluid mb-2" alt="Modern Resume" />
+                                        <div>Modern</div>
+                                    </label>
+                                </div>
+                                <!-- Template 3 -->
+                                <div class="col-md-4 text-center">
+                                    <label class="design-option p-2 border rounded w-100">
+                                        <input asp-for="ResumedTemplateId" type="radio" value="3" hidden />
+                                        <img src="~/images/resume-designs/template3.png" class="img-fluid mb-2" alt="Minimal Resume" />
+                                        <div>Minimal</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                     <button type="submit" class="btn btn-primary btn-lg w-100">
                         <i class="fas fa-save me-2"></i> Save Changes
@@ -493,10 +534,31 @@
     </div>
 
     @section Scripts {
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/EditResume.js" asp-append-version="true"></script>
+      
+   
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/EditResume.js" asp-append-version="true"></script>
+    <script>
+        // Tab navigation
+        $('#resumeTabs .nav-link').click(function(e) {
+            e.preventDefault();
+            var section = $(this).data('section') + '-section';
+            $('.form-section').removeClass('active');
+            $('#' + section).addClass('active');
+            $('#resumeTabs .nav-link').removeClass('active');
+            $(this).addClass('active');
+        });
+        // Highlight design option
+        $('input[name="ResumedTemplateId"]').change(function() {
+            $('.design-option').removeClass('border-primary');
+            $(this).closest('.design-option').addClass('border-primary');
+        });
+        // Initial highlight
+        var sel = $('input[name="ResumedTemplateId"]:checked');
+        if (sel.length) sel.closest('.design-option').addClass('border-primary');
+    </script>
     }
 }

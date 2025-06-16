@@ -77,7 +77,24 @@ namespace RizeUp
             app.UseRouting();
 
             app.UseAuthorization();
+            app.Use(async (context, next) =>
+            {
+                if (context.User?.Identity?.IsAuthenticated == true && context.Request.Path == "/")
+                {
+                    var userManager = context.RequestServices.GetRequiredService<UserManager<Person>>();
+                    var user = await userManager.GetUserAsync(context.User);
+                    if (user != null && await userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        context.Response.Redirect("/Admin/Index");
+                        return;
+                    }
 
+                    context.Response.Redirect("/Home/Index");
+                    return;
+                }
+
+                await next();
+            });
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
