@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using QuestPDF.Fluent;
+using RizeUp.Documents;
 using RizeUp.DTOs;
 using RizeUp.Interfaces;
 using RizeUp.Models;
@@ -117,6 +119,31 @@ namespace RizeUp.Controllers
         }
 
 
+        [HttpGet] // Change from HttpPost to HttpGet
+        public async Task<IActionResult> DownloadResume(int resumeId)
+        {
+            var resumeEntity = await _resumeRepo.GetResumeByIdAsync(resumeId);
+            if (resumeEntity == null)
+            {
+                return NotFound();
+            }
+
+            // Map entity to DTO first
+            var resumeDto = MapToResumeJsonDto(resumeEntity);
+
+            try
+            {
+                var generator = new ResumeGenerator();
+                var pdfBytes = generator.GeneratePdf(resumeDto);
+
+                return File(pdfBytes, "application/pdf",
+                    $"{resumeDto.FirstName}_{resumeDto.LastName}_Resume.pdf");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"PDF generation failed: {ex.Message}");
+            }
+        }
 
         //template for resume
         public async Task<IActionResult> Templates(int resumeId)

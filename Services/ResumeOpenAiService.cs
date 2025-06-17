@@ -105,8 +105,10 @@ namespace RizeUp.Services
             language, translate it into English before proceeding.Use all details you can glean from the
             Summary field to craft a strong, concise personal headline and a powerful professional summary.
             Enhance or expand any sparse content to make it more impactful, but do not invent credentials the
-            user never provided.
-
+            user never provided.When extracting skills, carefully analyze the entire input—including summary, education,
+experience, and any other section—to identify as many relevant skills as possible, 
+even if they are not explicitly listed in the skills section. Infer both technical and soft skills from context, job duties, education, and project descriptions.
+For each skill, assign an appropriate SkillType (e.g., 'Technical', 'Soft',)
             Below is the EXACT schema for the JSON you must produce.Do not add any extra keys.Fill in
             every key; if a section has no data, use null(for single‐value fields) or an empty array(for lists).
 

@@ -10,7 +10,7 @@ namespace RizeUp.Models
         public List<Service>? Services { get; set; } 
         public List<Project>? Projects { get; set; }
         public List<Skill>? Skills { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } 
 
         public int PortfolioTemplateId { get; set; }
         public string? ImageBase64 { get; set; }

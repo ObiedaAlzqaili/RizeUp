@@ -66,7 +66,7 @@ namespace RizeUp.Repository
         public async Task<IEnumerable<Resume>> GetResumesByUserIdAsync(string userId)
         {
             return await _dbContext.Resumes
-                .Where(r => r.EndUserId == userId)
+                .Where(r => r.EndUserId == userId && !r.IsDeleted)
                 .ToListAsync();
         }
 
@@ -123,11 +123,41 @@ namespace RizeUp.Repository
 
         public async Task DeleteResumeAsync(int id)
         {
-            var resume = await _dbContext.Resumes.FindAsync(id);
+            var resume = await _dbContext.Resumes
+                .Include(r => r.Educations)
+                .Include(r => r.Experiences)
+                .Include(r => r.Projects)
+                .Include(r => r.Skills)
+                .Include(r => r.Languages)
+                .Include(r => r.Certificates)
+                .FirstOrDefaultAsync(r => r.ResumeId == id);
+
             if (resume == null)
                 throw new KeyNotFoundException($"Resume with ID {id} not found.");
 
-            _dbContext.Resumes.Remove(resume);
+            if (resume.IsDeleted)
+                return; // Already soft deleted
+
+            resume.IsDeleted = true;
+
+        
+
+            if (resume.Experiences != null)
+                _dbContext.Experiences.RemoveRange(resume.Experiences);
+
+            if (resume.Projects != null)
+                _dbContext.Projects.RemoveRange(resume.Projects);
+
+            if (resume.Skills != null)
+                _dbContext.Skills.RemoveRange(resume.Skills);
+
+            if (resume.Languages != null)
+                _dbContext.Languages.RemoveRange(resume.Languages);
+
+            if (resume.Certificates != null)
+                _dbContext.Certificates.RemoveRange(resume.Certificates);
+
+
             await _dbContext.SaveChangesAsync();
         }
 

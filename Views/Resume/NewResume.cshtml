@@ -18,13 +18,49 @@
         <div class="step @(Model.CurrentStep >= 2 ? "active" : "")" data-step="2">2</div>
         <div class="step-line"></div>
         <div class="step @(Model.CurrentStep >= 3 ? "active" : "")" data-step="3">3</div>
+        <div class="step-line"></div>
+        <div class="step @(Model.CurrentStep >= 4 ? "active" : "")" data-step="4">4</div>
     </div>
 
     <form id="resumeForm" asp-action="ProcessStep" method="post">
         <input type="hidden" asp-for="CurrentStep" id="currentStep" value="@Model.CurrentStep" />
 
+		<!-- Step 0: Select Resume Template -->
+        <div class="form-section @(Model.CurrentStep == 1 ? "active" : "")" data-step="1" id="design-section">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-paint-brush me-2"></i> Select Resume Template</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-4 text-center">
+                            <label class="design-option p-2 border rounded w-100">
+                                <input asp-for="ResumedTemplateId" type="radio" value="1" hidden />
+                                <img src="~/images/ResumeDesgin/template1.png" class="img-fluid mb-2" alt="Classic" />
+                                <div>Classic</div>
+                            </label>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <label class="design-option p-2 border rounded w-100">
+                                <input asp-for="ResumedTemplateId" type="radio" value="2" hidden />
+                                <img src="~/images/ResumeDesgin/template2.png" class="img-fluid mb-2" alt="Classic" />
+                                <div>Classic</div>
+                            </label>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <label class="design-option p-2 border rounded w-100">
+                                <input asp-for="ResumedTemplateId" type="radio" value="3" hidden />
+                                <img src="~/images/ResumeDesgin/template3.png" class="img-fluid mb-2" alt="Classic" />
+                                <div>Classic</div>
+                            </label>
+                        </div>
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Step 1: Personal Information -->
-        <div class="form-section @(Model.CurrentStep == 1 ? "active" : "")" data-step="1">
+        <div class="form-section @(Model.CurrentStep == 2 ? "active" : "")" data-step="2">
             <h4>Personal Information</h4>
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -67,7 +103,7 @@
         </div>
 
         <!-- Step 2: Education, Experience & Skills -->
-        <div class="form-section @(Model.CurrentStep == 2 ? "active" : "")" data-step="2">
+        <div class="form-section @(Model.CurrentStep == 3 ? "active" : "")" data-step="3">
             <h4>Education, Experience & Skills</h4>
             <div class="mb-3">
                 <label asp-for="Education" class="form-label"></label>
@@ -90,7 +126,7 @@
         </div>
 
         <!-- Step 3: Review & Submit -->
-        <div class="form-section @(Model.CurrentStep == 3 ? "active" : "")" data-step="3">
+        <div class="form-section @(Model.CurrentStep == 4 ? "active" : "")" data-step="4">
             <h4>Review</h4>
             <div class="preview-section" id="preview">
                 <h5>Personal Information</h5>
@@ -121,12 +157,28 @@
 
         <!-- Navigation Buttons -->
         <div class="form-navigation">
-            <button type="submit" class="btn btn-outline-secondary" name="command" value="prev" @(Model.CurrentStep == 1 ? "disabled" : "")>
+            <button type="submit"
+                    class="btn btn-outline-secondary"
+                    name="command" value="prev"
+                    @(Model.CurrentStep == 1 ? "disabled" : "")>
                 Back
             </button>
-            <button type="submit" class="btn btn-primary" name="command" value="next" @(Model.CurrentStep == 3 ? "disabled" : "")>
-                Next
-            </button>
+
+            <!-- Only show “Next” up through step 3 -->
+            @if (Model.CurrentStep < 4)
+            {
+                <button type="submit" class="btn btn-primary" name="command" value="next">
+                    Next
+                </button>
+            }
+
+            <!-- On the last step, show Submit -->
+            @if (Model.CurrentStep == 4)
+            {
+                <button type="submit" class="btn btn-success w-100" name="command" value="submit">
+                    Submit to AI
+                </button>
+            }
         </div>
        
     </form>

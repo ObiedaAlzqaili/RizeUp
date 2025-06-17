@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.SemanticKernel;
+using QuestPDF.Infrastructure;
 using RizeUp.Data;
 using RizeUp.Interfaces;
 using RizeUp.Models;
@@ -16,7 +17,8 @@ namespace RizeUp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            
+            QuestPDF.Settings.License = LicenseType.Community;
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -27,7 +29,7 @@ namespace RizeUp
             // 1. Add code to read the key from "sercrite.json".
             // 2. Register the key in the DI container as "userManagerSercirte".
             // 3. Use Configuration to load the file and access the key.
-
+           
             
 
             var key = builder.Configuration["OpenAi:key"];

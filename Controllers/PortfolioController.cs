@@ -64,8 +64,17 @@ namespace RizeUp.Controllers
             // === NEXT button clicked ===
             if (command == "next")
             {
+                if (command == "next" && model.CurrentStep == 1)
+                {
+                    if (model.PortfolioTemplateId == 0)
+                    {
+                        ModelState.AddModelError(nameof(model.PortfolioTemplateId),
+                          "Please pick a template to continue.");
+                        return View("NewPortfolio", model);
+                    }
+                }
                 // Handle profile image upload and convert to base64 on step 1
-                if (model.CurrentStep == 1 && model.ProfileImage != null && model.ProfileImage.Length > 0)
+                if (model.CurrentStep == 2 && model.ProfileImage != null && model.ProfileImage.Length > 0)
                 {
                     using (var ms = new MemoryStream())
                     {
@@ -78,13 +87,13 @@ namespace RizeUp.Controllers
                     model.ProfileImage = null; // Clear the file to avoid model binding issues
                 }
                 // If no new image was uploaded but we have existing base64 data, retain it
-                else if (model.CurrentStep == 1 && model.ProfileImage == null && !string.IsNullOrEmpty(model.ProfileImageBase64))
+                else if (model.CurrentStep == 2 && model.ProfileImage == null && !string.IsNullOrEmpty(model.ProfileImageBase64))
                 {
                     // Keep the existing image data
                 }
 
                 // Handle project images (if any) and convert to base64 on step 2
-                if (model.CurrentStep == 2 && model.Projects != null)
+                if (model.CurrentStep == 3 && model.Projects != null)
                 {
                     for (int i = 0; i < model.Projects.Count; i++)
                     {
@@ -112,7 +121,7 @@ namespace RizeUp.Controllers
                 // Rest of the validation logic remains the same...
                 // [Previous validation code here]
 
-                if (model.CurrentStep < 3)
+                if (model.CurrentStep < 4)
                 {
                     model.CurrentStep++;
                 }
@@ -120,7 +129,7 @@ namespace RizeUp.Controllers
             }
 
             // === SUBMIT button clicked on step 3 ===
-            if (command == "submit" && model.CurrentStep == 3)
+            if (command == "submit" && model.CurrentStep == 4)
             {
                 var result = await _portfolioOpenAiService.ParsePortfolioDataAsync(model);
                 if (result == null)
@@ -173,12 +182,8 @@ namespace RizeUp.Controllers
         [HttpGet]
         public async Task<IActionResult> DeletePortfolio(int portfolioId)
         {
-            var portfolio = await _portfolioRepo.GetPortfolioByIdAsync(portfolioId);
-            if (portfolio == null)
-            {
-                return NotFound();
-            }
-         
+            await _portfolioRepo.DeletePortfolioAsync(portfolioId);
+           
             return RedirectToAction("Index");
         }
 

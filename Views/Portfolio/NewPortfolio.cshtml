@@ -20,6 +20,8 @@
         <div class="step @(Model.CurrentStep >= 2 ? "active" : "")" data-step="2">2</div>
         <div class="step-line"></div>
         <div class="step @(Model.CurrentStep >= 3 ? "active" : "")" data-step="3">3</div>
+        <div class="step-line"></div>
+        <div class="step @(Model.CurrentStep >= 4 ? "active" : "")" data-step="4">4</div>
     </div>
 
     <form asp-action="ProcessStep" asp-controller="Portfolio" method="post" enctype="multipart/form-data">
@@ -31,7 +33,50 @@
         <input type="hidden" asp-for="ProfileImageBase64" value="@Model.ProfileImageBase64" />
         <input type="hidden" asp-for="ProfileImageContentType" value="@Model.ProfileImageContentType" />
         <input type="hidden" asp-for="ProfileImageFileName" value="@Model.ProfileImageFileName" />
+
+
         <div class="form-section @(Model.CurrentStep == 1 ? "active" : "")" data-step="1">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-paint-brush me-2"></i> Select Design
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <!-- Template 1 -->
+                        <div class="col-md-4 text-center">
+                            <label class="design-option p-2 border rounded w-100">
+                                <input asp-for="PortfolioTemplateId" type="radio" value="1" hidden />
+                                <img src="~/images/PortfolioDesgin/template1.png" class="img-fluid mb-2" alt="Classic Layout" />
+                                <div>Classic Layout</div>
+                            </label>
+                        </div>
+                        <!-- Template 2 -->
+                        <div class="col-md-4 text-center">
+                            <label class="design-option p-2 border rounded w-100">
+                                <input asp-for="PortfolioTemplateId" type="radio" value="2" hidden />
+                                <img src="~/images/PortfolioDesgin/template2.png" class="img-fluid mb-2" alt="Modern Layout" />
+                                <div>Modern Layout</div>
+                            </label>
+                        </div>
+                        <!-- Template 3 -->
+                        <div class="col-md-4 text-center">
+                            <label class="design-option p-2 border rounded w-100">
+                                <input asp-for="PortfolioTemplateId" type="radio" value="3" hidden />
+                                <img src="~/images/PortfolioDesgin/template3.png" class="img-fluid mb-2" alt="Minimalist" />
+                                <div>Minimalist</div>
+                            </label>
+                        </div>
+                    </div>
+                    <span asp-validation-for="PortfolioTemplateId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="form-section @(Model.CurrentStep == 2 ? "active" : "")" data-step="2">
             <h4>Personal &amp; Contact Information</h4>
             <input type="hidden" asp-for="ProfileImageBase64" />
             <div class="row">
@@ -97,7 +142,7 @@
         <!-- =========================
              PAGE 2: Services, Projects, Skills
              ========================= -->
-        <div class="form-section @(Model.CurrentStep == 2 ? "active" : "")" data-step="2">
+        <div class="form-section @(Model.CurrentStep == 3 ? "active" : "")" data-step="3">
             <h4>Services, Projects &amp; Skills</h4>
 
             <input type="hidden" asp-for="ProfileImageBase64" value="@Model.ProfileImageBase64" />
@@ -176,7 +221,7 @@
         <input type="hidden" asp-for="ProfileImageBase64" value="@Model.ProfileImageBase64" />
         <input type="hidden" asp-for="ProfileImageContentType" value="@Model.ProfileImageContentType" />
         <input type="hidden" asp-for="ProfileImageFileName" value="@Model.ProfileImageFileName" />
-        <div class="form-section @(Model.CurrentStep == 3 ? "active" : "")" data-step="3">
+        <div class="form-section @(Model.CurrentStep == 4 ? "active" : "")" data-step="4">
             <h4>Review Your Portfolio</h4>
             @if (Model.Projects != null && Model.Projects.Count > 0)
             {
@@ -246,17 +291,15 @@
         <div class="form-navigation mt-4 d-flex justify-content-between">
             <button type="submit"
                     class="btn btn-outline-secondary"
-                    name="command"
-                    value="prev"
+                    name="command" value="prev"
                     @(Model.CurrentStep == 1 ? "disabled" : "")>
                 <i class="bi bi-arrow-left me-1"></i> Back
             </button>
 
             <button type="submit"
                     class="btn btn-primary"
-                    name="command"
-                    value="next"
-                    @(Model.CurrentStep == 3 ? "disabled" : "")>
+                    name="command" value="next"
+                    @(Model.CurrentStep == 4 ? "disabled" : "")>
                 Next <i class="bi bi-arrow-right ms-1"></i>
             </button>
         </div>

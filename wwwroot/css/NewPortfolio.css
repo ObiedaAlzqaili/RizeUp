@@ -9,6 +9,9 @@
     --gray-medium: #E2E8F0;
     --text-muted: #718096;
 }
+.design-option input:checked + img {
+    border: 2px solid var(--primary-color);
+}
 
 body {
     font-family: 'Inter', sans-serif;
