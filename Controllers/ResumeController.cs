@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
-using RizeUp.Documents;
 using RizeUp.DTOs;
 using RizeUp.Interfaces;
 using RizeUp.Models;
 using RizeUp.Repository;
+using RizeUp.Services.PdfGeneration;
 
 namespace RizeUp.Controllers  
 {
@@ -14,11 +14,12 @@ namespace RizeUp.Controllers
     {
         private readonly IResumeOpenAiService _resumeOpenAiService;
         private readonly IResumeRepo _resumeRepo;
-
-        public ResumeController(IResumeOpenAiService resumeOpenAiService, IResumeRepo resumeRepo)
+        private readonly IResumePdfGenerator _pdfGenerator;
+        public ResumeController(IResumeOpenAiService resumeOpenAiService, IResumeRepo resumeRepo,IResumePdfGenerator pdfGenerator)
         {
             _resumeOpenAiService = resumeOpenAiService;
            _resumeRepo = resumeRepo;
+            _pdfGenerator = pdfGenerator;
         }
         [Authorize]
         public async Task<IActionResult> Index()
@@ -119,7 +120,7 @@ namespace RizeUp.Controllers
         }
 
 
-        [HttpGet] // Change from HttpPost to HttpGet
+        [HttpGet("DownloadResume")]
         public async Task<IActionResult> DownloadResume(int resumeId)
         {
             var resumeEntity = await _resumeRepo.GetResumeByIdAsync(resumeId);
@@ -128,22 +129,21 @@ namespace RizeUp.Controllers
                 return NotFound();
             }
 
-            // Map entity to DTO first
             var resumeDto = MapToResumeJsonDto(resumeEntity);
 
             try
             {
-                var generator = new ResumeGenerator();
-                var pdfBytes = generator.GeneratePdf(resumeDto);
-
+                var pdfBytes = _pdfGenerator.GenerateResumePdf(resumeDto);
                 return File(pdfBytes, "application/pdf",
                     $"{resumeDto.FirstName}_{resumeDto.LastName}_Resume.pdf");
             }
             catch (Exception ex)
             {
+                // Log error here
                 return StatusCode(500, $"PDF generation failed: {ex.Message}");
             }
         }
+        
 
         //template for resume
         public async Task<IActionResult> Templates(int resumeId)

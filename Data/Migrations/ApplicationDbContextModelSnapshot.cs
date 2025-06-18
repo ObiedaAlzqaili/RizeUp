@@ -192,7 +192,7 @@ namespace RizeUp.Data.Migrations
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("Certificates");
+                    b.ToTable("Certificates", (string)null);
                 });
 
             modelBuilder.Entity("RizeUp.Models.Education", b =>
@@ -231,7 +231,7 @@ namespace RizeUp.Data.Migrations
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("Educations");
+                    b.ToTable("Educations", (string)null);
                 });
 
             modelBuilder.Entity("RizeUp.Models.Experience", b =>
@@ -267,7 +267,7 @@ namespace RizeUp.Data.Migrations
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("Experiences");
+                    b.ToTable("Experiences", (string)null);
                 });
 
             modelBuilder.Entity("RizeUp.Models.Language", b =>
@@ -291,7 +291,7 @@ namespace RizeUp.Data.Migrations
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("Languages");
+                    b.ToTable("Languages", (string)null);
                 });
 
             modelBuilder.Entity("RizeUp.Models.Person", b =>
@@ -453,7 +453,7 @@ namespace RizeUp.Data.Migrations
 
                     b.HasIndex("EndUserId");
 
-                    b.ToTable("Portfolios");
+                    b.ToTable("Portfolios", (string)null);
                 });
 
             modelBuilder.Entity("RizeUp.Models.Project", b =>
@@ -503,7 +503,7 @@ namespace RizeUp.Data.Migrations
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("RizeUp.Models.Resume", b =>
@@ -567,7 +567,7 @@ namespace RizeUp.Data.Migrations
 
                     b.HasIndex("EndUserId");
 
-                    b.ToTable("Resumes");
+                    b.ToTable("Resumes", (string)null);
                 });
 
             modelBuilder.Entity("RizeUp.Models.Service", b =>
@@ -591,7 +591,7 @@ namespace RizeUp.Data.Migrations
 
                     b.HasIndex("PortfolioId");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("RizeUp.Models.Skill", b =>
@@ -620,7 +620,7 @@ namespace RizeUp.Data.Migrations
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("Skills");
+                    b.ToTable("Skills", (string)null);
                 });
 
             modelBuilder.Entity("RizeUp.Models.Admin", b =>

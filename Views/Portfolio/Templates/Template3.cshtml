@@ -812,6 +812,12 @@
     }
 </style>
 
+@if (TempData["ContactSuccess"] != null)
+{
+    <div class="alert alert-success text-center">
+        @TempData["ContactSuccess"]
+    </div>
+}
     <!-- Navigation -->
 <nav class="navbar navbar-expand-lg">
     <div class="container">
@@ -1067,36 +1073,50 @@
 }
 
     <!-- Contact Section -->
-    <section class="contact section" id="contact">
-        <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="glass-card">
-                <div class="contact-form p-5">
-                    <form method="post" asp-controller="Portfolio" asp-action="Contact">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Your Name" name="name" required>
+<section class="contact section" id="contact">
+    <div class="container">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="glass-card">
+                    <div class="card-body p-4 p-md-5">
+                        @if (TempData["ContactError"] != null)
+                        {
+                            <div class="alert alert-danger mb-4">@TempData["ContactError"]</div>
+                        }
+                        @if (TempData["ContactSuccess"] != null)
+                        {
+                            <div class="alert alert-success mb-4">@TempData["ContactSuccess"]</div>
+                        }
+                        <form asp-action="Contact" asp-controller="Portfolio" method="post" class="contact-form">
+                            <input type="hidden" name="portfolioOwnerEmail" value="@Model.Email" />
+                            <input type="hidden" name="portfolioId" value="@Model.Id" />
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label for="name" class="form-label">Your Name</label>
+                                    <input type="text" class="form-control" id="name" name="Name" required>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label for="email" class="form-label">Your Email</label>
+                                    <input type="email" class="form-control" id="email" name="Email" required>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Your Email" name="email" required>
-                                </div>
+                            <div class="mb-4">
+                                <label for="subject" class="form-label">Subject</label>
+                                <input type="text" class="form-control" id="subject" name="Subject" required>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Subject" name="subject" required>
-                        </div>
-                        <div class="form-group">
-                            <textarea class="form-control" placeholder="Message" name="message" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </form>
+                            <div class="mb-4">
+                                <label for="message" class="form-label">Message</label>
+<textarea class="form-control" id="message" name="Message" rows="6" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary submit-btn">Send Message</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Footer -->
     <footer>

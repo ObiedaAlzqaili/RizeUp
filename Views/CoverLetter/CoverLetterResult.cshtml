@@ -1,0 +1,396 @@
+﻿@model RizeUp.DTOs.CoverLetterResponseDto
+<style>
+    :root {
+        --primary-color: #4CAF50;
+        --secondary-color: #388E3C;
+        --accent-color: #8BC34A;
+        --dark-color: #333333;
+        --light-color: #f8f9fa;
+        --white: #ffffff;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--dark-color);
+        background-color: #f5f7fb;
+        padding: 0;
+        margin: 0;
+    }
+
+    .cover-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        padding: 2.5rem 0;
+        margin-bottom: 2.5rem;
+        color: white;
+    }
+
+        .cover-header h1 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .cover-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+    .btn-back {
+        background: var(--white);
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        padding: 0.5rem 1.5rem;
+        border-radius: 30px;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+        .btn-back:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+    .letter-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .letter-box {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #eaeaea;
+        margin-bottom: 3rem;
+    }
+
+        .letter-box:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+        }
+
+    .contact-info {
+        background: var(--light-color);
+        border-radius: 10px;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+        .contact-item i {
+            width: 24px;
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+
+    .btn-copy {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        background: var(--light-color);
+        color: var(--primary-color);
+        border: none;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        z-index: 10;
+        font-weight: 600;
+    }
+
+        .btn-copy:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+    .letter-header {
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--light-color);
+    }
+
+    .letter-footer {
+        padding-top: 1.5rem;
+        margin-top: 1.5rem;
+        border-top: 1px solid var(--light-color);
+    }
+
+    .paragraph {
+        margin-bottom: 1.25rem;
+        text-align: justify;
+    }
+
+    .signature {
+        font-family: 'Dancing Script', cursive;
+        font-size: 1.75rem;
+        color: var(--dark-color);
+        margin-top: 0.5rem;
+    }
+
+    .company-logo-placeholder {
+        width: 80px;
+        height: 80px;
+        background: var(--light-color);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--dark-color);
+        margin-bottom: 1rem;
+        border: 1px dashed #ced4da;
+    }
+
+    .footer-note {
+        text-align: center;
+        color: #6c757d;
+        padding: 1.5rem 0;
+        border-top: 1px solid #eaeaea;
+        margin-top: 2rem;
+    }
+
+    .toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1050;
+    }
+
+    .toast {
+        background: var(--primary-color);
+        color: white;
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+    }
+
+    media (max-width: 768px) {
+        .letter-box
+
+    {
+        padding: 1.5rem;
+    }
+
+    .letter-box:before {
+        width: 4px;
+    }
+
+    .btn-copy {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin-top: 1rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .contact-info {
+        padding: 1rem;
+    }
+
+    .cover-header {
+        padding: 1.8rem 0;
+    }
+
+        .cover-header h1 {
+            font-size: 1.8rem;
+        }
+
+    }
+</style>
+
+    <!-- Header section -->
+    <header class="cover-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="fas fa-file-alt me-3"></i>Your Professional Cover Letter</h1>
+                    <p>Generated by RizeUp AI specifically for your application</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="text-white fw-bold fs-4">RizeUp</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="letter-container">
+            <a href="#" class="btn-back">
+                <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+            </a>
+
+            <div class="letter-box">
+                <button class="btn btn-copy" id="copyButton">
+                    <i class="fas fa-copy"></i> Copy to Clipboard
+                </button>
+
+                <div class="d-flex justify-content-end mb-4">
+                    <div class="company-logo-placeholder">
+                        <i class="fas fa-building fa-2x"></i>
+                    </div>
+                </div>
+
+                <div class="letter-header">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>@Model.ApplicantName</h4>
+                            <div class="contact-info">
+                                @if (!string.IsNullOrWhiteSpace(Model.ApplicantAddress))
+                                {
+                                    <div class="contact-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>@Model.ApplicantAddress</span>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Model.ApplicantCityState))
+                                {
+                                    <div class="contact-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>@Model.ApplicantCityState</span>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Model.ApplicantEmail))
+                                {
+                                    <div class="contact-item">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>@Model.ApplicantEmail</span>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Model.ApplicantPhone))
+                                {
+                                    <div class="contact-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span>@Model.ApplicantPhone</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            @if (!string.IsNullOrWhiteSpace(Model.Date))
+                            {
+                                <p class="mb-1"><strong>Date:</strong> @Model.Date</p>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.HiringManagerName))
+                            {
+                                <h4 class="mt-3">@Model.HiringManagerName</h4>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.CompanyName))
+                            {
+                                <p class="mb-1">@Model.CompanyName</p>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.CompanyAddress))
+                            {
+                                <p>@Model.CompanyAddress</p>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.CompanyCityState))
+                            {
+                                <p>@Model.CompanyCityState</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="letter-body">
+                    @if (!string.IsNullOrWhiteSpace(Model.HiringManagerName))
+                    {
+                        <p class="mb-4">Dear @Model.HiringManagerName,</p>
+                    }
+
+                    <div class="paragraphs">
+                        @foreach (var para in Model.Paragraphs)
+                        {
+                            <p class="paragraph">@para</p>
+                        }
+                    </div>
+
+                    <div class="letter-footer">
+                        @if (!string.IsNullOrWhiteSpace(Model.ClosingLine))
+                        {
+                            <p class="mb-2">@Model.ClosingLine</p>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Signature))
+                        {
+                            <p class="signature">@Model.Signature</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-note">
+                <p>Generated by RizeUp Cover Letter AI • Secure and Confidential</p>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast-container" id="toastContainer">
+  
+    </div>
+
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const letterBox = document.querySelector('.letter-box');
+            const range = document.createRange();
+            range.selectNode(letterBox);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+
+            try {
+                document.execCommand('copy');
+                showToast('Cover letter copied to clipboard!');
+            } catch (err) {
+                showToast('Failed to copy text');
+            }
+
+            window.getSelection().removeAllRanges();
+        });
+
+        function showToast(message) {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <span>${message}</span>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateY(0)';
+            }, 10);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    toastContainer.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+    </script>

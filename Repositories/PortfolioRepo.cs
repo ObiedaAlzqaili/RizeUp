@@ -18,22 +18,6 @@ namespace RizeUp.Repository
             return await _context.Portfolios.CountAsync();
         }
 
-        //public async Task<List<PortfolioReview>> GetRecentReviewsAsync(int count)
-        //{
-        //    return await _context.Portfolio
-        //        .Include(r => r.User)
-        //        .OrderByDescending(r => r.ReviewDate)
-        //        .Take(count)
-        //        .Select(r => new PortfolioReview
-        //        {
-        //            UserName = r.User.UserName,
-        //            Title = r.User.Title ?? "User",
-        //            Content = r.Content,
-        //            ReviewDate = r.ReviewDate
-        //        })
-        //        .ToListAsync();
-        //}
-
         public async Task AddPortfolioAsync(Portfolio portfolio)
         {
             if (portfolio == null)

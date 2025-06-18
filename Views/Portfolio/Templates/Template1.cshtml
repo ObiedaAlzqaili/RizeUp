@@ -563,6 +563,12 @@
         animation-delay: 0.3s;
     }
 </style>
+@if (TempData["ContactSuccess"] != null)
+{
+    <div class="alert alert-success text-center">
+        @TempData["ContactSuccess"]
+    </div>
+}
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg">
     <div class="container">
@@ -795,28 +801,38 @@
         <h2 class="section-title">Get In Touch</h2>
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="card">
+                <div class="glass-card">
                     <div class="card-body p-4 p-md-5">
-                        <form method="post" asp-controller="Portfolio" asp-action="Contact">
+                        @if (TempData["ContactError"] != null)
+                        {
+                            <div class="alert alert-danger mb-4">@TempData["ContactError"]</div>
+                        }
+                        @if (TempData["ContactSuccess"] != null)
+                        {
+                            <div class="alert alert-success mb-4">@TempData["ContactSuccess"]</div>
+                        }
+                        <form asp-action="Contact" asp-controller="Portfolio" method="post" class="contact-form">
+                            <input type="hidden" name="portfolioOwnerEmail" value="@Model.Email" />
+                            <input type="hidden" name="portfolioId" value="@Model.Id" />
                             <div class="row">
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-6 mb-4">
                                     <label for="name" class="form-label">Your Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" required>
+                                    <input type="text" class="form-control" id="name" name="Name" required>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-6 mb-4">
                                     <label for="email" class="form-label">Your Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
+                                    <input type="email" class="form-control" id="email" name="Email" required>
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-4">
                                 <label for="subject" class="form-label">Subject</label>
-                                <input type="text" class="form-control" id="subject" name="subject" required>
+                                <input type="text" class="form-control" id="subject" name="Subject" required>
                             </div>
                             <div class="mb-4">
                                 <label for="message" class="form-label">Message</label>
-                                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+<textarea class="form-control" id="message" name="Message" rows="6" required></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Send Message</button>
+                            <button type="submit" class="btn btn-primary submit-btn">Send Message</button>
                         </form>
                     </div>
                 </div>

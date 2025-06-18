@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Security.Claims;
+using MailKit.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using MimeKit;
 using RizeUp.DTOs;
 using RizeUp.Interfaces;
 using RizeUp.Models;
@@ -15,13 +18,15 @@ namespace RizeUp.Controllers
     {
         private readonly IPortfolioOpenAiService _portfolioOpenAiService;
         private readonly IPortfolioRepo _portfolioRepo;
+        private readonly EmailSettings _emailSettings;
 
-  
-        public PortfolioController(IPortfolioRepo portfolioRepo, IPortfolioOpenAiService portfolioOpenAiService)
+
+        public PortfolioController(IPortfolioRepo portfolioRepo, IPortfolioOpenAiService portfolioOpenAiService , IOptions<EmailSettings> emailOptions )
         {
             
             _portfolioRepo = portfolioRepo;
             _portfolioOpenAiService = portfolioOpenAiService;
+            _emailSettings = emailOptions.Value;
         }
 
   
@@ -187,7 +192,59 @@ namespace RizeUp.Controllers
             return RedirectToAction("Index");
         }
 
-        
+
+        //this for EMail Sender
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Contact(int portfolioId, string name, string email, string subject, string message)
+        {
+            // 1. Look up the portfolio
+            var portfolio = await _portfolioRepo.GetPortfolioByIdAsync(portfolioId);
+            if (portfolio == null)
+                return NotFound();
+
+            // 2. Build the email with cleaner formatting
+            var mime = new MimeMessage();
+            mime.From.Add(new MailboxAddress(
+                _emailSettings.FromName,
+                _emailSettings.FromAddress));
+            mime.To.Add(new MailboxAddress(
+                $"{portfolio.FirstName} {portfolio.LastName}",
+                portfolio.Email));
+            mime.Subject = subject;
+
+            // Clean, professional message formatting
+            var body = new BodyBuilder
+            {
+                TextBody = $"Contact Form Submission\n" +
+                          $"-----------------------\n" +
+                          $"Name: {name}\n" +
+                          $"Email: {email}\n\n" +
+                          $"Message:\n" +
+                          $"{message.Trim()}\n\n" +
+                          $"-----------------------\n" +
+                          $"Sent from your portfolio contact form"
+            };
+            mime.Body = body.ToMessageBody();
+
+            // 3. Send via SMTP (keep your working code)
+            using var client = new MailKit.Net.Smtp.SmtpClient();
+            await client.ConnectAsync(
+                _emailSettings.Host,
+                _emailSettings.Port,
+                SecureSocketOptions.StartTls);
+            await client.AuthenticateAsync(
+                _emailSettings.Username,
+                _emailSettings.Password);
+            await client.SendAsync(mime);
+            await client.DisconnectAsync(true);
+
+            // 4. Confirm to user
+            TempData["ContactSuccess"] = "Your message has been sent!";
+            return RedirectToAction("Templates", new { ID = portfolioId });
+        }
+
+
         //Temolate for Portdolio
         [HttpGet]
         public async Task<IActionResult> Templates(int portfolioId)

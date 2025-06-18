@@ -1,14 +1,19 @@
+using Hangfire;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using QuestPDF.Infrastructure;
 using RizeUp.Data;
+using RizeUp.DTOs;
 using RizeUp.Interfaces;
 using RizeUp.Models;
 using RizeUp.Repository;
 using RizeUp.Services;
-
+using RizeUp.Services.PdfGeneration;
 
 namespace RizeUp
 {
@@ -29,8 +34,11 @@ namespace RizeUp
             // 1. Add code to read the key from "sercrite.json".
             // 2. Register the key in the DI container as "userManagerSercirte".
             // 3. Use Configuration to load the file and access the key.
-           
-            
+            //this is for mailKit
+
+
+            // Add after builder initialization
+        
 
             var key = builder.Configuration["OpenAi:key"];
 
@@ -45,6 +53,8 @@ namespace RizeUp
                 return kernelBuilder.Build();
             });
 
+            builder.Services.AddScoped<IAiLetterService, AiLetterService>();
+            builder.Services.AddScoped<IResumePdfGenerator, ResumePdfGenerator>();
             builder.Services.AddScoped<IResumeRepo, ResumeRepo>();
             builder.Services.AddScoped<IPortfolioRepo, PortfolioRepo>();
             builder.Services.AddSingleton<IResumeOpenAiService, ResumeOpenAiService>();
@@ -56,11 +66,18 @@ namespace RizeUp
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-           
+            builder.Services.Configure<EmailSettings>(
+              builder.Configuration.GetSection("EmailSettings"));
+
+            builder.Services.AddSingleton(sp =>
+            sp.GetRequiredService<IOptions<EmailSettings>>().Value);
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
-            
+
+          
+            //end for the mailkit
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
