@@ -155,17 +155,6 @@ namespace RizeUp.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
         private Resume MapToResumeEntity(ResumeDto dto, string userId)
         {
             return new Resume

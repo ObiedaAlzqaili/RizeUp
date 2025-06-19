@@ -7,11 +7,12 @@ using RizeUp.Models;
 
 public static class UserManagerExtensions
 {
-    public static async Task<List<Person>> GetRecentUsersAsync(this UserManager<Person> userManager, int count)
+    public static async Task<List<Person>> GetLastFiveEndUsersAsync(this UserManager<Person> userManager)
     {
-        return await userManager.Users
-            .OrderByDescending(u => u.Id) // Assuming Id is sequential; replace with a timestamp field if available
-            .Take(count)
-            .ToListAsync();
+        var usersInRole = await userManager.GetUsersInRoleAsync("EndUser");
+        return usersInRole
+            .OrderByDescending(u => u.Id)
+            .Take(5)
+            .ToList();
     }
 }

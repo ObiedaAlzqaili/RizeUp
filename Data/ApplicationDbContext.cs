@@ -17,6 +17,7 @@ namespace RizeUp.Data
         public DbSet<Certificate> Certificates { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

@@ -18,32 +18,7 @@ namespace RizeUp.Repository
             return await _dbContext.Resumes.CountAsync();
         }
 
-        public async Task<List<ResumeActivity>> GetRecentActivityAsync(int days)
-        {
-            // Calculate cutoff date
-            var cutoff = DateOnly.FromDateTime(DateTime.Now.AddDays(-days));
-
-            // Get all resumes with EndUser included
-            var resumes = await _dbContext.Resumes
-                .Include(r => r.EndUser)
-                .OrderByDescending(r => r.CreatedDate)
-                .ToListAsync();
-
-            // Filter and project in-memory to avoid expression tree issues with DateOnly.TryParse
-            var recentActivities = resumes
-                .Where(r => DateOnly.TryParse(r.CreatedDate, out var createdDate) && createdDate >= cutoff)
-                .Take(10)
-                .Select(r => new ResumeActivity
-                {
-                    UserName = r.EndUser?.UserName ?? $"{r.EndUser?.FirstName} {r.EndUser?.LastName}".Trim(),
-                    ActivityType = "Created Resume",
-                    ActivityDate = DateOnly.TryParse(r.CreatedDate, out var d) ? d.ToDateTime(TimeOnly.MinValue) : DateTime.MinValue,
-                    Status = "Active"
-                })
-                .ToList();
-
-            return recentActivities;
-        }
+        
 
         public async Task<Resume> GetResumeByIdAsync(int id)
         {
@@ -161,35 +136,14 @@ namespace RizeUp.Repository
             await _dbContext.SaveChangesAsync();
         }
 
-        //private void UpdateChildCollection<T>(
-        //    ICollection<T> existingEntities,
-        //    ICollection<T> newEntities,
-        //    Func<T, T, bool> keySelector) where T : class
-        //{
-        //    newEntities ??= new List<T>();
-
-        //    // Remove deleted entities
-        //    var toRemove = existingEntities.Where(e => !newEntities.Any(ne => keySelector(e, ne))).ToList();
-        //    foreach (var entity in toRemove)
-        //    {
-        //        existingEntities.Remove(entity);
-        //    }
-
-        //    // Update and add entities
-        //    foreach (var newEntity in newEntities)
-        //    {
-        //        var existingEntity = existingEntities.FirstOrDefault(e => keySelector(e, newEntity));
-        //        if (existingEntity != null)
-        //        {
-        //            // Update fields
-        //            _dbContext.Entry(existingEntity).CurrentValues.SetValues(newEntity);
-        //        }
-        //        else
-        //        {
-        //            // Add new entity
-        //            existingEntities.Add(newEntity);
-        //        }
-        //    }
-        //  }
+        public async Task<List<Resume>> GetPortfolioCount(int count)
+        {
+            return await _dbContext.Resumes
+                .Where(r => !r.IsDeleted)
+                .OrderByDescending(r => r.ModifiedDate ?? r.CreatedDate)
+                .Take(count)
+                .Include(r => r.EndUser)
+                .ToListAsync();
+        }
     }
 }

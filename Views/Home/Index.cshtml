@@ -1,7 +1,9 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model RizeUp.DTOs.ReviewDto
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Person> SignInManager
+@{
+    ViewData["Title"] = "RizeUp - AI Resume & Portfolio Builder";
 }
-
 
 <section class="hero-section">
     <div class="container">
@@ -192,54 +194,92 @@
 </section>
 
 <!-- Testimonials Section -->
-<section id="testimonials" class="py-5 bg-light-custom">
+<!-- Reviews Section -->
+<section id="reviews" class="py-5 bg-light-custom">
     <div class="container">
-        <h2 class="section-title">What Our Users Say</h2>
-        <p class="text-center text-muted mb-5">Success stories from professionals who used RizeUp</p>
+        <h2 class="section-title">User Reviews</h2>
+        <p class="text-center text-muted mb-5">Share your experience with RizeUp</p>
 
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="testimonial-card">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Sarah J." class="testimonial-img me-3">
-                        <div>
-                            <h5 class="mb-0">Sarah J.</h5>
-                            <small class="text-muted">Marketing Manager</small>
-                        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="card shadow-sm border-0 mx-auto" style="max-width: 600px;">
+                    <div class="card-body p-4">
+                        <h4 class="text-center mb-4">Add Your Review</h4>
+                        <form asp-controller="Home" asp-action="SubmitReview" method="post">
+                            <!-- Rating -->
+                            <div class="mb-4 text-center">
+                                <label class="form-label d-block mb-2">Rating</label>
+                                <div class="star-rating justify-content-center">
+                                    @for (int i = 5; i >= 1; i--)
+                                    {
+                                        <input type="radio" id="star-@i" asp-for="Rating" value="@i" />
+                                        <label for="star-@i" class="bi bi-star"></label>
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Comment -->
+                            <div class="mb-4">
+                                <label asp-for="Comment" class="form-label">Your Review</label>
+                                <textarea asp-for="Comment" class="form-control" rows="4"
+                                          placeholder="Share your experience..."></textarea>
+                                <span asp-validation-for="Comment" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary px-5">Submit Review</button>
+                            </div>
+                        </form>
                     </div>
-                    <p class="mb-0">"The AI resume builder saved me hours of work. It created a professional resume that helped me land interviews at three top companies within two weeks!"</p>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-4">
-                <div class="testimonial-card">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Michael T." class="testimonial-img me-3">
-                        <div>
-                            <h5 class="mb-0">Michael T.</h5>
-                            <small class="text-muted">Software Developer</small>
-                        </div>
-                    </div>
-                    <p class="mb-0">"As a developer, I never knew how to showcase my projects. RizeUp's AI portfolio builder created an amazing showcase that impressed my current employer."</p>
-                </div>
-            </div>
+        <!-- Existing Reviews -->
+        <div class="row justify-content-center mt-5">
+            <div class="col-12 col-lg-10">
+                <h4 class="text-center mb-4">What Our Users Say</h4>
 
-            <div class="col-md-4">
-                <div class="testimonial-card">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya K." class="testimonial-img me-3">
-                        <div>
-                            <h5 class="mb-0">Priya K.</h5>
-                            <small class="text-muted">Graphic Designer</small>
-                        </div>
+                @if ((List<Review>)ViewBag.RecentReviews != null )
+                {
+                    <div class="row justify-content-center">
+                        @foreach (var review in (List<Review>)ViewBag.RecentReviews)
+                        {
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="review-card h-100">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="review-avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                            @review.UserName[0]
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-0">@review.UserName</h5>
+                                            <div class="star-rating-display">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    <i class="bi @(i <= review.Rating ? "bi-star-fill" : "bi-star") text-warning"></i>
+                                                }
+                                            </div>
+                                        </div>
+                                        <small class="text-muted ms-auto">@review.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                    </div>
+                                    <p class="mb-0">@review.Comment</p>
+                                </div>
+                            </div>
+                        }
                     </div>
-                    <p class="mb-0">"The AI suggestions for my resume were spot on. It highlighted skills I didn't even think to include, and I got a job offer with a 20% salary increase!"</p>
-                </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <i class="bi bi-chat-square-text display-4 text-muted mb-3"></i>
+                        <p class="lead">No reviews yet. Be the first to share your experience!</p>
+                    </div>
+                }
             </div>
         </div>
     </div>
 </section>
-
 <!-- FAQ Section -->
 <section id="faq" class="py-5">
     <div class="container">
@@ -301,17 +341,20 @@
         </div>
     </div>
 </section>
-
-<!-- CTA Section -->
-<section class="cta-section">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center">
-                <h2 class="display-5 fw-bold mb-4">Ready to Transform Your Career?</h2>
-                <p class="lead mb-5">Join thousands of professionals who landed better jobs with RizeUp's AI-powered tools</p>
-                <a href="/signup" class="btn btn-light btn-lg px-5 me-3">Start Free Trial</a>
-                <a href="/pricing" class="btn btn-outline-light btn-lg px-5">See Plans</a>
+   
+@if (!SignInManager.IsSignedIn(User)) {
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <h2 class="display-5 fw-bold mb-4">Ready to Transform Your Career?</h2>
+                        <p class="lead mb-5">Join thousands of professionals who landed better jobs with RizeUp's AI-powered tools</p>
+                        <a href="/signup" class="btn btn-light btn-lg px-5 me-3">Start Free Trial</a>
+                        <a href="/pricing" class="btn btn-outline-light btn-lg px-5">See Plans</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
+    }
+  

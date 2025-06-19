@@ -497,42 +497,31 @@
             </a>
         </div>
         <div class="sidebar-menu">
-            <a href="#" class="sidebar-item active">
+            <a asp-action="Index" asp-controller="Adnin" class="sidebar-item active">
                 <i class="bi bi-speedometer2"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="#" class="sidebar-item">
+            <a asp-action="Users" asp-controller="Admin" class="sidebar-item">
                 <i class="bi bi-people"></i>
                 <span>Users</span>
             </a>
-            <a href="#" class="sidebar-item">
+            <aasp-action ="Resumes" asp-controller="Admin" class="sidebar-item">
                 <i class="bi bi-file-text"></i>
                 <span>Resumes</span>
             </a>
-            <a href="#" class="sidebar-item">
+                <a asp-action="Portfolios" asp-controller="Admin" class="sidebar-item">
                 <i class="bi bi-collection"></i>
                 <span>Portfolios</span>
             </a>
-            <a href="#" class="sidebar-item">
-                <i class="bi bi-graph-up"></i>
-                <span>Analytics</span>
-            </a>
-            <a href="#" class="sidebar-item">
+                <a asp-action="Reviews" asp-controller="Admin" class="sidebar-item">
                 <i class="bi bi-chat-left-text"></i>
                 <span>Reviews</span>
             </a>
-            <a href="#" class="sidebar-item">
-                <i class="bi bi-gear"></i>
-                <span>Settings</span>
-            </a>
-            <a href="#" class="sidebar-item">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Logout</span>
-            </a>
+           
         </div>
     </div>
 
-  <body>
+
 		@RenderBody()
   </body>
 

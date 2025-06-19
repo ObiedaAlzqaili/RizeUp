@@ -1,32 +1,55 @@
 ﻿using System.Diagnostics;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RizeUp.DTOs;
 using RizeUp.Models;
+using RizeUp.Repositories;
 
 namespace RizeUp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IReviewRepo _reviews;
+        public HomeController(ILogger<HomeController> logger,IReviewRepo reviews)
         {
             _logger = logger;
+            _reviews = reviews;
         }
-
+      
         public IActionResult Index()
         {
-            return View();
+            var recentReviews = _reviews.GetRecentAsync(5).Result;
+            ViewBag.RecentReviews = recentReviews;
+            return View(new ReviewDto());
         }
 
-        public IActionResult Privacy()
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> SubmitReview(ReviewDto dto)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return View("Index", dto);
+            }else
+            {
+                var review = new Review
+                {
+                    UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                    UserName = User.Identity.Name,
+                    Rating = dto.Rating,
+                    Comment = dto.Comment,
+                    CreatedAt = DateTime.UtcNow
+                };
+                await _reviews.AddAsync(review);
+                TempData["SuccessMessage"] = "Review submitted successfully!";
+                return RedirectToAction("Index");
+            }
+           
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        
     }
 }

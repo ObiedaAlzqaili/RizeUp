@@ -10,7 +10,7 @@ namespace RizeUp.Repository
         Task DeleteResumeAsync(int id);
         Task<IEnumerable<Resume>> GetResumesByUserIdAsync(string userId);
         Task<int> GetCountAsync();
-        Task<List<ResumeActivity>> GetRecentActivityAsync(int days);
+        Task<List<Resume>> GetPortfolioCount(int count);
 
     }
 }

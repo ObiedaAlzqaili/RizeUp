@@ -107,5 +107,17 @@ namespace RizeUp.Repository
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Portfolio>> GetPortfoliosCount(int count)
+        {
+            // Fetch the latest 'count' portfolios that are not deleted, including related data for DataTable display
+            return await _context.Portfolios
+                .Where(p => !p.IsDeleted)
+                .OrderByDescending(p => p.Id)
+                .Include(p => p.EndUserId)
+                .Take(count)
+                .AsNoTracking()
+                .ToListAsync();
+        }
     }
 }

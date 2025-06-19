@@ -11,6 +11,8 @@ namespace RizeUp.Repository
         Task DeletePortfolioAsync(int id);
         Task<IEnumerable<Portfolio>> GetPortfoliosByUserIdAsync(string userId);
         Task<int> GetCountAsync();
+
+        Task<List<Portfolio>> GetPortfoliosCount(int count);
         //Task<List<PortfolioReview>> GetRecentReviewsAsync(int count);
 
     }

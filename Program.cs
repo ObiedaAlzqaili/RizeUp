@@ -11,6 +11,7 @@ using RizeUp.Data;
 using RizeUp.DTOs;
 using RizeUp.Interfaces;
 using RizeUp.Models;
+using RizeUp.Repositories;
 using RizeUp.Repository;
 using RizeUp.Services;
 using RizeUp.Services.PdfGeneration;
@@ -53,6 +54,7 @@ namespace RizeUp
                 return kernelBuilder.Build();
             });
 
+            builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
             builder.Services.AddScoped<IAiLetterService, AiLetterService>();
             builder.Services.AddScoped<IResumePdfGenerator, ResumePdfGenerator>();
             builder.Services.AddScoped<IResumeRepo, ResumeRepo>();
