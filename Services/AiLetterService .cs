@@ -110,8 +110,33 @@ private string ExtractPureJson(string rawResponse)
     return "{}";
 }
 
-Task<string> IAiLetterService.GenerateThankYouAsync(string content)
+    public async Task<ThankYouLetterResponseDto> GenerateThankYouAsync(string content)
     {
-        throw new NotImplementedException();
+        // 1) Prompt template: instruct the AI to output ONLY the JSON matching our DTO
+        var prompt = @"
+    You are a professional thank-you letter writer. 
+    Given this input context:
+    ""{Context}""
+
+    Return ONLY a single JSON object (no markdown, no commentary) that exactly matches this schema:
+    {
+      ""Subject"": string,
+      ""InterviewerName"": string,
+      ""BodyParagraphs"": string[],
+      ""ClosingLine"": string,
+      ""SenderName"": string,
+      ""LinkedInProfile"": string,
+      ""PhoneNumber"": string
+    }";
+
+        var func = _kernel.CreateFunctionFromPrompt(prompt);
+        var result = await func.InvokeAsync(_kernel, new ()
+        {
+            ["input"] = content
+        });
+
+        // 3) Extract and clean JSON response
+        var json = result.ToString().Trim();
+        return JsonSerializer.Deserialize<ThankYouLetterResponseDto>(json)!;
     }
 }

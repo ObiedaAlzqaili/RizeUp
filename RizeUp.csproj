@@ -28,10 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Prompts\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Views\Portfolio\Templates\Template3.cshtml" />
   </ItemGroup>
 

@@ -43,14 +43,14 @@ namespace RizeUp
 
             var key = builder.Configuration["OpenAi:key"];
 
-            var userSecret = builder.Configuration["key"];
+            
              
 
 
             builder.Services.AddSingleton<Kernel>(sp =>
             {
                 var kernelBuilder = Kernel.CreateBuilder();
-                kernelBuilder.AddOpenAIChatCompletion("gpt-4", userSecret);
+                kernelBuilder.AddOpenAIChatCompletion("gpt-4", key);
                 return kernelBuilder.Build();
             });
 

@@ -1,13 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model RizeUp.DTOs.ThankYouLetterResponseDto
 <style>
     :root {
         --primary-color: #4CAF50; /* Light green */
@@ -390,8 +381,37 @@
     .step-number {
         margin-bottom: 1rem;
     }
-
+    /* small tweaks to make it look more like an email */
+    .email-card {
+        border: 1px solid #e0e0e0;
+        border-radius: .5rem;
+        max-width: 600px;
+        margin: 2rem auto;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
+
+    .email-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 1rem 1.5rem;
+        border-top-left-radius: .5rem;
+        border-top-right-radius: .5rem;
+    }
+
+    .email-body {
+        padding: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .email-footer {
+        padding: 1.5rem;
+        color: #555;
+        font-size: .9rem;
+        border-top: 1px solid #e0e0e0;
+        border-bottom-left-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+    }
+    
 </style>
 
 
@@ -403,7 +423,7 @@
                 <div class="hero-content text-center">
                     <h1 class="display-5 fw-bold mb-3">FREE AI Interview Thank You Generator</h1>
                     <p class="lead mb-4">Create a professional thank you letter in seconds with our AI-powered tool. Impress hiring managers and boost your chances of getting the job.</p>
-                    <div class="ai-badge">Powered by Advanced AI</div>
+                    <div class="ai-badge">Powered by OpenAi</div>
                 </div>
             </div>
         </div>
@@ -463,25 +483,23 @@
                         </div>
                     </div>
 
-                    <form asp-action="CreateCoverLetter" id="letterForm">
+                    <form asp-action="CreateLetter" asp-controller="CoverLetter" method="post" id="letterForm">
                         <div class="mb-3">
                             <label class="input-label">Paste job post, previous emails, or any relevant information:</label>
                             <div class="textarea-container">
-                                <textarea class="form-control" id="jobInfo" rows="6" placeholder="Paste the job description, interview notes, or any relevant information here. Make sure to include the role, company name, and any specific details you want to highlight."></textarea>
+                                <textarea name="details" class="form-control" id="jobInfo" rows="6" placeholder="Paste the job description, interview notes, or any relevant information here. Make sure to include the role, company name, and any specific details you want to highlight."></textarea>
                                 <div class="word-count">0/1000 words</div>
                             </div>
                         </div>
 
                         <div class="d-grid">
-                            <button type="button" class="btn btn-accent btn-lg" id="generateBtn">
+                            <button type="submit" class="btn btn-accent btn-lg" id="generateBtn">
                                 <i class="fas fa-bolt me-2"></i> GENERATE LETTER
                             </button>
                         </div>
                     </form>
 
-                    <div class="user-count">
-                        <strong>1423+ people</strong> have used our AI tools in the past week
-                    </div>
+                   
                 </div>
 
                 <div class="preview-container" id="previewSection">
@@ -492,7 +510,46 @@
                         </button>
                     </div>
                     <div class="preview-content" id="letterPreview">
-                        <!-- Preview content will be inserted here by JavaScript -->
+                        <div class="preview-container" id="previewSection" style="display: @(Model != null ? "block" : "none")">
+                            <div class="preview-header">
+                                <h3>Your AI-Generated Thank You Letter</h3>
+                                <button class="btn btn-primary btn-copy" id="copyBtn">
+                                    <i class="fas fa-copy me-1"></i> Copy
+                                </button>
+                            </div>
+                            <div class="preview-content" id="letterPreview">
+                                @if(Model != null)
+                                {
+                                    <div class="email-card">
+                                        <div class="email-header">
+                                            <small class="text-muted">Subject:</small>
+                                            <strong>@Model.Subject</strong>
+                                        </div>
+
+                                        <div class="email-body">
+                                            <p>Dear @Model.InterviewerName,</p>
+
+                                            @foreach (var paragraph in Model.BodyParagraphs)
+                                            {
+                                                <p>@paragraph</p>
+                                            }
+
+                                            <p>@Model.ClosingLine</p>
+                                            <p>Best regards,</p>
+                                            <p><strong>@Model.SenderName</strong></p>
+                                        </div>
+
+                                        <div class="email-footer text-center">
+                                            <a href="@Model.LinkedInProfile" target="_blank" class="me-3">
+                                                <i class="bi bi-linkedin"></i> LinkedIn
+                                            </a>
+                                            <a href="tel:@Model.PhoneNumber">
+                                                <i class="bi bi-telephone"></i> @Model.PhoneNumber
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
                     </div>
                 </div>
             </div>

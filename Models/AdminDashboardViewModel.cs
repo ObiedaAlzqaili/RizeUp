@@ -9,8 +9,8 @@ namespace RizeUp.Models
         public int TotalUsers { get; set; }
         public List<Person?> RecentUsers { get; set; }
         public List<Review> Reviews { get; set; }
-        public List<Resume> Recent { get; set; }
-        public List<Portfolio> UserReviews { get; set; }
+        public List<Resume> RecentResumes { get; set; }
+        public List<Portfolio> RecentPortfolios { get; set; }
     }
    
     public class PortfolioReview

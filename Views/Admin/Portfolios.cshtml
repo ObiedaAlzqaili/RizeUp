@@ -1,5 +1,71 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model RizeUp.Models.AdminDashboardViewModel
 @{
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
 }
+<div class="main-content">
+    <div class="top-header">
+        <button id="sidebarToggle" class="toggle-sidebar">
+            <i class="bi bi-list"></i>
+        </button>
+    </div>
+
+    <div class="dashboard-content">
+
+        <div class="table-card">
+            <div class="card-title">
+                <i class="bi bi-list-ul"></i> All Portfolios
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Username</th>
+                            <th>CreatedDate</th>
+                            <th>Link</th>
+                            <th>Status</th>
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.RecentPortfolios.Any())
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">No users found.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            var idx = 1;
+                            foreach (var u in Model.RecentPortfolios)
+                            {
+                                bool locked = u.IsDeleted ;
+                                <tr>
+                                    <td>@idx++</td>
+                                    <td>@u.EndUser.FirstName</td>
+                                    <td>@u.CreatedDate</td>
+                                    <td><a asp-action="Templates" asp-controller="Portfolio" asp-route-portfolioId="@u.Id" target="_blank">View Portfolio</a></td>
+                                    <td>
+                                        <span class="status-badge @(locked ? "badge-inactive" : "badge-active")">
+                                            @(locked ? "Inactive" : "Active")
+                                        </span>
+                                    </td>
+                                   
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById('sidebarToggle')?.addEventListener('click', () => {
+      document.querySelector('.sidebar')?.classList.toggle('active');
+      document.querySelector('.main-content')?.classList.toggle('sidebar-active');
+    });
+</script>

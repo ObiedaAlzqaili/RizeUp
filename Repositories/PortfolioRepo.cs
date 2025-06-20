@@ -112,9 +112,8 @@ namespace RizeUp.Repository
         {
             // Fetch the latest 'count' portfolios that are not deleted, including related data for DataTable display
             return await _context.Portfolios
-                .Where(p => !p.IsDeleted)
                 .OrderByDescending(p => p.Id)
-                .Include(p => p.EndUserId)
+                .Include(p => p.EndUser)
                 .Take(count)
                 .AsNoTracking()
                 .ToListAsync();

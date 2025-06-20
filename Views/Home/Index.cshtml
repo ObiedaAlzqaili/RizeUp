@@ -104,96 +104,99 @@
                         <p class="text-muted">Review the AI-generated content, make any adjustments you want, then download your resume as PDF or publish your portfolio online.</p>
                     </div>
                 </div>
+                @if (!SignInManager.IsSignedIn(User))
+                {
+                    <div class="text-center mt-5">
+                        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary btn-lg px-5">Get Started Free</a>
+                    </div>
+                }
 
-                <div class="text-center mt-5">
-                    <a href="/signup" class="btn btn-primary btn-lg px-5">Get Started Free</a>
-                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Pricing Section -->
-<section id="pricing" class="py-5">
-    <div class="container">
-        <h2 class="section-title">Simple Pricing Plans</h2>
-        <p class="text-center text-muted mb-5">Choose the plan that fits your needs</p>
+@* @if (!SignInManager.IsSignedIn(User))
+{
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Simple Pricing Plans</h2>
+            <p class="text-center text-muted mb-5">Choose the plan that fits your needs</p>
 
-        <div class="row g-4 justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h4 class="mb-2">Starter</h4>
-                        <p class="mb-0">Basic features</p>
-                    </div>
-                    <div class="p-4">
-                        <div class="text-center mb-4">
-                            <span class="display-4 fw-bold">$0</span>
-                            <span class="text-muted">/forever</span>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h4 class="mb-2">Starter</h4>
+                            <p class="mb-0">Basic features</p>
                         </div>
-                        <ul class="list-unstyled mb-4">
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> 1 AI-Generated Resume</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Basic Portfolio</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> PDF Download</li>
-                            <li class="mb-2"><i class="bi bi-x text-danger me-2"></i> No Cover Letters</li>
-                            <li class="mb-2"><i class="bi bi-x text-danger me-2"></i> Limited AI Revisions</li>
-                        </ul>
-                        <a href="/signup" class="btn btn-outline-primary w-100">Get Started</a>
+                        <div class="p-4">
+                            <div class="text-center mb-4">
+                                <span class="display-4 fw-bold">$0</span>
+                                <span class="text-muted">/forever</span>
+                            </div>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> 2 AI-Generated Resume</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> 2 AI-Generated Portfolio</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> 2 AI-Generated Cover Letter</li>
+                            </ul>
+                            <a href="/signup" class="btn btn-outline-primary w-100">Get Started</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 col-lg-4">
-                <div class="pricing-card position-relative">
-                    <div class="popular-badge">Most Popular</div>
-                    <div class="pricing-header">
-                        <h4 class="mb-2">Professional</h4>
-                        <p class="mb-0">Everything you need</p>
-                    </div>
-                    <div class="p-4">
-                        <div class="text-center mb-4">
-                            <span class="display-4 fw-bold">$12</span>
-                            <span class="text-muted">/month</span>
+                <div class="col-md-6 col-lg-4">
+                    <div class="pricing-card position-relative">
+                        <div class="popular-badge">Most Popular</div>
+                        <div class="pricing-header">
+                            <h4 class="mb-2">Professional</h4>
+                            <p class="mb-0">Everything you need</p>
                         </div>
-                        <ul class="list-unstyled mb-4">
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Unlimited AI Resumes</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Advanced Portfolio</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> PDF & Word Download</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> AI Cover Letters</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Unlimited AI Revisions</li>
-                        </ul>
-                        <a href="/signup" class="btn btn-primary w-100">Get Professional</a>
+                        <div class="p-4">
+                            <div class="text-center mb-4">
+                                <span class="display-4 fw-bold">$12</span>
+                                <span class="text-muted">/month</span>
+                            </div>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Unlimited AI Resumes</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Advanced Portfolio</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> PDF & Word Download</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> AI Cover Letters</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Unlimited AI Revisions</li>
+                            </ul>
+                            <a href="/signup" class="btn btn-primary w-100">Get Professional</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 col-lg-4">
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h4 class="mb-2">Enterprise</h4>
-                        <p class="mb-0">For career experts</p>
-                    </div>
-                    <div class="p-4">
-                        <div class="text-center mb-4">
-                            <span class="display-4 fw-bold">$29</span>
-                            <span class="text-muted">/month</span>
+                <div class="col-md-6 col-lg-4">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h4 class="mb-2">Enterprise</h4>
+                            <p class="mb-0">For career experts</p>
                         </div>
-                        <ul class="list-unstyled mb-4">
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> All Professional Features</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Expert Resume Review</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> LinkedIn Optimization</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Priority Support</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Job Search Assistance</li>
-                        </ul>
-                        <a href="/signup" class="btn btn-outline-primary w-100">Go Enterprise</a>
+                        <div class="p-4">
+                            <div class="text-center mb-4">
+                                <span class="display-4 fw-bold">$29</span>
+                                <span class="text-muted">/month</span>
+                            </div>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> All Professional Features</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Expert Resume Review</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> LinkedIn Optimization</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Priority Support</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i> Job Search Assistance</li>
+                            </ul>
+                            <a href="/signup" class="btn btn-outline-primary w-100">Go Enterprise</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+} *@
 
-<!-- Testimonials Section -->
 <!-- Reviews Section -->
 <section id="reviews" class="py-5 bg-light-custom">
     <div class="container">
@@ -206,7 +209,7 @@
                     <div class="card-body p-4">
                         <h4 class="text-center mb-4">Add Your Review</h4>
                         <form asp-controller="Home" asp-action="SubmitReview" method="post">
-                            <!-- Rating -->
+                          
                             <div class="mb-4 text-center">
                                 <label class="form-label d-block mb-2">Rating</label>
                                 <div class="star-rating justify-content-center">
@@ -218,7 +221,7 @@
                                 </div>
                             </div>
 
-                            <!-- Comment -->
+                           
                             <div class="mb-4">
                                 <label asp-for="Comment" class="form-label">Your Review</label>
                                 <textarea asp-for="Comment" class="form-control" rows="4"
@@ -226,7 +229,7 @@
                                 <span asp-validation-for="Comment" class="text-danger small"></span>
                             </div>
 
-                            <!-- Submit Button -->
+                         
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary px-5">Submit Review</button>
                             </div>
@@ -350,8 +353,7 @@
                     <div class="col-lg-8 text-center">
                         <h2 class="display-5 fw-bold mb-4">Ready to Transform Your Career?</h2>
                         <p class="lead mb-5">Join thousands of professionals who landed better jobs with RizeUp's AI-powered tools</p>
-                        <a href="/signup" class="btn btn-light btn-lg px-5 me-3">Start Free Trial</a>
-                        <a href="/pricing" class="btn btn-outline-light btn-lg px-5">See Plans</a>
+                        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-light btn-lg px-5 me-3">Start Free Trial</a>
                     </div>
                 </div>
             </div>

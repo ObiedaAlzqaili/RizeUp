@@ -136,10 +136,9 @@ namespace RizeUp.Repository
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Resume>> GetPortfolioCount(int count)
+        public async Task<List<Resume>> GetResumeCount(int count)
         {
             return await _dbContext.Resumes
-                .Where(r => !r.IsDeleted)
                 .OrderByDescending(r => r.ModifiedDate ?? r.CreatedDate)
                 .Take(count)
                 .Include(r => r.EndUser)

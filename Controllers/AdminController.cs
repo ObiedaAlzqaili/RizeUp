@@ -30,7 +30,7 @@ namespace RizeUp.Controllers
             _reviewRepo = reviewRepo;
         }
 
-        public async Task<IActionResult> Index()
+            public async Task<IActionResult> Index()
         {
             var model = new AdminDashboardViewModel
             {
@@ -44,6 +44,11 @@ namespace RizeUp.Controllers
 
             return View(model);
         }
+
+
+
+
+            // this is for users
             public async Task<IActionResult> Users()
             {
                 var model = new AdminDashboardViewModel
@@ -57,11 +62,35 @@ namespace RizeUp.Controllers
 
                 return View(model);
             }
-            public async Task<IActionResult> Resumes()
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return BadRequest();
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+                TempData["Success"] = "User deleted.";
+            else
+                TempData["Error"] = "Could not delete user.";
+
+            return RedirectToAction(nameof(Users));
+        }
+
+
+
+
+
+
+        public async Task<IActionResult> Resumes()
             {
                 var model = new AdminDashboardViewModel
                 {
-                    Recent = await _resumeRepo.GetPortfolioCount(15),
+                    RecentResumes = await _resumeRepo.GetResumeCount(15),
                 };
 
                 return View(model);
@@ -70,11 +99,8 @@ namespace RizeUp.Controllers
             {
                 var model = new AdminDashboardViewModel
                 {
-                    TotalResumes = await _resumeRepo.GetCountAsync(),
-                    Reviews = await _reviewRepo.GetRecentAsync(5),
-                    TotalUsers = await _userManager.Users.CountAsync(),
-                    UserReviews = await _portfolioRepo.GetPortfoliosCount(15),
-                    RecentUsers = await _userManager.GetLastFiveEndUsersAsync(),
+                    RecentPortfolios = await _portfolioRepo.GetPortfoliosCount(15),
+          
                 };
 
                 return View(model);
@@ -83,10 +109,7 @@ namespace RizeUp.Controllers
             {
                 var model = new AdminDashboardViewModel
                 {
-                    TotalResumes = await _resumeRepo.GetCountAsync(),
                     Reviews = await _reviewRepo.GetRecentAsync(15),
-                    TotalUsers = await _userManager.Users.CountAsync(),
-                    RecentUsers = await _userManager.GetLastFiveEndUsersAsync(),
                 };
 
                 return View(model);

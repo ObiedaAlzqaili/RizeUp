@@ -41,9 +41,24 @@ namespace RizeUp.Controllers
 
 
 
-        public IActionResult ThankYouLetter()
+        public IActionResult ThanksLetter()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateLetter( string details)
+        {
+            if(details != null)
+            {
+                var letter = await _service.GenerateThankYouAsync(details);
+                return View(letter);
+            }else
+            {
+                return View();
+            }
+              // your Razor view can bind directly to ThankYouLetterResponseDto
         }
     }
 }

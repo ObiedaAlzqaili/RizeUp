@@ -4,243 +4,773 @@
 *@
 @{
 }
-<div class="container my-5">
-    <!-- ===========================
-         Header: Name / Title / Contact
-         =========================== -->
-    <div class="row mb-4">
-        <div class="col-12 text-center">
-            <h1 class="fw-bold">@Model.FirstName @Model.LastName</h1>
-            @if (!string.IsNullOrWhiteSpace(Model.Title))
-            {
-                <h4 class="text-muted">@Model.Title</h4>
+<style>
+    :root {
+        --primary: #2c3e50;
+        --secondary: #3498db;
+        --accent: #e74c3c;
+        --light: #ecf0f1;
+        --dark: #2c3e50;
+        --gray: #95a5a6;
+        --light-gray: #f8f9fa;
+        --spacing-sm: 0.5rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 1.5rem;
+        --spacing-xl: 2.5rem;
+        --border-radius: 4px;
+        --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--dark);
+        background-color: #f9f9f9;
+        line-height: 1.6;
+        padding: var(--spacing-xl);
+    }
+
+    .resume-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        box-shadow: var(--box-shadow);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+    }
+
+    /* Header Styles */
+    .resume-header {
+        background: linear-gradient(135deg, var(--primary), #1a2530);
+        color: white;
+        padding: var(--spacing-xl) var(--spacing-xl) calc(var(--spacing-xl) * 1.5);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .resume-header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+    .header-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+
+    .name-title {
+        margin-bottom: var(--spacing-md);
+    }
+
+        .name-title h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .name-title h2 {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--light);
+            opacity: 0.9;
+        }
+
+    .contact-info {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: var(--spacing-lg);
+        margin-top: var(--spacing-lg);
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+
+        .contact-item i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        .contact-item a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .contact-item a:hover {
+                color: var(--secondary);
             }
-            <p class="mt-2">
+
+    /* Section Styles */
+    .resume-section {
+        padding: var(--spacing-xl);
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+        .resume-section:last-child {
+            border-bottom: none;
+        }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: var(--spacing-lg);
+        padding-bottom: var(--spacing-sm);
+        border-bottom: 2px solid var(--secondary);
+    }
+
+        .section-header i {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            margin-right: var(--spacing-sm);
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+    /* Summary Section */
+    .summary-content p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--dark);
+    }
+
+    /* Education Section */
+    .education-item {
+        display: flex;
+        margin-bottom: var(--spacing-lg);
+        position: relative;
+        padding-left: 30px;
+    }
+
+        .education-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .education-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--secondary);
+        }
+
+        .education-item::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 24px;
+            width: 2px;
+            height: calc(100% + var(--spacing-md));
+            background: var(--light-gray);
+        }
+
+        .education-item:last-child::after {
+            display: none;
+        }
+
+    .education-content {
+        flex: 1;
+    }
+
+    .education-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-sm);
+    }
+
+        .education-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+    .education-date {
+        color: var(--secondary);
+        font-weight: 500;
+    }
+
+    .education-details p {
+        color: var(--gray);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .education-gpa {
+        font-weight: 500;
+        color: var(--dark);
+    }
+
+    /* Experience Section */
+    .experience-item {
+        margin-bottom: var(--spacing-xl);
+        padding-left: 30px;
+        position: relative;
+    }
+
+        .experience-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .experience-item::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 24px;
+            width: 2px;
+            height: calc(100% + var(--spacing-lg));
+            background: var(--light-gray);
+        }
+
+        .experience-item:last-child::after {
+            display: none;
+        }
+
+    .experience-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-sm);
+    }
+
+        .experience-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+    .experience-date {
+        color: var(--accent);
+        font-weight: 500;
+    }
+
+    .experience-company {
+        font-weight: 500;
+        color: var(--secondary);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .experience-duties {
+        color: var(--dark);
+        line-height: 1.7;
+    }
+
+    /* Skills Section */
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: var(--spacing-md);
+    }
+
+    .skill-item {
+        background: var(--light-gray);
+        padding: var(--spacing-md);
+        border-radius: var(--border-radius);
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+            background: white;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .skill-item span {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+    /* Languages Section */
+    .languages-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-lg);
+    }
+
+    .language-item {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .language-name {
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .language-level {
+        position: relative;
+        height: 8px;
+        background: var(--light-gray);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .language-progress {
+        height: 100%;
+        background: var(--secondary);
+        border-radius: 4px;
+    }
+
+    /* Certificates Section */
+    .certificates-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: var(--spacing-lg);
+    }
+
+    .certificate-item {
+        border: 1px solid var(--light-gray);
+        border-radius: var(--border-radius);
+        padding: var(--spacing-lg);
+        transition: all 0.3s ease;
+    }
+
+        .certificate-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+            border-color: var(--secondary);
+        }
+
+    .certificate-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-sm);
+    }
+
+        .certificate-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+    .certificate-date {
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+
+    .certificate-provider {
+        color: var(--secondary);
+        font-weight: 500;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .certificate-gpa {
+        font-weight: 500;
+        color: var(--dark);
+    }
+
+    /* Projects Section */
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: var(--spacing-lg);
+    }
+
+    .project-item {
+        border: 1px solid var(--light-gray);
+        border-radius: var(--border-radius);
+        padding: var(--spacing-lg);
+        transition: all 0.3s ease;
+    }
+
+        .project-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+            border-color: var(--accent);
+        }
+
+    .project-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-sm);
+    }
+
+        .project-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+    .project-date {
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+
+    .project-description {
+        color: var(--dark);
+        margin-bottom: var(--spacing-md);
+        line-height: 1.6;
+    }
+
+    .project-link a {
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+
+        .project-link a:hover {
+            text-decoration: underline;
+        }
+
+    /* Responsive Design */
+    media (max-width: 768px) {
+        .resume-header
+
+    {
+        padding: var(--spacing-lg);
+    }
+
+    .resume-section {
+        padding: var(--spacing-lg);
+    }
+
+    .contact-info {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-md);
+    }
+
+    .education-header, .experience-header, .certificate-header, .project-header {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .skills-grid, .certificates-grid, .projects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    }
+
+    media print {
+        body
+
+    {
+        padding: 0;
+        background: white;
+    }
+
+    .resume-container {
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    }
+</style>
+<div class="resume-container">
+    <!-- Header Section -->
+    <header class="resume-header">
+        <div class="header-content">
+            <div class="name-title">
+                <h1>@Model.FirstName @Model.LastName</h1>
+                <h2>@Model.Title</h2>
+            </div>
+            <div class="contact-info">
                 @if (!string.IsNullOrWhiteSpace(Model.Email))
                 {
-                    <a href="mailto:@Model.Email">@Model.Email</a>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:@Model.Email">@Model.Email</a>
+                    </div>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.PhoneNumber))
                 {
-                    <span> | @Model.PhoneNumber</span>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>@Model.PhoneNumber</span>
+                    </div>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.LinkedinLink))
                 {
-                    <span> | <a href="@Model.LinkedinLink" target="_blank">LinkedIn</a></span>
+                    <div class="contact-item">
+                        <i class="fab fa-linkedin"></i>
+                        <a href="@Model.LinkedinLink" target="_blank">LinkedIn</a>
+                    </div>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.GitHubLink))
                 {
-                    <span> | <a href="@Model.GitHubLink" target="_blank">GitHub</a></span>
+                    <div class="contact-item">
+                        <i class="fab fa-github"></i>
+                        <a href="@Model.GitHubLink" target="_blank">GitHub</a>
+                    </div>
                 }
-            </p>
-        </div>
-    </div>
-
-    <hr />
-
-    <!-- ===========================
-         Summary / Bio
-         =========================== -->
-    @if (!string.IsNullOrWhiteSpace(Model.Summary))
-    {
-        <div class="row mb-4">
-            <div class="col-12">
-                <h2 class="h5 text-uppercase text-secondary mb-2">Professional Summary</h2>
-                <p>@Model.Summary</p>
             </div>
         </div>
-        <hr />
+    </header>
+
+    <!-- Summary Section -->
+    @if (!string.IsNullOrWhiteSpace(Model.Summary))
+    {
+        <section class="resume-section">
+            <div class="section-header">
+                <i class="fas fa-user"></i>
+                <h2>Professional Summary</h2>
+            </div>
+            <div class="summary-content">
+                <p>@Model.Summary</p>
+            </div>
+        </section>
     }
 
-    <!-- ===========================
-         Education Section
-         =========================== -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="h5 text-uppercase text-secondary mb-3">Education</h2>
-            @if (Model.Educations.Any())
+    <!-- Education Section -->
+    <section class="resume-section">
+        <div class="section-header">
+            <i class="fas fa-graduation-cap"></i>
+            <h2>Education</h2>
+        </div>
+        @if (Model.Educations.Any())
+        {
+            @foreach (var edu in Model.Educations)
             {
-                <ul class="list-unstyled">
-                    @foreach (var edu in Model.Educations)
-                    {
-                        <li class="mb-3">
-                            <h5 class="mb-1">@edu.CollegeName</h5>
-                            <p class="mb-1">
+                <div class="education-item">
+                    <div class="education-content">
+                        <div class="education-header">
+                            <h3>@edu.CollegeName</h3>
+                            <div class="education-date">@edu.StartDate – @edu.EndDate</div>
+                        </div>
+                        <div class="education-details">
+                            <p>
                                 @edu.DegreeType
                                 @if (!string.IsNullOrWhiteSpace(edu.Major))
                                 {
                                     <span>in @edu.Major</span>
                                 }
-                                <span class="text-muted">
-                                    (@edu.StartDate – @edu.EndDate)
-                                </span>
                             </p>
                             @if (edu.GPA.HasValue)
                             {
-                                <p class="mb-0">GPA: @edu.GPA.Value.ToString("0.00")</p>
+                                <p class="education-gpa">GPA: @edu.GPA.Value.ToString("0.00")</p>
                             }
-                        </li>
-                    }
-                </ul>
+                        </div>
+                    </div>
+                </div>
             }
-            else
-            {
-                <p class="text-muted">No education information provided.</p>
-            }
+        }
+        else
+        {
+            <p class="text-muted">No education information provided.</p>
+        }
+    </section>
+
+    <!-- Experience Section -->
+    <section class="resume-section">
+        <div class="section-header">
+            <i class="fas fa-briefcase"></i>
+            <h2>Work Experience</h2>
         </div>
-    </div>
-
-    <hr />
-
-    <!-- ===========================
-         Experience Section
-         =========================== -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="h5 text-uppercase text-secondary mb-3">Experience</h2>
-            @if (Model.Experiences.Any())
+        @if (Model.Experiences.Any())
+        {
+            @foreach (var exp in Model.Experiences)
             {
-                <ul class="list-unstyled">
-                    @foreach (var exp in Model.Experiences)
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <h3>@exp.Title</h3>
+                        <div class="experience-date">@exp.StartDate – @(exp.IsCurrent ?? false ? "Present" : exp.EndDate)</div>
+                    </div>
+                    <div class="experience-company">@exp.Company</div>
+                    @if (!string.IsNullOrWhiteSpace(exp.Duties))
                     {
-                        <li class="mb-4">
-                            <div class="d-flex justify-content-between">
-                                <h5 class="mb-1">@exp.Title, @exp.Company</h5>
-                                <span class="text-muted">
-                                    (@exp.StartDate – @(exp.IsCurrent == true ? "Present" : exp.EndDate))
-                                </span>
-                            </div>
-                            @if (!string.IsNullOrWhiteSpace(exp.Duties))
-                            {
-                                <p class="mb-0">@exp.Duties</p>
-                            }
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <p class="text-muted">No work experience provided.</p>
-            }
-        </div>
-    </div>
-
-    <hr />
-
-    <!-- ===========================
-         Skills Section
-         =========================== -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="h5 text-uppercase text-secondary mb-3">Skills</h2>
-            @if (Model.Skills.Any())
-            {
-                <div class="row">
-                    @foreach (var skill in Model.Skills)
-                    {
-                        <div class="col-6 col-md-4 mb-2">
-                            <span class="badge bg-primary text-white">@skill.SkillName</span>
+                        <div class="experience-duties">
+                            <p>@exp.Duties</p>
                         </div>
                     }
                 </div>
             }
-            else
-            {
-                <p class="text-muted">No skills listed.</p>
-            }
+        }
+        else
+        {
+            <p class="text-muted">No work experience provided.</p>
+        }
+    </section>
+
+    <!-- Skills Section -->
+    <section class="resume-section">
+        <div class="section-header">
+            <i class="fas fa-tools"></i>
+            <h2>Skills</h2>
         </div>
-    </div>
+        @if (Model.Skills.Any())
+        {
+            <div class="skills-grid">
+                @foreach (var skill in Model.Skills)
+                {
+                    <div class="skill-item">
+                        <span>@skill.SkillName</span>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No skills listed.</p>
+        }
+    </section>
 
-    <hr />
-
-    <!-- ===========================
-         Languages Section
-         =========================== -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="h5 text-uppercase text-secondary mb-3">Languages</h2>
-            @if (Model.Languages.Any())
-            {
-                <ul class="list-inline">
-                    @foreach (var lang in Model.Languages)
-                    {
-                        <li class="list-inline-item me-4">
-                            <strong>@lang.LanguageName</strong> – @lang.Level
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <p class="text-muted">No languages specified.</p>
-            }
+    <!-- Languages Section -->
+    <section class="resume-section">
+        <div class="section-header">
+            <i class="fas fa-language"></i>
+            <h2>Languages</h2>
         </div>
-    </div>
+        @if (Model.Languages.Any())
+        {
+            <div class="languages-container">
+                @foreach (var lang in Model.Languages)
+                {
+                    <div class="language-item">
+                        <div class="language-name">@lang.LanguageName</div>
+                        <div class="language-level">
+                            <div class="language-progress" style="width:
+                                            @(lang.Level == "Native" ? "100%" :
+                                                                                                 lang.Level == "Fluent" ? "90%" :
+                                                                                                 lang.Level == "Advanced" ? "80%" :
+                                                                                                 lang.Level == "Intermediate" ? "65%" :
+                                                                                                 lang.Level == "Basic" ? "40%" : "30%")">
+                    </div>
+                </div>
+                <div class="language-label">@lang.Level</div>
+            </div>
+                        }
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No languages specified.</p>
+        }
+    </section>
 
-    <hr />
-
-    <!-- ===========================
-         Certificates Section
-         =========================== -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="h5 text-uppercase text-secondary mb-3">Certificates</h2>
-            @if (Model.Certificates.Any())
-            {
-                <ul class="list-unstyled">
-                    @foreach (var cert in Model.Certificates)
-                    {
-                        <li class="mb-3">
-                            <h6 class="mb-1">@cert.ProviderName – @cert.Field</h6>
-                            <p class="mb-1 text-muted">
-                                (@cert.StartDate – @cert.EndDate)
-                            </p>
-                            @if (cert.GPA.HasValue)
-                            {
-                                <p class="mb-0">GPA: @cert.GPA.Value.ToString("0.00")</p>
-                            }
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <p class="text-muted">No certificates listed.</p>
-            }
+    <!-- Certificates Section -->
+    <section class="resume-section">
+        <div class="section-header">
+            <i class="fas fa-certificate"></i>
+            <h2>Certificates</h2>
         </div>
-    </div>
+        @if (Model.Certificates.Any())
+        {
+            <div class="certificates-grid">
+                @foreach (var cert in Model.Certificates)
+                {
+                    <div class="certificate-item">
+                        <div class="certificate-header">
+                            <h3>@cert.Field</h3>
+                            <div class="certificate-date">@cert.StartDate – @cert.EndDate</div>
+                        </div>
+                        <div class="certificate-provider">@cert.ProviderName</div>
+                        @if (cert.GPA.HasValue)
+                        {
+                            <div class="certificate-gpa">GPA: @cert.GPA.Value.ToString("0.00")</div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No certificates listed.</p>
+        }
+    </section>
 
-    <hr />
-
-    <!-- ===========================
-         Projects Section
-         =========================== -->
-    <div class="row mb-5">
-        <div class="col-12">
-            <h2 class="h5 text-uppercase text-secondary mb-3">Projects</h2>
-            @if (Model.Projects.Any())
-            {
-                <ul class="list-unstyled">
-                    @foreach (var project in Model.Projects)
-                    {
-                        <li class="mb-4">
-                            <h5 class="mb-1">@project.ProjectName</h5>
-                            <p class="mb-1">@project.ProjectDescription</p>
-                            <p class="mb-1 text-muted">
-                                (@project.StartDate – @project.EndDate)
-                                @if (!string.IsNullOrWhiteSpace(project.ProjectLink))
-                                {
-                                    <span> | <a href="@project.ProjectLink" target="_blank">Project Link</a></span>
-                                }
-                            </p>
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <p class="text-muted">No projects listed.</p>
-            }
+    <!-- Projects Section -->
+    <section class="resume-section">
+        <div class="section-header">
+            <i class="fas fa-project-diagram"></i>
+            <h2>Projects</h2>
         </div>
-    </div>
+        @if (Model.Projects.Any())
+        {
+            <div class="projects-grid">
+                @foreach (var project in Model.Projects)
+                {
+                    <div class="project-item">
+                        <div class="project-header">
+                            <h3>@project.ProjectName</h3>
+                            <div class="project-date">@project.StartDate – @project.EndDate</div>
+                        </div>
+                        <div class="project-description">
+                            <p>@project.ProjectDescription</p>
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(project.ProjectLink))
+                        {
+                            <div class="project-link">
+                                <a href="@project.ProjectLink" target="_blank">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    View Project
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No projects listed.</p>
+        }
+    </section>
 </div>
+
+<script>
+    // Add print functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add print button for non-print view
+        if (!window.matchMedia('print').matches) {
+            const printBtn = document.createElement('button');
+            printBtn.textContent = 'Print Resume';
+            printBtn.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 24px;
+                background: #3498db;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                z-index: 1000;
+            `;
+            printBtn.addEventListener('click', function() {
+                window.print();
+            });
+            document.body.appendChild(printBtn);
+        }
+    });
+</script>

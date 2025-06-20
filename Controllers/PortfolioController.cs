@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using MimeKit;
 using RizeUp.DTOs;
+using RizeUp.Extensions;
 using RizeUp.Interfaces;
 using RizeUp.Models;
 using RizeUp.Repository;
@@ -36,11 +37,8 @@ namespace RizeUp.Controllers
         {
             var portfolios = await _portfolioRepo.GetPortfoliosByUserIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            return View(MapToPortfolioJsonDtoList(portfolios.ToList()));
+            return View(PortfolioExtensions.MapToPortfolioJsonDtoList(portfolios.ToList()));
         }
-
-
-
 
         //Create New Portfolio
         [HttpGet]
@@ -78,7 +76,7 @@ namespace RizeUp.Controllers
                         return View("NewPortfolio", model);
                     }
                 }
-                // Handle profile image upload and convert to base64 on step 1
+                
                 if (model.CurrentStep == 2 && model.ProfileImage != null && model.ProfileImage.Length > 0)
                 {
                     using (var ms = new MemoryStream())
@@ -89,15 +87,15 @@ namespace RizeUp.Controllers
                         model.ProfileImageFileName = model.ProfileImage.FileName;
                         model.ProfileImageContentType = model.ProfileImage.ContentType;
                     }
-                    model.ProfileImage = null; // Clear the file to avoid model binding issues
+                    model.ProfileImage = null; 
                 }
-                // If no new image was uploaded but we have existing base64 data, retain it
+               
                 else if (model.CurrentStep == 2 && model.ProfileImage == null && !string.IsNullOrEmpty(model.ProfileImageBase64))
                 {
-                    // Keep the existing image data
+                    
                 }
 
-                // Handle project images (if any) and convert to base64 on step 2
+                
                 if (model.CurrentStep == 3 && model.Projects != null)
                 {
                     for (int i = 0; i < model.Projects.Count; i++)
@@ -113,18 +111,16 @@ namespace RizeUp.Controllers
                                 project.ImageFileName = project.Image.FileName;
                                 project.ImageContentType = project.Image.ContentType;
                             }
-                            project.Image = null; // Clear the file to avoid model binding issues
+                            project.Image = null; 
                         }
-                        // If no new image was uploaded but we have existing base64 data, retain it
+                        
                         else if (project.Image == null && !string.IsNullOrEmpty(project.ImageBase64))
                         {
-                            // Keep the existing image data
+                            
                         }
                     }
                 }
 
-                // Rest of the validation logic remains the same...
-                // [Previous validation code here]
 
                 if (model.CurrentStep < 4)
                 {
@@ -146,7 +142,7 @@ namespace RizeUp.Controllers
                 // Save the portfolio data to the database
                 // You may need to map the DTO to your Portfolio entity/model
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var data = MapToPortfolioEntity(result, userId);
+                var data = PortfolioExtensions.MapToPortfolioEntity(result, userId);
                 await _portfolioRepo.AddPortfolioAsync(data);
                 return RedirectToAction("Index");
             }
@@ -161,7 +157,7 @@ namespace RizeUp.Controllers
         public async Task<IActionResult> EditPortfolio(int PortfolioId)
         {
             var portfolio = await _portfolioRepo.GetPortfolioByIdAsync(PortfolioId);
-            var portfolioDto = MapToPortfolioDto(portfolio);
+            var portfolioDto = PortfolioExtensions.MapToPortfolioDto(portfolio);
             return View(portfolioDto);
         }
         [HttpPost]
@@ -173,7 +169,7 @@ namespace RizeUp.Controllers
                 // Re-render the view with validation errors and keep current step
                 return View("EditPortfolio", portfolio);
             }
-            var portfolio1 = MapToPortfolioEntity(portfolio, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var portfolio1 = PortfolioExtensions.MapToPortfolioEntity(portfolio, User.FindFirstValue(ClaimTypes.NameIdentifier));
             portfolio1.Id = portfolio.Id;
   
           await _portfolioRepo.UpdatePortfolioAsync(portfolio1);
@@ -254,7 +250,7 @@ namespace RizeUp.Controllers
             {
                 return NotFound();
             }
-            var portfolioDto = MapToPortfolioDto(portfolio);
+            var portfolioDto = PortfolioExtensions.MapToPortfolioDto(portfolio);
             return View(portfolioDto);
         }
 

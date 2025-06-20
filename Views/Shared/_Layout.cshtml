@@ -30,7 +30,7 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Resume" asp-action="Index">Resume</a>
                         <a class="nav-link text-dark" asp-area="" asp-controller="Portfolio" asp-action="Index">Portfolio</a>
                         <li class="nav-item"><a class="nav-link" asp-action="CoverLetter" asp-controller="CoverLetter" >CoverLetter</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="ThanksLetter" asp-controller="CoverLetter">Thanks Letter </a></li>
                     </ul>
                     <div class="ms-lg-3 mt-3 mt-lg-0">
                         <partial name="_LoginPartial" />
@@ -99,10 +99,10 @@
                     </h3>
                     <p class="text-muted">AI-powered tools to help you build better resumes and portfolios, and land your dream job.</p>
                     <div class="social-icons mb-4">
-                        <a href="#"><i class="bi bi-facebook"></i></a>
-                        <a href="#"><i class="bi bi-twitter"></i></a>
-                        <a href="#"><i class="bi bi-linkedin"></i></a>
-                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="https://www.facebook.com/HTUjo/"><i class="bi bi-facebook"></i></a>
+                        <a href="https://x.com/HTUjo"><i class="bi bi-twitter"></i></a>
+                        <a href="https://www.linkedin.com/school/al-hussein-technical-university-htu/posts/?feedView=all"><i class="bi bi-linkedin"></i></a>
+                        <a href="https://www.instagram.com/htujo/?hl=ar"><i class="bi bi-instagram"></i></a>
                     </div>
                 </div>
 
@@ -110,9 +110,9 @@
                     <div class="footer-links">
                         <h5>Product</h5>
                         <ul class="list-unstyled">
-                            <li><a href="#">AI Resume Builder</a></li>
-                            <li><a href="#">AI Portfolio Builder</a></li>
-                            <li><a href="#">Features</a></li>
+                            <li><a asp-action="Index" asp-controller="Resume" target="_blank">AI Resume Builder</a></li>
+                            <li><a asp-action="Index" asp-controller="Portfolio" target="_blank" >AI Portfolio Builder</a></li>
+                            <li><a asp-action="CoverLetter" asp-controller="CoverLetter" target="_blank" >Cover Letter Generator</a></li>
                             <li><a href="#">Pricing</a></li>
                         </ul>
                     </div>
@@ -130,7 +130,7 @@
                     </div>
                 </div>
 
-                <div class="col-6 col-md-3 col-lg-2">
+                @* <div class="col-6 col-md-3 col-lg-2">
                     <div class="footer-links">
                         <h5>Resources</h5>
                         <ul class="list-unstyled">
@@ -140,9 +140,9 @@
                             <li><a href="#">Help Center</a></li>
                         </ul>
                     </div>
-                </div>
+                </div> *@
 
-                <div class="col-6 col-md-3 col-lg-2">
+                @* <div class="col-6 col-md-3 col-lg-2">
                     <div class="footer-links">
                         <h5>Legal</h5>
                         <ul class="list-unstyled">
@@ -152,7 +152,7 @@
                             <li><a href="#">GDPR</a></li>
                         </ul>
                     </div>
-                </div>
+                </div> *@
             </div>
 
             <hr class="my-4 bg-secondary">
@@ -177,6 +177,140 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Use your form's ID or selector
+            const form = document.querySelector('form#resumeForm'); // Adjust selector if needed!
+            const loader = document.getElementById('resume-loader-overlay');
+            const progressBar = loader ? loader.querySelector('#progressBar') : null;
+            const statusText = loader ? loader.querySelector('#statusText') : null;
+
+            if (form && loader) {
+                form.addEventListener('submit', function (e) {
+                    loader.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Disable scroll
+                    // Animate progress bar and status
+                    let progress = 0;
+                    let currentStatus = 0;
+                    const statusMessages = [
+                        "Analyzing your experience",
+                        "Optimizing content for ATS",
+                        "Designing professional layout",
+                        "Finalizing your resume",
+                        "Almost done..."
+                    ];
+
+                    const interval = setInterval(() => {
+                        progress += 2 + Math.random() * 4;
+                        if (progress >= 100) {
+                            progress = 100;
+                            clearInterval(interval);
+                        }
+                        if (progressBar) progressBar.style.width = progress + '%';
+
+                        // Update status text every 20% progress
+                        if (progress > (currentStatus + 1) * 20 && currentStatus < statusMessages.length) {
+                            if (statusText) statusText.textContent = statusMessages[currentStatus];
+                            currentStatus++;
+                        }
+
+                        // Final message when complete
+                        if (progress >= 100) {
+                            if (statusText) statusText.textContent = "Resume complete! Redirecting...";
+                        }
+                    }, 200);
+                });
+            }
+        });
+
+
+         document.addEventListener('DOMContentLoaded', function () {
+            // Use your form's ID or selector
+            const form = document.querySelector('form#portfolioForm'); // Adjust selector if needed!
+            const loader = document.getElementById('resume-loader-overlay');
+            const progressBar = loader ? loader.querySelector('#progressBar') : null;
+            const statusText = loader ? loader.querySelector('#statusText') : null;
+
+            if (form && loader) {
+                form.addEventListener('submit', function (e) {
+                    loader.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Disable scroll
+                    // Animate progress bar and status
+                    let progress = 0;
+                    let currentStatus = 0;
+                    const statusMessages = [
+                        "Analyzing your experience",
+                        "Designing professional layout",
+                        "Finalizing your Portfolio",
+                        "Almost done..."
+                    ];
+
+                    const interval = setInterval(() => {
+                        progress += 2 + Math.random() * 4;
+                        if (progress >= 100) {
+                            progress = 100;
+                            clearInterval(interval);
+                        }
+                        if (progressBar) progressBar.style.width = progress + '%';
+
+                        // Update status text every 20% progress
+                        if (progress > (currentStatus + 1) * 20 && currentStatus < statusMessages.length) {
+                            if (statusText) statusText.textContent = statusMessages[currentStatus];
+                            currentStatus++;
+                        }
+
+                        // Final message when complete
+                        if (progress >= 100) {
+                            if (statusText) statusText.textContent = "Portfolio complete! Redirecting...";
+                        }
+                    }, 200);
+                });
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Use your form's ID or selector
+            const form = document.querySelector('form#letterForm'); // Adjust selector if needed!
+            const loader = document.getElementById('resume-loader-overlay');
+            const progressBar = loader ? loader.querySelector('#progressBar') : null;
+            const statusText = loader ? loader.querySelector('#statusText') : null;
+
+            if (form && loader) {
+                form.addEventListener('submit', function (e) {
+                    loader.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Disable scroll
+                    // Animate progress bar and status
+                    let progress = 0;
+                    let currentStatus = 0;
+                    const statusMessages = [
+                        "Analyzing your experience",
+                        "Generate a strong Conver Letter",
+                        "Finalizing your Cover Letter",
+                        "Almost done..."
+                    ];
+
+                    const interval = setInterval(() => {
+                        progress += 2 + Math.random() * 4;
+                        if (progress >= 100) {
+                            progress = 100;
+                            clearInterval(interval);
+                        }
+                        if (progressBar) progressBar.style.width = progress + '%';
+
+                        // Update status text every 20% progress
+                        if (progress > (currentStatus + 1) * 20 && currentStatus < statusMessages.length) {
+                            if (statusText) statusText.textContent = statusMessages[currentStatus];
+                            currentStatus++;
+                        }
+
+                        // Final message when complete
+                        if (progress >= 100) {
+                            if (statusText) statusText.textContent = "CoverLetter complete! Redirecting...";
+                        }
+                    }, 200);
+                });
+            }
+        });
+
+         document.addEventListener('DOMContentLoaded', function () {
             // Use your form's ID or selector
             const form = document.querySelector('form#resumeForm'); // Adjust selector if needed!
             const loader = document.getElementById('resume-loader-overlay');

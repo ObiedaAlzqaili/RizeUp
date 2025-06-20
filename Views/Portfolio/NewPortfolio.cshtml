@@ -24,7 +24,7 @@
         <div class="step @(Model.CurrentStep >= 4 ? "active" : "")" data-step="4">4</div>
     </div>
 
-    <form asp-action="ProcessStep" asp-controller="Portfolio" method="post" enctype="multipart/form-data">
+    <form id="portfolioForm" asp-action="ProcessStep" asp-controller="Portfolio" method="post" enctype="multipart/form-data">
         <input type="hidden" asp-for="CurrentStep" id="currentStep" value="@Model.CurrentStep" />
 
         <!-- ===========================

@@ -1,5 +1,65 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model RizeUp.Models.AdminDashboardViewModel
 @{
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
 }
+<div class="main-content">
+    <div class="top-header">
+        <button id="sidebarToggle" class="toggle-sidebar">
+            <i class="bi bi-list"></i>
+        </button>
+    </div>
+
+    <div class="dashboard-content">
+
+        <div class="table-card">
+            <div class="card-title">
+                <i class="bi bi-list-ul"></i> All Reviews
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                           
+                            @* <th>Username</th> *@
+                            <th>CreatedDate</th>
+                            <th>Rate</th>
+                            <th>Comment</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Reviews.Any())
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">No Review found.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            var idx = 1;
+                            foreach (var u in Model.Reviews)
+                            {
+                                <tr>
+                                    @* <td>@u.EndUser.FirstName</td> *@
+                                    <td>@u.CreatedAt</td>
+                                    <td>@u.Rating</td>
+                                    <td>@u.Comment</td>
+
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById('sidebarToggle')?.addEventListener('click', () => {
+      document.querySelector('.sidebar')?.classList.toggle('active');
+      document.querySelector('.main-content')?.classList.toggle('sidebar-active');
+    });
+</script>

@@ -3,8 +3,47 @@
 @{
     ViewData["Title"] = "Access denied";
 }
+<style>
+    .error-panel {
+        background-color: var(--light-color);
+        border: 2px solid var(--secondary-color);
+        border-radius: 0.5rem;
+    }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
+        .error-panel i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+        }
+
+        .error-panel h1,
+        .error-panel p {
+            color: var(--dark-color);
+        }
+    media (max-width: 576px) {
+        .error-panel
+
+    {
+        padding: 1.5rem 1rem;
+    }
+
+    .error-panel i {
+        font-size: 2rem;
+    }
+
+    .error-panel h1 {
+        font-size: 1.5rem;
+    }
+
+    }
+</style>
+<header class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <div class="error-panel text-center p-4">
+                <i class="bi bi-exclamation-triangle-fill mb-3"></i>
+                <h1 class="mb-2">@ViewData["Title"]</h1>
+                <p class="mb-0">You do not have access to this resource.</p>
+            </div>
+        </div>
+    </div>
 </header>

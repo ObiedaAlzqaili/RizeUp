@@ -39,6 +39,7 @@ namespace RizeUp.Repositories
             return await _context.Reviews
                 .OrderByDescending(r => r.Id)
                 .Take(count)
+                .Include(r => r.EndUser)
                 .ToListAsync();
         }
 
