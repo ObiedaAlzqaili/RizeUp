@@ -24,7 +24,7 @@ public class AiLetterService : IAiLetterService
 [Personal Information]
 {req.PersonalInfo}
 ";
-
+        ///
         // 2. Concise prompt with strict JSON output instructions
         var prompt = @"
 Generate a cover letter as pure JSON using ONLY the following input:
